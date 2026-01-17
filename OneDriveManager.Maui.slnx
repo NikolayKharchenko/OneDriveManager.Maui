@@ -1,1 +1,3 @@
-<Solution />
+<Solution>
+  <Project Path="Graph/Graph.csproj" />
+</Solution>
