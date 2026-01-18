@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace OneDriveManager.UI;
+namespace OneDriveAlbums.UI;
 
 [Application]
 public class MainApplication : MauiApplication

@@ -1,7 +1,7 @@
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Client.Extensions.Msal;
 
-namespace OneDriveManager.Graph;
+namespace OneDriveAlbums.Graph;
 
 public static class MsalTokenCache
 {

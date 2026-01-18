@@ -1,4 +1,4 @@
-namespace OneDriveManager.Graph;
+namespace OneDriveAlbums.Graph;
 
 public interface IAuthProvider
 {

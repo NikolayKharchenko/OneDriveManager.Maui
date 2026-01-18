@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace OneDriveManager.UI;
+namespace OneDriveAlbums.UI;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

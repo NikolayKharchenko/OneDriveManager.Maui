@@ -1,6 +1,6 @@
 ﻿using UIKit;
 
-namespace OneDriveManager.UI;
+namespace OneDriveAlbums.UI;
 
 public class Program
 {

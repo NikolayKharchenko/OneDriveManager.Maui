@@ -1,4 +1,4 @@
-﻿namespace OneDriveManager.UI;
+﻿namespace OneDriveAlbums.UI;
 
 public partial class App : Application
 {

@@ -1,7 +1,7 @@
 using Microsoft.Kiota.Abstractions;
 using Microsoft.Kiota.Abstractions.Authentication;
 
-namespace OneDriveManager.Graph;
+namespace OneDriveAlbums.Graph;
 
 internal sealed class DelegatingKiotaAuthProvider(IAuthProvider auth, string[] scopes) : IAuthenticationProvider
 {

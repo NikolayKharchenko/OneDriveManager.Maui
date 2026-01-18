@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace OneDriveManager.UI;
+namespace OneDriveAlbums.UI;
 
 public static class MauiProgram
 {

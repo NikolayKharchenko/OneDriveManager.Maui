@@ -1,7 +1,7 @@
 ﻿using Microsoft.Graph.Models;
 using System.Diagnostics;
 
-namespace OneDriveManager.Graph;
+namespace OneDriveAlbums.Graph;
 
 public static class GraphExtensions
 {

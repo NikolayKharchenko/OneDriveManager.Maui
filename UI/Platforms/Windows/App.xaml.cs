@@ -1,4 +1,4 @@
-﻿namespace OneDriveManager.UI.WinUI;
+﻿namespace OneDriveAlbums.UI.WinUI;
 
 /// <summary>
 /// Provides application-specific behavior to supplement the default Application class.

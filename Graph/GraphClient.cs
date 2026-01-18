@@ -8,7 +8,7 @@ using Microsoft.Kiota.Abstractions;
 using System.Diagnostics;
 using System.Text.Json;
 
-namespace OneDriveManager.Graph;
+namespace OneDriveAlbums.Graph;
 
 public enum ThumbnailSize
 {
