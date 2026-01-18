@@ -1,23 +1,30 @@
-﻿namespace OneDriveAlbums.UI;
+﻿
+using OneDriveAlbums.UI.Resources.Strings;
+using System.Diagnostics;
+
+namespace OneDriveAlbums.UI;
 
 public partial class MainPage : ContentPage
 {
-    int count = 0;
-
+    static private MainPage? instance;
+    static public MainPage Instance
+    {
+        get
+        {
+            Trace.Assert(instance != null, "MainPage instance is null. Make sure to access MainPage.Instance after the MainPage has been constructed.");
+            return instance;
+        }
+    }
     public MainPage()
     {
+        instance = this;
         InitializeComponent();
+        SetStatusText(Strings.Ready_Txt);
     }
 
-    private void OnCounterClicked(object? sender, EventArgs e)
+    public void SetStatusText(string text = "")
     {
-        count++;
-
-        if (count == 1)
-            CounterBtn.Text = $"Clicked {count} time";
-        else
-            CounterBtn.Text = $"Clicked {count} times";
-
-        SemanticScreenReader.Announce(CounterBtn.Text);
+        Status_Lbl.Text = text;
     }
+
 }

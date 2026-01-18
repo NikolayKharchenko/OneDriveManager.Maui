@@ -65,4 +65,19 @@
 	  <ProjectReference Include="..\Graph\Graph.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Resources\Strings\Strings.Designer.cs">
+	    <DependentUpon>Strings.resx</DependentUpon>
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Resources\Strings\Strings.resx">
+	    <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+	    <Generator>ResXFileCodeGenerator</Generator>
+	  </EmbeddedResource>
+	</ItemGroup>
+
 </Project>
