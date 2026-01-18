@@ -126,4 +126,13 @@
   <data name="ViewAlbums_Btn" xml:space="preserve">
     <value>Альбомы</value>
   </data>
+  <data name="Ready_Txt" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="Connecting_Msg" xml:space="preserve">
+    <value>Соединение...</value>
+  </data>
+  <data name="Connected_Msg" xml:space="preserve">
+    <value>Подключен как {0}</value>
+  </data>
 </root>

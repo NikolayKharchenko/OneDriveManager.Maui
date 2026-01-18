@@ -55,13 +55,14 @@ public class GraphClient
         instance = this;
     }
 
-    public static GraphClient Instance()
+    public static GraphClient Instance
     {
-        if (instance == null)
+        get
         {
-            instance = new GraphClient();
+            if (instance == null)
+                instance = new GraphClient();
+            return instance;
         }
-        return instance;
     }
 
     public bool IsConnected => client != null;

@@ -14,7 +14,7 @@ public static class MsalTokenCache
 
         StorageCreationProperties properties = new StorageCreationPropertiesBuilder("msal_cache.bin3", MsalCacheHelper.UserRootDirectory).Build();
 
-        MsalCacheHelper helper = await MsalCacheHelper.CreateAsync(properties).ConfigureAwait(false);
+        MsalCacheHelper helper = await MsalCacheHelper.CreateAsync(properties);
         helper.RegisterCache(pca.UserTokenCache);
 
         _initialized = true;

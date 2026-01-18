@@ -1,4 +1,5 @@
 ﻿
+using OneDriveAlbums.Graph;
 using OneDriveAlbums.UI.Resources.Strings;
 using System.Diagnostics;
 
@@ -6,6 +7,8 @@ namespace OneDriveAlbums.UI;
 
 public partial class MainPage : ContentPage
 {
+    private const string ClientId = "14667aef-1076-4332-a2aa-de72d31a570f";
+
     static private MainPage? instance;
     static public MainPage Instance
     {
@@ -22,9 +25,43 @@ public partial class MainPage : ContentPage
         SetStatusText(Strings.Ready_Txt);
     }
 
-    public void SetStatusText(string text = "")
+    public void SetStatusText(string text = "", params object[] args)
     {
-        Status_Lbl.Text = text;
+        Status_Lbl.Text = string.Format(text, args);
     }
 
+    private void SignIn_Clicked(object sender, EventArgs e)
+    {
+        IAuthProvider authProvider = Platform.CreateAuthProvider(ClientId);
+        connectToGraph();
+    }
+
+    private async void connectToGraph()
+    {
+        try
+        {
+            SetStatusText(Strings.Connecting_Msg);
+
+            string baseDir = Platform.GetOneDriveLocalDirectory();
+            IAuthProvider auth = Platform.CreateAuthProvider(ClientId);
+
+            await GraphClient.Instance.Connect(
+                new GraphClient.Config(
+                    OneDriveRootFolder: baseDir,
+                    MaxElements: App.Config.MaxElements),
+                auth);
+
+            string displayName = await GraphClient.Instance.ConnectedAccountName();
+            SetStatusText(Strings.Connected_Msg, displayName);
+        }
+        catch (Exception ex)
+        {
+            SetStatusText(ex.Message);
+        }
+    }
+
+    private void ViewAlbums_Clicked(object sender, EventArgs e)
+    {
+
+    }
 }

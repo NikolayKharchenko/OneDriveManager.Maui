@@ -61,6 +61,24 @@ namespace OneDriveAlbums.UI.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Signed in as {0}.
+        /// </summary>
+        internal static string Connected_Msg {
+            get {
+                return ResourceManager.GetString("Connected_Msg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting....
+        /// </summary>
+        internal static string Connecting_Msg {
+            get {
+                return ResourceManager.GetString("Connecting_Msg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OneDrive Albums.
         /// </summary>
         internal static string MainWindow_Caption {

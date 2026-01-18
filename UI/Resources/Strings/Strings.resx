@@ -129,4 +129,10 @@
   <data name="Ready_Txt" xml:space="preserve">
     <value>Ready</value>
   </data>
+  <data name="Connecting_Msg" xml:space="preserve">
+    <value>Connecting...</value>
+  </data>
+  <data name="Connected_Msg" xml:space="preserve">
+    <value>Signed in as {0}</value>
+  </data>
 </root>

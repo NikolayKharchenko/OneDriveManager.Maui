@@ -66,6 +66,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Platforms\Android\Platform.cs">
+	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+	  </Compile>
 	  <Compile Update="Resources\Strings\Strings.Designer.cs">
 	    <DependentUpon>Strings.resx</DependentUpon>
 	    <DesignTime>True</DesignTime>
