@@ -13,21 +13,17 @@ internal sealed class MsalDesktopAuthProvider : AuthProviderImplBase
     {
         nint hwnd = GetMauiAppHwnd();
 
-        var interactiveBuilder = pca.AcquireTokenInteractive(scopes);
-
-        if (hwnd != nint.Zero)
-            interactiveBuilder = interactiveBuilder.WithParentActivityOrWindow(hwnd);
-
-        var interactive = await interactiveBuilder
+        var result = await PCA.AcquireTokenInteractive(scopes)
+            .WithUseEmbeddedWebView(true)
+            .WithParentActivityOrWindow(hwnd)
             .ExecuteAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        return interactive.AccessToken;
+        return result.AccessToken;
     }
 
     private static nint GetMauiAppHwnd()
     {
-        // Prefer the current MAUI window; fallback to the first available.
         var mauiWindow = Application.Current?.Windows.FirstOrDefault();
         var winuiWindow = mauiWindow?.Handler?.PlatformView as Microsoft.UI.Xaml.Window;
 

@@ -21,7 +21,7 @@ public class GraphClient
 {
     internal record PersistentData(Dictionary<string, DateTime> BundleDates);
 
-    private static readonly string[] Scopes =
+    public static readonly string[] Scopes =
     [
         "User.Read",
         "Files.ReadWrite",
@@ -73,14 +73,14 @@ public class GraphClient
     public event EventHandler<ItemsEventArgs>? Items_Loaded;
     public event EventHandler? Connection_Change;
 
-    public async Task Connect(Config config, IAuthProvider authProvider)
+    public async Task Connect(Config config, AuthProviderImplBase authProvider)
     {
         try
         {
             this.config = config;
 
-            var kiotaAuthProvider = new DelegatingKiotaAuthProvider(authProvider, Scopes);
-            var adapter = new HttpClientRequestAdapter(kiotaAuthProvider, httpClient: new HttpClient());
+            await MsalTokenCache.InitializeAsync(authProvider.PCA);
+            var adapter = new HttpClientRequestAdapter(authProvider, httpClient: new HttpClient());
 
             client = new GraphServiceClient(adapter);
             await client.Me.GetAsync();

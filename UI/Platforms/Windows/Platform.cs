@@ -1,14 +1,14 @@
 ﻿using OneDriveAlbums.Graph;
-using OneDriveManager.Graph;
 
 namespace OneDriveAlbums.UI;
 
 internal static class Platform
 {
-    public static IAuthProvider CreateAuthProvider(string clientId)
+    public static AuthProviderImplBase CreateAuthProvider(string clientId)
     {
         return new MsalDesktopAuthProvider(clientId);
     }
+
     public static string GetOneDriveLocalDirectory()
     {
         string? oneDriveRoot = OneDriveFolderLocator.TryGetConsumerOneDriveRoot();

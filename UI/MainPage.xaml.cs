@@ -32,7 +32,6 @@ public partial class MainPage : ContentPage
 
     private void SignIn_Clicked(object sender, EventArgs e)
     {
-        IAuthProvider authProvider = Platform.CreateAuthProvider(ClientId);
         connectToGraph();
     }
 
@@ -43,7 +42,7 @@ public partial class MainPage : ContentPage
             SetStatusText(Strings.Connecting_Msg);
 
             string baseDir = Platform.GetOneDriveLocalDirectory();
-            IAuthProvider auth = Platform.CreateAuthProvider(ClientId);
+            AuthProviderImplBase auth = Platform.CreateAuthProvider(ClientId);
 
             await GraphClient.Instance.Connect(
                 new GraphClient.Config(

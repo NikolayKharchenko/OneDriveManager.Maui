@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 
-namespace OneDriveManager.Graph;
+namespace OneDriveAlbums.UI;
 
 internal static class OneDriveFolderLocator
 {

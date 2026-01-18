@@ -1,33 +1,48 @@
 using Microsoft.Identity.Client;
+using Microsoft.Kiota.Abstractions;
+using Microsoft.Kiota.Abstractions.Authentication;
+#if WINDOWS
+using Microsoft.Identity.Client.Desktop;
+#endif
 
 namespace OneDriveAlbums.Graph;
 
-public abstract class AuthProviderImplBase : IAuthProvider
+public abstract class AuthProviderImplBase : IAuthenticationProvider
 {
-    protected IPublicClientApplication? pca;
-    string clientId;
+    public IPublicClientApplication PCA;
 
     protected AuthProviderImplBase(string clientId)
     {
-        this.clientId = clientId;
-    }
-        
-    public async Task<string> GetAccessTokenAsync(string[] scopes, CancellationToken cancellationToken)
-    {
-        pca = PublicClientApplicationBuilder
+        PCA = PublicClientApplicationBuilder
             .Create(clientId)
             .WithAuthority(AzureCloudInstance.AzurePublic, AadAuthorityAudience.PersonalMicrosoftAccount)
-            // IMPORTANT: don't force http://localhost; let MSAL pick the loopback redirect + port.
             .WithRedirectUri("http://localhost")
+#if WINDOWS
+            .WithWindowsEmbeddedBrowserSupport()
+#endif
             .Build();
-        await MsalTokenCache.InitializeAsync(pca);
-        IAccount? account = (await pca.GetAccountsAsync()).FirstOrDefault();
+    }
+
+    public async Task AuthenticateRequestAsync(
+            RequestInformation request,
+            Dictionary<string, object>? additionalAuthenticationContext = null,
+            CancellationToken cancellationToken = default)
+    {
+        _ = additionalAuthenticationContext;
+
+        string token = await getAccessTokenAsync(cancellationToken);
+        request.Headers.TryAdd("Authorization", $"Bearer {token}");
+    }
+
+    private async Task<string> getAccessTokenAsync(CancellationToken cancellationToken)
+    {
+        IAccount? account = (await PCA.GetAccountsAsync()).FirstOrDefault();
 
         if (account != null)
         {
             try
             {
-                var silent = await pca.AcquireTokenSilent(scopes, account)
+                var silent = await PCA.AcquireTokenSilent(GraphClient.Scopes, account)
                     .ExecuteAsync(cancellationToken);
 
                 return silent.AccessToken;
@@ -37,7 +52,7 @@ public abstract class AuthProviderImplBase : IAuthProvider
             }
         }
 
-        return await GetAccessTokenInteractiveAsync(scopes, cancellationToken).ConfigureAwait(false);
+        return await GetAccessTokenInteractiveAsync(GraphClient.Scopes, cancellationToken);
     }
 
     protected abstract Task<string> GetAccessTokenInteractiveAsync(string[] scopes, CancellationToken cancellationToken);

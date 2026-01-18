@@ -48,7 +48,7 @@
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
-		
+
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
@@ -62,25 +62,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Graph\Graph.csproj" />
+		<ProjectReference Include="..\Graph\Graph.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Platforms\Android\Platform.cs">
-	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
-	  </Compile>
-	  <Compile Update="Resources\Strings\Strings.Designer.cs">
-	    <DependentUpon>Strings.resx</DependentUpon>
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	  </Compile>
+		<Compile Update="Platforms\Android\Platform.cs">
+			<ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+		</Compile>
+		<Compile Update="Resources\Strings\Strings.Designer.cs">
+			<DependentUpon>Strings.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Resources\Strings\Strings.resx">
-	    <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-	    <Generator>ResXFileCodeGenerator</Generator>
-	  </EmbeddedResource>
+		<EmbeddedResource Update="Resources\Strings\Strings.resx">
+			<LastGenOutput>Strings.Designer.cs</LastGenOutput>
+			<Generator>ResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
 	</ItemGroup>
 
 </Project>

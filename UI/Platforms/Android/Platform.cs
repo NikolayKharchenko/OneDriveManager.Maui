@@ -4,7 +4,7 @@ namespace OneDriveAlbums.UI;
 
 internal static class Platform
 {
-    public static IAuthProvider CreateAuthProvider(string clientId)
+    public static AuthProviderImplBase CreateAuthProvider(string clientId)
     {
         throw new NotImplementedException("Android AuthProviderFactory is not implemented yet.");
     }
