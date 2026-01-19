@@ -9,6 +9,9 @@ public partial class AlbumsView : ContentView
     private IReadOnlyList<DriveItem>? albums;
     private readonly ObservableCollection<AlbumItemModel> albumModels = new();
 
+    bool? ascByName;
+    bool? ascByDate;
+
     public AlbumsView()
     {
         InitializeComponent();
@@ -25,11 +28,11 @@ public partial class AlbumsView : ContentView
         foreach (DriveItem album in albums)
             albumModels.Add(new AlbumItemModel(album));
 
-        foreach (var model in albumModels)
-            _ = model.EnsureThumbnailAsync(); // fire-and-forget; VM marshals back to UI thread
+        foreach (AlbumItemModel model in albumModels)
+            _ = model.EnsureThumbnailAsync();
     }
 
-    public void OnAlbumTapped(object sender, EventArgs e)
+    public void Album_Tap(object sender, EventArgs e)
     {
         if (sender is not Border border || border.BindingContext is not AlbumItemModel albumModel)
             return;
@@ -38,5 +41,33 @@ public partial class AlbumsView : ContentView
             return;
 
         _ = Launcher.OpenAsync(albumModel.Item.WebUrl);
+    }
+
+    public void sortAlbums<T>(Func<AlbumItemModel, T> selector, bool ascending)
+    {
+        List<AlbumItemModel> sorted = (ascending
+            ? albumModels.OrderBy(selector)
+            : albumModels.OrderByDescending(selector))
+            .ToList(); // important: materialize before Clear()
+
+        albumModels.Clear();
+
+        foreach (AlbumItemModel model in sorted)
+            albumModels.Add(model);
+    }
+
+    public void SortByName_Click(object sender, EventArgs e)
+    {
+        ascByDate = null;
+        ascByName = ascByName is null ? true : !ascByName;
+        sortAlbums(model => model.Name, ascByName.Value);
+    }
+
+    public void SortByDate_Click(object sender, EventArgs e)
+    {
+        ascByName = null;
+        ascByDate = ascByDate is null ? false : !ascByDate;
+
+        sortAlbums(model => model.Item!.CreatedDateTime!.Value, ascByDate.Value);
     }
 }

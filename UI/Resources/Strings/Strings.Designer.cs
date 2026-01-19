@@ -133,6 +133,33 @@ namespace OneDriveAlbums.UI.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sort by.
+        /// </summary>
+        internal static string SortBy_Lbl {
+            get {
+                return ResourceManager.GetString("SortBy_Lbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        internal static string SortByDate_Btn {
+            get {
+                return ResourceManager.GetString("SortByDate_Btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string SortByName_Btn {
+            get {
+                return ResourceManager.GetString("SortByName_Btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Albums.
         /// </summary>
         internal static string ViewAlbums_Btn {

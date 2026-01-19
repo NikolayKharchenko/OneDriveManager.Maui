@@ -144,4 +144,13 @@
   <data name="LoadedItems_Msg" xml:space="preserve">
     <value>Found {0} items. {1:mm\:ss} elapsed</value>
   </data>
+  <data name="SortByName_Btn" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SortByDate_Btn" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="SortBy_Lbl" xml:space="preserve">
+    <value>Sort by</value>
+  </data>
 </root>

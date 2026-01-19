@@ -144,4 +144,13 @@
   <data name="LoadedItems_Msg" xml:space="preserve">
     <value>Найдено {0} элементов за {1:mm\:ss}</value>
   </data>
+  <data name="SortByName_Btn" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="SortByDate_Btn" xml:space="preserve">
+    <value>Дата</value>
+  </data>
+  <data name="SortBy_Lbl" xml:space="preserve">
+    <value>Сортировать по</value>
+  </data>
 </root>
