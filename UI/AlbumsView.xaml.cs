@@ -28,8 +28,13 @@ public partial class AlbumsView : ContentView
         foreach (DriveItem album in albums)
             albumModels.Add(new AlbumItemModel(album));
 
+        loadAllThumbnails();
+    }
+
+    private void loadAllThumbnails()
+    {
         foreach (AlbumItemModel model in albumModels)
-            _ = model.EnsureThumbnailAsync();
+            _ = model.LoadThumbnailAsync();
     }
 
     public void Album_Tap(object sender, EventArgs e)
@@ -52,6 +57,9 @@ public partial class AlbumsView : ContentView
 
         foreach (AlbumItemModel model in sorted)
             albumModels.Add(model);
+
+        // Old thumbnails can expire. Need to reload them
+        loadAllThumbnails();
     }
 
     public void SortByName_Click(object sender, EventArgs e)

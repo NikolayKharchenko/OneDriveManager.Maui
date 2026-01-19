@@ -25,15 +25,8 @@ public sealed class AlbumItemModel : INotifyPropertyChanged
         }
     }
 
-    bool thumbnailRequested;
-
-    public async Task EnsureThumbnailAsync(ThumbnailSize preferredSize = ThumbnailSize.Large)
+    public async Task LoadThumbnailAsync(ThumbnailSize preferredSize = ThumbnailSize.Large)
     {
-        if (thumbnailRequested)
-            return;
-
-        thumbnailRequested = true;
-
         if (string.IsNullOrWhiteSpace(Item.Id))
             return;
 
