@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-        xmlns:str="clr-namespace:OneDriveAlbums.UI.Resources.Strings" x:Class="OneDriveAlbums.UI.MainPage">
+        xmlns:local="clr-namespace:OneDriveAlbums.UI" xmlns:str="clr-namespace:OneDriveAlbums.UI.Resources.Strings" x:Class="OneDriveAlbums.UI.MainPage">
 
     <Grid RowDefinitions="*,Auto" Padding="10">
-        <Grid Grid.Row="0" />
+        <local:AlbumsView Grid.Row="0" x:Name="Albums_Vw"/>
         <Label Grid.Row="1" x:Name="Status_Lbl" FontSize="14" HorizontalOptions="Start" Margin="0,20,0,0" />
     </Grid>
 </ContentPage>

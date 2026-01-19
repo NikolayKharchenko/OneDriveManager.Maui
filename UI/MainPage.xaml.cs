@@ -36,7 +36,7 @@ public partial class MainPage : ContentPage
     private async void initialize()
     {
         await connectToGraph();
-        await loadAlbums();
+        await Albums_Vw.LoadAlbums();
     }
 
     private async Task connectToGraph()
@@ -54,15 +54,5 @@ public partial class MainPage : ContentPage
 
         string displayName = await GraphClient.Instance.ConnectedAccountName();
         SetStatusText(Strings.Connected_Msg, displayName);
-    }
-
-    static bool isItemSuitable(DriveItem item)
-    {
-        return item?.Bundle?.Album != null;
-    }
-
-    private async Task loadAlbums()
-    {
-        await GraphClient.Instance.GetBundlesAsync(isItemSuitable).ConfigureAwait(false);
     }
 }
