@@ -10,11 +10,11 @@
         <CollectionView.ItemTemplate>
             <DataTemplate>
                 <Border Padding="8" Margin="6">
-                    <!--
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Handler="OnAlbumTapped" NumberOfTapsRequired="2" />
-                    </Grid.GestureRecognizers>
--->
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAlbumTapped" NumberOfTapsRequired="2" />
+                    </Border.GestureRecognizers>
+                    
                     <VerticalStackLayout>
                         <Image WidthRequest="300" HeightRequest="300" Source="{Binding Thumbnail}" Aspect="AspectFit" />
 
