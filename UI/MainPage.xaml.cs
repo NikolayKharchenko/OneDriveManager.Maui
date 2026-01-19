@@ -63,4 +63,12 @@ public partial class MainPage : ContentPage
     {
 
     }
+    private async void SignOut_Clicked(object sender, EventArgs e)
+    {
+        if (GraphClient.Instance.IsConnected)
+        {
+            await GraphClient.Instance.Disconnect();
+            SetStatusText(Strings.Ready_Txt);
+        }
+    }
 }

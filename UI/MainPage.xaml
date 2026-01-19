@@ -5,7 +5,8 @@
     <Grid RowDefinitions="Auto,*,Auto" Padding="10">
         <HorizontalStackLayout Grid.Row="0" Spacing="20" VerticalOptions="Center">
             <Button Text="{Static str:Strings.SignIn_Btn}" Clicked="SignIn_Clicked"/>
-            <Button Text="{Static str:Strings.ViewAlbums_Btn}" Clicked="ViewAlbums_Clicked"/>
+            <Button Text="{Static str:Strings.ViewAlbums_Btn}" Clicked="ViewAlbums_Clicked" />
+            <Button Text="{Static str:Strings.SignOut_Btn}" Clicked="SignOut_Clicked"/>
         </HorizontalStackLayout>
         <Grid Grid.Row="1" />
         <Label Grid.Row="2" x:Name="Status_Lbl" FontSize="14" HorizontalOptions="Start" Margin="0,20,0,0" />

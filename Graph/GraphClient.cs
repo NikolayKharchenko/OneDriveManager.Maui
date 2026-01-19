@@ -3,8 +3,9 @@ using Microsoft.Graph.Drives.Item.Bundles;
 using Microsoft.Graph.Drives.Item.Items;
 using Microsoft.Graph.Drives.Item.Items.Item;
 using Microsoft.Graph.Models;
-using Microsoft.Kiota.Http.HttpClientLibrary;
+using Microsoft.Identity.Client;
 using Microsoft.Kiota.Abstractions;
+using Microsoft.Kiota.Http.HttpClientLibrary;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -36,6 +37,8 @@ public class GraphClient
     GraphServiceClient? client;
     Config config;
     static GraphClient? instance;
+
+    private IPublicClientApplication? _pca;
 
     private string configDir => Path.Combine(config.OneDriveRootFolder, ".OneDriveManager");
     string persistentDataPath => Path.Combine(configDir, "persistdb.json");
@@ -71,7 +74,7 @@ public class GraphClient
 
     public event EventHandler<ItemsEventArgs>? Items_Loading;
     public event EventHandler<ItemsEventArgs>? Items_Loaded;
-    public event EventHandler? Connection_Change;
+    public event Action? Connection_Change;
 
     public async Task Connect(Config config, AuthProviderImplBase authProvider)
     {
@@ -79,20 +82,40 @@ public class GraphClient
         {
             this.config = config;
 
-            await MsalTokenCache.InitializeAsync(authProvider.PCA);
+            _pca = authProvider.PCA;
+
+            await MsalTokenCache.InitializeAsync(_pca).ConfigureAwait(false);
             var adapter = new HttpClientRequestAdapter(authProvider, httpClient: new HttpClient());
 
             client = new GraphServiceClient(adapter);
-            await client.Me.GetAsync();
+            await client.Me.GetAsync().ConfigureAwait(false);
 
             loadPersistentData();
-            Connection_Change?.Invoke(this, EventArgs.Empty);
+            Connection_Change?.Invoke();
         }
         catch (Exception)
         {
             client = null;
-            Connection_Change?.Invoke(this, EventArgs.Empty);
+            _pca = null;
+            Connection_Change?.Invoke();
             throw;
+        }
+    }
+
+    public async Task Disconnect()
+    {
+        if (client == null || _pca == null)
+            return;
+
+        try
+        {
+            await MsalTokenCache.ClearAsync(_pca);
+        }
+        finally
+        {
+            client = null;
+            _pca = null;
+            Connection_Change?.Invoke();
         }
     }
 
@@ -152,8 +175,6 @@ public class GraphClient
     {
         Trace.Assert(client != null, "GraphClient is not connected");
 
-        // Delta enumerates the whole drive state efficiently, then provides a deltaLink for later incremental sync.
-        // Initial request:
         string startUrl = "https://graph.microsoft.com/v1.0/me/drive/root/delta";
         ItemsRequestBuilder itemsRequestBuilder = client.Drives["root"].Items;
         return await getItemsAsync(url => itemsRequestBuilder.WithUrl(url).GetAsync(), startUrl, filter);

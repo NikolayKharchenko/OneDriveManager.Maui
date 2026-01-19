@@ -106,6 +106,15 @@ namespace OneDriveAlbums.UI.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sign out.
+        /// </summary>
+        internal static string SignOut_Btn {
+            get {
+                return ResourceManager.GetString("SignOut_Btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Albums.
         /// </summary>
         internal static string ViewAlbums_Btn {

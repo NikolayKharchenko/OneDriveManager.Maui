@@ -135,4 +135,7 @@
   <data name="Connected_Msg" xml:space="preserve">
     <value>Signed in as {0}</value>
   </data>
+  <data name="SignOut_Btn" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
 </root>
