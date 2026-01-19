@@ -14,12 +14,13 @@
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnAlbumTapped" NumberOfTapsRequired="2" />
                     </Border.GestureRecognizers>
-                    
-                    <VerticalStackLayout>
+
+                    <Grid>
                         <Image WidthRequest="300" HeightRequest="300" Source="{Binding Thumbnail}" Aspect="AspectFit" />
 
-                        <Label Text="{Binding Name}" LineBreakMode="TailTruncation" />
-                    </VerticalStackLayout>
+                        <Label Text="{Binding Name}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="End" Opacity="0.8"
+                                Background="White" />
+                    </Grid>
                 </Border>
             </DataTemplate>
         </CollectionView.ItemTemplate>
