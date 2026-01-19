@@ -25,8 +25,8 @@
                         <Grid>
                             <Image WidthRequest="300" HeightRequest="300" Source="{Binding Thumbnail}" Aspect="AspectFit" />
 
-                            <Label Text="{Binding Name}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="End" Opacity="0.8"
-                                    Background="White" />
+                            <Label Text="{Binding Name}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="End"
+                                   Background="White" Padding="3" Margin="3"/>
                         </Grid>
                     </Border>
                 </DataTemplate>

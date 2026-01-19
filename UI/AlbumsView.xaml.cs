@@ -45,11 +45,9 @@ public partial class AlbumsView : ContentView
 
     public void sortAlbums<T>(Func<AlbumItemModel, T> selector, bool ascending)
     {
-        List<AlbumItemModel> sorted = (ascending
-            ? albumModels.OrderBy(selector)
-            : albumModels.OrderByDescending(selector))
-            .ToList(); // important: materialize before Clear()
-
+        // important: materialize before Clear()
+        List<AlbumItemModel> sorted = (ascending ? albumModels.OrderBy(selector) : albumModels.OrderByDescending(selector)).ToList();
+        
         albumModels.Clear();
 
         foreach (AlbumItemModel model in sorted)
