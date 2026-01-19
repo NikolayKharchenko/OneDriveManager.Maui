@@ -1,4 +1,4 @@
-﻿
+﻿using Microsoft.Graph.Models;
 using OneDriveAlbums.Graph;
 using OneDriveAlbums.UI.Resources.Strings;
 using System.Diagnostics;
@@ -23,6 +23,9 @@ public partial class MainPage : ContentPage
         instance = this;
         InitializeComponent();
         SetStatusText(Strings.Ready_Txt);
+        GraphClient.Instance.Items_Loading += (s, e) => { SetStatusText(Strings.LoadingItems_Msg, e.Count, e.Elapsed); };
+        GraphClient.Instance.Items_Loaded += (s, e) => { SetStatusText(Strings.LoadedItems_Msg, e.Count, e.Elapsed); };
+        Dispatcher.Dispatch(initialize);
     }
 
     public void SetStatusText(string text = "", params object[] args)
@@ -30,45 +33,36 @@ public partial class MainPage : ContentPage
         Status_Lbl.Text = string.Format(text, args);
     }
 
-    private void SignIn_Clicked(object sender, EventArgs e)
+    private async void initialize()
     {
-        connectToGraph();
+        await connectToGraph();
+        await loadAlbums();
     }
 
-    private async void connectToGraph()
+    private async Task connectToGraph()
     {
-        try
-        {
-            SetStatusText(Strings.Connecting_Msg);
+        SetStatusText(Strings.Connecting_Msg);
 
-            string baseDir = Platform.GetOneDriveLocalDirectory();
-            AuthProviderImplBase auth = Platform.CreateAuthProvider(ClientId);
+        string baseDir = Platform.GetOneDriveLocalDirectory();
+        AuthProviderImplBase auth = Platform.CreateAuthProvider(ClientId);
 
-            await GraphClient.Instance.Connect(
-                new GraphClient.Config(
-                    OneDriveRootFolder: baseDir,
-                    MaxElements: App.Config.MaxElements),
-                auth);
+        await GraphClient.Instance.Connect(
+            new GraphClient.Config(
+                OneDriveRootFolder: baseDir,
+                MaxElements: App.Config.MaxElements),
+            auth);
 
-            string displayName = await GraphClient.Instance.ConnectedAccountName();
-            SetStatusText(Strings.Connected_Msg, displayName);
-        }
-        catch (Exception ex)
-        {
-            SetStatusText(ex.Message);
-        }
+        string displayName = await GraphClient.Instance.ConnectedAccountName();
+        SetStatusText(Strings.Connected_Msg, displayName);
     }
 
-    private void ViewAlbums_Clicked(object sender, EventArgs e)
+    static bool isItemSuitable(DriveItem item)
     {
-
+        return item?.Bundle?.Album != null;
     }
-    private async void SignOut_Clicked(object sender, EventArgs e)
+
+    private async Task loadAlbums()
     {
-        if (GraphClient.Instance.IsConnected)
-        {
-            await GraphClient.Instance.Disconnect();
-            SetStatusText(Strings.Ready_Txt);
-        }
+        await GraphClient.Instance.GetBundlesAsync(isItemSuitable).ConfigureAwait(false);
     }
 }

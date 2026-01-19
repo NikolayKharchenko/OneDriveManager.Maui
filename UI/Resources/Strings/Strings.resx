@@ -138,4 +138,10 @@
   <data name="SignOut_Btn" xml:space="preserve">
     <value>Sign out</value>
   </data>
+  <data name="LoadingItems_Msg" xml:space="preserve">
+    <value>Loading... {0} items found. {1:mm\:ss} elapsed</value>
+  </data>
+  <data name="LoadedItems_Msg" xml:space="preserve">
+    <value>Found {0} items. {1:mm\:ss} elapsed</value>
+  </data>
 </root>

@@ -2,13 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
         xmlns:str="clr-namespace:OneDriveAlbums.UI.Resources.Strings" x:Class="OneDriveAlbums.UI.MainPage">
 
-    <Grid RowDefinitions="Auto,*,Auto" Padding="10">
-        <HorizontalStackLayout Grid.Row="0" Spacing="20" VerticalOptions="Center">
-            <Button Text="{Static str:Strings.SignIn_Btn}" Clicked="SignIn_Clicked"/>
-            <Button Text="{Static str:Strings.ViewAlbums_Btn}" Clicked="ViewAlbums_Clicked" />
-            <Button Text="{Static str:Strings.SignOut_Btn}" Clicked="SignOut_Clicked"/>
-        </HorizontalStackLayout>
-        <Grid Grid.Row="1" />
-        <Label Grid.Row="2" x:Name="Status_Lbl" FontSize="14" HorizontalOptions="Start" Margin="0,20,0,0" />
+    <Grid RowDefinitions="*,Auto" Padding="10">
+        <Grid Grid.Row="0" />
+        <Label Grid.Row="1" x:Name="Status_Lbl" FontSize="14" HorizontalOptions="Start" Margin="0,20,0,0" />
     </Grid>
 </ContentPage>

@@ -51,6 +51,8 @@ public partial class App : Application
     {
         LoadConfig();
         InitializeComponent();
+
+        
     }
 
     protected override Window CreateWindow(IActivationState? activationState)

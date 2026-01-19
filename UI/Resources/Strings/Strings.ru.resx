@@ -135,4 +135,13 @@
   <data name="Connected_Msg" xml:space="preserve">
     <value>Подключен как {0}</value>
   </data>
+  <data name="SignOut_Btn" xml:space="preserve">
+    <value>Отсоединиться</value>
+  </data>
+  <data name="LoadingItems_Msg" xml:space="preserve">
+    <value>Загрузка...Найдено {0} элементов за {1:mm\:ss}</value>
+  </data>
+  <data name="LoadedItems_Msg" xml:space="preserve">
+    <value>Найдено {0} элементов за {1:mm\:ss}</value>
+  </data>
 </root>

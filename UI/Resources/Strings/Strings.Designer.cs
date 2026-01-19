@@ -79,6 +79,24 @@ namespace OneDriveAlbums.UI.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found {0} items. {1:mm\:ss} elapsed.
+        /// </summary>
+        internal static string LoadedItems_Msg {
+            get {
+                return ResourceManager.GetString("LoadedItems_Msg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading... {0} items found. {1:mm\:ss} elapsed.
+        /// </summary>
+        internal static string LoadingItems_Msg {
+            get {
+                return ResourceManager.GetString("LoadingItems_Msg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OneDrive Albums.
         /// </summary>
         internal static string MainWindow_Caption {

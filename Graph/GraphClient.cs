@@ -74,7 +74,6 @@ public class GraphClient
 
     public event EventHandler<ItemsEventArgs>? Items_Loading;
     public event EventHandler<ItemsEventArgs>? Items_Loaded;
-    public event Action? Connection_Change;
 
     public async Task Connect(Config config, AuthProviderImplBase authProvider)
     {
@@ -84,20 +83,18 @@ public class GraphClient
 
             _pca = authProvider.PCA;
 
-            await MsalTokenCache.InitializeAsync(_pca).ConfigureAwait(false);
+            await MsalTokenCache.InitializeAsync(_pca);
             var adapter = new HttpClientRequestAdapter(authProvider, httpClient: new HttpClient());
 
             client = new GraphServiceClient(adapter);
             await client.Me.GetAsync().ConfigureAwait(false);
 
             loadPersistentData();
-            Connection_Change?.Invoke();
         }
         catch (Exception)
         {
             client = null;
             _pca = null;
-            Connection_Change?.Invoke();
             throw;
         }
     }
@@ -115,7 +112,6 @@ public class GraphClient
         {
             client = null;
             _pca = null;
-            Connection_Change?.Invoke();
         }
     }
 
