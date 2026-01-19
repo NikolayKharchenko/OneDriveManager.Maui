@@ -1,5 +1,6 @@
 using Microsoft.Graph.Models;
 using OneDriveAlbums.Graph;
+using OneDriveAlbums.UI.Resources.Strings;
 using System.Collections.ObjectModel;
 
 namespace OneDriveAlbums.UI;
@@ -11,6 +12,16 @@ public partial class AlbumsView : ContentView
 
     bool? ascByName;
     bool? ascByDate;
+
+    const char UpArrow = '\x2191';
+    const char DownArrow = '\x2193';
+
+    char sortSymbol(bool? ascending)
+    {
+        if (ascending is null)
+            return ' ';
+        return ascending.Value ? UpArrow : DownArrow;
+    }
 
     public AlbumsView()
     {
@@ -54,7 +65,7 @@ public partial class AlbumsView : ContentView
         _ = Launcher.OpenAsync(albumModel.Item.WebUrl);
     }
 
-    public void sortAlbums<T>(Func<AlbumItemModel, T> selector, bool ascending)
+    void sortAlbums<T>(Func<AlbumItemModel, T> selector, bool ascending)
     {
         // important: materialize before Clear()
         List<AlbumItemModel> sorted = (ascending ? albumModels.OrderBy(selector) : albumModels.OrderByDescending(selector)).ToList();
@@ -68,11 +79,18 @@ public partial class AlbumsView : ContentView
         loadAllThumbnails();
     }
 
+    void updateSortButtons()
+    {
+        SortByName_Btn.Text = Strings.SortByName_Btn + " " + sortSymbol(ascByName);
+        SortByDate_Btn.Text = Strings.SortByDate_Btn + " " + sortSymbol(ascByDate);
+    }
+
     public void SortByName_Click(object sender, EventArgs e)
     {
         ascByDate = null;
         ascByName = ascByName is null ? true : !ascByName;
         sortAlbums(model => model.Name, ascByName.Value);
+        updateSortButtons();
     }
 
     public void SortByDate_Click(object sender, EventArgs e)
@@ -81,6 +99,7 @@ public partial class AlbumsView : ContentView
         ascByDate = ascByDate is null ? false : !ascByDate;
 
         sortAlbums(model => model.Item!.CreatedDateTime!.Value, ascByDate.Value);
+        updateSortButtons();
     }
 
     void SearchFor_TextChanged(object sender, TextChangedEventArgs e)
