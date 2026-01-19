@@ -23,8 +23,14 @@ public partial class AlbumsView : ContentView
     public async Task LoadAlbums()
     {
         albums = await GraphClient.Instance.GetBundlesAsync(isItemSuitable);
+        reloadModels();
+    }
 
+    private void reloadModels()
+    {
         albumModels.Clear();
+        if (albums is null)
+            return;
         foreach (DriveItem album in albums)
             albumModels.Add(new AlbumItemModel(album));
 
@@ -75,5 +81,31 @@ public partial class AlbumsView : ContentView
         ascByDate = ascByDate is null ? false : !ascByDate;
 
         sortAlbums(model => model.Item!.CreatedDateTime!.Value, ascByDate.Value);
+    }
+
+    void SearchFor_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        string searchText = e.NewTextValue?.Trim() ?? string.Empty;
+        if (searchText.Length == 0)
+        {
+            reloadModels();
+            return;
+        }
+        if (searchText.Length < 3)
+            return;
+
+        albumModels.Clear();
+        IEnumerable<AlbumItemModel> filtered = albums!
+                .Where(album => (album.Name?.Contains(searchText, StringComparison.OrdinalIgnoreCase)).GetValueOrDefault(false))
+                .Select(album => new AlbumItemModel(album));
+        
+        foreach (AlbumItemModel model in filtered)
+            albumModels.Add(model);
+        loadAllThumbnails();
+    }
+
+    void ClearSearch_Click(object sender, EventArgs e)
+    {
+        SearchFor_Entry.Text = string.Empty;
     }
 }

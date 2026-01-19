@@ -9,6 +9,13 @@
                     Margin="0,0,10,0" />
             <Button Text="{x:Static str:Strings.SortByDate_Btn}" x:Name="SortByDate_Btn" Clicked="SortByDate_Click" VerticalOptions="Center"
                     Margin="0,0,10,0" />
+            <Label Text="{Static str:Strings.SearchFor_Lbl}" Margin="20,0,10,0" VerticalOptions="Center" />
+            <Grid>
+                <Entry x:Name="SearchFor_Entry" WidthRequest="400" VerticalOptions="Center" TextChanged="SearchFor_TextChanged"
+                        Placeholder="{x:Static str:Strings.SearchFor_PlaceHolder}" />
+                <Button Text="X" x:Name="ClearSearch_Btn" Clicked="ClearSearch_Click" WidthRequest="30" HeightRequest="30" VerticalOptions="Center"
+                        HorizontalOptions="End" Margin="0,0,5,0" Background="Transparent" TextColor="Gray"/>
+            </Grid>
         </HorizontalStackLayout>
         <CollectionView Grid.Row="1" SelectionMode="Single" x:Name="Albums_CVw">
             <CollectionView.ItemsLayout>

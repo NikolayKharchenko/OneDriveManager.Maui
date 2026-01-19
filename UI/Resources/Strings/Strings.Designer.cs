@@ -115,6 +115,24 @@ namespace OneDriveAlbums.UI.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search for:.
+        /// </summary>
+        internal static string SearchFor_Lbl {
+            get {
+                return ResourceManager.GetString("SearchFor_Lbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter 3 or more characters to search for.
+        /// </summary>
+        internal static string SearchFor_PlaceHolder {
+            get {
+                return ResourceManager.GetString("SearchFor_PlaceHolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sign in.
         /// </summary>
         internal static string SignIn_Btn {

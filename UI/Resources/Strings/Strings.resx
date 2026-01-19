@@ -153,4 +153,10 @@
   <data name="SortBy_Lbl" xml:space="preserve">
     <value>Sort by</value>
   </data>
+  <data name="SearchFor_Lbl" xml:space="preserve">
+    <value>Search for:</value>
+  </data>
+  <data name="SearchFor_PlaceHolder" xml:space="preserve">
+    <value>Enter 3 or more characters to search for</value>
+  </data>
 </root>
