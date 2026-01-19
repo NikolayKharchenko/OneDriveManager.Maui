@@ -13,7 +13,7 @@
             <Grid>
                 <Entry x:Name="SearchFor_Entry" WidthRequest="400" VerticalOptions="Center" TextChanged="SearchFor_TextChanged"
                         Placeholder="{x:Static str:Strings.SearchFor_PlaceHolder}" />
-                <Button Text="X" x:Name="ClearSearch_Btn" Clicked="ClearSearch_Click" WidthRequest="30" HeightRequest="30" VerticalOptions="Center"
+                <Button Text="&#x2715;" x:Name="ClearSearch_Btn" Clicked="ClearSearch_Click" WidthRequest="30" HeightRequest="30" VerticalOptions="Center"
                         HorizontalOptions="End" Margin="0,0,5,0" Background="Transparent" TextColor="Gray"/>
             </Grid>
         </HorizontalStackLayout>
