@@ -12,7 +12,7 @@ public sealed class AlbumItemModel : INotifyPropertyChanged
     public DriveItem Item { get; }
     public string Name => Item.Name ?? "(unnamed)";
 
-    ImageSource? thumbnail;
+    private ImageSource? thumbnail;
     public ImageSource? Thumbnail
     {
         get => thumbnail;
@@ -20,6 +20,7 @@ public sealed class AlbumItemModel : INotifyPropertyChanged
         {
             if (ReferenceEquals(thumbnail, value))
                 return;
+
             thumbnail = value;
             OnPropertyChanged();
         }
@@ -33,6 +34,7 @@ public sealed class AlbumItemModel : INotifyPropertyChanged
         string? coverImageItemId = Item.Bundle?.Album?.CoverImageItemId;
         if (string.IsNullOrWhiteSpace(coverImageItemId))
             return;
+
         string? url = await GraphClient.Instance.GetThumbnailUrlAsync(coverImageItemId, preferredSize);
         if (string.IsNullOrWhiteSpace(url))
             return;
