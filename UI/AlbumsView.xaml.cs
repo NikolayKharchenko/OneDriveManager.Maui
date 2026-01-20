@@ -93,16 +93,22 @@ public partial class AlbumsView : ContentView
     {
         ascByDate = null;
         ascByName = ascByName is null ? true : !ascByName;
-        sortAlbums(model => model.Name, ascByName.Value);
-        updateSortButtons();
+        sortByCurrentState();
     }
 
     public void SortByDate_Click(object sender, EventArgs e)
     {
         ascByName = null;
         ascByDate = ascByDate is null ? false : !ascByDate;
+        sortByCurrentState();
+    }
 
-        sortAlbums(model => model.Item!.CreatedDateTime!.Value, ascByDate.Value);
+    void sortByCurrentState()
+    {
+        if (ascByName is not null)
+            sortAlbums(model => model.Name, ascByName.Value);
+        else if (ascByDate is not null)
+            sortAlbums(model => model.Item!.CreatedDateTime!.Value, ascByDate.Value);
         updateSortButtons();
     }
 

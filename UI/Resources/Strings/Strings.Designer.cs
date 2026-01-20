@@ -151,7 +151,7 @@ namespace OneDriveAlbums.UI.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sort by.
+        ///   Looks up a localized string similar to Sort by:.
         /// </summary>
         internal static string SortBy_Lbl {
             get {

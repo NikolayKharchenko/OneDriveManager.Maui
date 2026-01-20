@@ -151,7 +151,7 @@
     <value>Date</value>
   </data>
   <data name="SortBy_Lbl" xml:space="preserve">
-    <value>Sort by</value>
+    <value>Sort by:</value>
   </data>
   <data name="SearchFor_Lbl" xml:space="preserve">
     <value>Search for:</value>

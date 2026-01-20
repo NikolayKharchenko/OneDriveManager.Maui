@@ -4,7 +4,7 @@
     <Grid RowDefinitions="Auto,Auto,*" RowSpacing="5">
 
         <HorizontalStackLayout Grid.Row="0">
-            <Label Text="{Static str:Strings.SortBy_Lbl}" Margin="0,0,10,0" VerticalOptions="Center" />
+            <Label Text="{Static str:Strings.SortBy_Lbl}" WidthRequest="100" Margin="0,0,10,0" VerticalOptions="Center" />
             <Button Text="{x:Static str:Strings.SortByName_Btn}" x:Name="SortByName_Btn" Clicked="SortByName_Click" VerticalOptions="Center"
                     Margin="0,0,10,0" WidthRequest="100"/>
             <Button Text="{x:Static str:Strings.SortByDate_Btn}" x:Name="SortByDate_Btn" Clicked="SortByDate_Click" VerticalOptions="Center"
@@ -12,7 +12,7 @@
         </HorizontalStackLayout>
         
         <HorizontalStackLayout Grid.Row="1">
-            <Label Text="{Static str:Strings.SearchFor_Lbl}" Margin="0,0,10,0" VerticalOptions="Center" />
+            <Label Text="{Static str:Strings.SearchFor_Lbl}" WidthRequest="100" Margin="0,0,10,0" VerticalOptions="Center" />
             <Grid>
                 <Entry x:Name="SearchFor_Entry" WidthRequest="310" VerticalOptions="Center" TextChanged="SearchFor_TextChanged"
                         Placeholder="{x:Static str:Strings.SearchFor_PlaceHolder}" />
