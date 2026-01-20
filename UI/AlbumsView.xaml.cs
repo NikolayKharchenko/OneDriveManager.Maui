@@ -131,4 +131,10 @@ public partial class AlbumsView : ContentView
     {
         SearchFor_Entry.Text = string.Empty;
     }
+
+    private void Albums_SizeChanged(object sender, EventArgs e)
+    {
+        GridItemsLayout grid = (GridItemsLayout)Albums_CVw.ItemsLayout;
+        grid.Span = int.Max(1, (int)(Albums_CVw.Width / 300));
+    }
 }

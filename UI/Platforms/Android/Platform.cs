@@ -6,11 +6,11 @@ internal static class Platform
 {
     public static AuthProviderImplBase CreateAuthProvider(string clientId)
     {
-        throw new NotImplementedException("Android AuthProviderFactory is not implemented yet.");
+        return new AndroidAuthProvider(clientId);
     }
 
     public static string GetOneDriveLocalDirectory()
     {
-        throw new NotImplementedException("Android GetOneDriveLocalDirectory is not implemented yet.");
+        return FileSystem.AppDataDirectory;
     }
 }

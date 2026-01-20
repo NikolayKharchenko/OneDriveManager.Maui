@@ -33,7 +33,7 @@ public sealed class AlbumItemModel : INotifyPropertyChanged
         string? coverImageItemId = Item.Bundle?.Album?.CoverImageItemId;
         if (string.IsNullOrWhiteSpace(coverImageItemId))
             return;
-        string? url = await GraphClient.Instance.GetThumbnailUrlAsync(coverImageItemId, preferredSize).ConfigureAwait(false);
+        string? url = await GraphClient.Instance.GetThumbnailUrlAsync(coverImageItemId, preferredSize);
         if (string.IsNullOrWhiteSpace(url))
             return;
 

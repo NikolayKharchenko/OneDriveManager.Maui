@@ -13,14 +13,21 @@ public abstract class AuthProviderImplBase : IAuthenticationProvider
 
     protected AuthProviderImplBase(string clientId)
     {
-        PCA = PublicClientApplicationBuilder
+        var builder = PublicClientApplicationBuilder
             .Create(clientId)
-            .WithAuthority(AzureCloudInstance.AzurePublic, AadAuthorityAudience.PersonalMicrosoftAccount)
-            .WithRedirectUri("http://localhost")
-#if WINDOWS
-            .WithWindowsEmbeddedBrowserSupport()
+            .WithAuthority(AzureCloudInstance.AzurePublic, AadAuthorityAudience.PersonalMicrosoftAccount);
+
+#if ANDROID
+        builder = builder.WithRedirectUri($"msal{clientId}://auth");
+#else
+        builder = builder.WithRedirectUri("http://localhost");
 #endif
-            .Build();
+
+#if WINDOWS
+        builder = builder.WithWindowsEmbeddedBrowserSupport();
+#endif
+
+        PCA = builder.Build();
     }
 
     public async Task AuthenticateRequestAsync(
@@ -52,8 +59,13 @@ public abstract class AuthProviderImplBase : IAuthenticationProvider
             }
         }
 
-        return await GetAccessTokenInteractiveAsync(GraphClient.Scopes, cancellationToken);
+        AcquireTokenInteractiveParameterBuilder builder = PCA.AcquireTokenInteractive(GraphClient.Scopes)
+            .WithUseEmbeddedWebView(true);
+        builder = WithModification(builder);
+        AuthenticationResult result = await builder.ExecuteAsync(cancellationToken);
+
+        return result.AccessToken;
     }
 
-    protected abstract Task<string> GetAccessTokenInteractiveAsync(string[] scopes, CancellationToken cancellationToken);
+    protected abstract AcquireTokenInteractiveParameterBuilder WithModification(AcquireTokenInteractiveParameterBuilder builder);
 }

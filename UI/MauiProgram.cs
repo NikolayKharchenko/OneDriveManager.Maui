@@ -9,7 +9,7 @@ public static class MauiProgram
     {
         HookUnhandledExceptions();
 
-        var builder = MauiApp.CreateBuilder();
+        MauiAppBuilder builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
@@ -19,7 +19,7 @@ public static class MauiProgram
             });
 
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
         return builder.Build();
@@ -31,14 +31,12 @@ public static class MauiProgram
         {
             var ex = e.ExceptionObject as Exception;
             Trace.WriteLine($"[UnhandledException][IsTerminating={e.IsTerminating}] {ex}");
-            MainPage.Instance.SetStatusText(ex?.Message ?? "An unknown error occurred.");
         };
 
         TaskScheduler.UnobservedTaskException += (_, e) =>
         {
             Trace.WriteLine($"[UnobservedTaskException] {e.Exception}");
             e.SetObserved(); // prevents the process from being torn down later due to this exception
-            MainPage.Instance.SetStatusText(e.Exception?.Message ?? "An unknown error occurred.");
         };
     }
 }

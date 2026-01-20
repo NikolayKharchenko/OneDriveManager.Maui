@@ -1,3 +1,4 @@
+using Microsoft.Identity.Client;
 using OneDriveAlbums.Graph;
 using WinRT.Interop;
 
@@ -9,17 +10,10 @@ internal sealed class MsalDesktopAuthProvider : AuthProviderImplBase
     {
     }
 
-    protected override async Task<string> GetAccessTokenInteractiveAsync(string[] scopes, CancellationToken cancellationToken)
+    protected override AcquireTokenInteractiveParameterBuilder WithModification(AcquireTokenInteractiveParameterBuilder builder)
     {
         nint hwnd = GetMauiAppHwnd();
-
-        var result = await PCA.AcquireTokenInteractive(scopes)
-            .WithUseEmbeddedWebView(true)
-            .WithParentActivityOrWindow(hwnd)
-            .ExecuteAsync(cancellationToken)
-            .ConfigureAwait(false);
-
-        return result.AccessToken;
+        return builder.WithParentActivityOrWindow(hwnd);
     }
 
     private static nint GetMauiAppHwnd()
