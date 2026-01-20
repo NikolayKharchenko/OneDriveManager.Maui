@@ -83,9 +83,7 @@ public class GraphClient
 
             _pca = authProvider.PCA;
 
-#if !ANDROID
             await MsalTokenCache.InitializeAsync(_pca);
-#endif
             var adapter = new HttpClientRequestAdapter(authProvider, httpClient: new HttpClient());
 
             client = new GraphServiceClient(adapter);
