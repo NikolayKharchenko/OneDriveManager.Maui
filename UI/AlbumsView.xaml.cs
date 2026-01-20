@@ -13,8 +13,10 @@ public partial class AlbumsView : ContentView
     bool? ascByName;
     bool? ascByDate;
 
-    const char UpArrow = '\x2191';
-    const char DownArrow = '\x2193';
+    //const char UpArrow = '\x2191';
+    //const char DownArrow = '\x2193';
+    const char UpArrow = '\x25B2';
+    const char DownArrow = '\x25BC';
 
     char sortSymbol(bool? ascending)
     {
@@ -108,6 +110,8 @@ public partial class AlbumsView : ContentView
         if (searchText.Length == 0)
         {
             reloadModels();
+            ascByDate = ascByName = null;
+            updateSortButtons();
             return;
         }
         if (searchText.Length < 3)
