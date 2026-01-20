@@ -17,20 +17,25 @@
                         HorizontalOptions="End" Margin="0,0,5,0" Background="Transparent" TextColor="Gray"/>
             </Grid>
         </HorizontalStackLayout>
+
         <CollectionView Grid.Row="1" SelectionMode="Single" x:Name="Albums_CVw" SizeChanged="Albums_SizeChanged">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" Span="5" HorizontalItemSpacing="2" VerticalItemSpacing="2"/>
             </CollectionView.ItemsLayout>
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Padding="8" Margin="6">
-
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="Album_Tap" NumberOfTapsRequired="2" />
                         </Border.GestureRecognizers>
 
                         <Grid>
-                            <Image WidthRequest="300" HeightRequest="300" Source="{Binding Thumbnail}" Aspect="AspectFit" />
+                            <Image WidthRequest="300"
+                                   HeightRequest="300"
+                                   Source="{Binding Thumbnail}"
+                                   Aspect="AspectFit"
+                                   BindingContextChanged="ThumbnailImage_BindingContextChanged" />
 
                             <Label Text="{Binding Name}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="Start"
                                    Background="White" Padding="3" Margin="3"/>

@@ -3,6 +3,7 @@ using OneDriveAlbums.Graph;
 using OneDriveAlbums.UI.Resources.Strings;
 using System.Collections.ObjectModel;
 
+using Image = Microsoft.Maui.Controls.Image;
 namespace OneDriveAlbums.UI;
 
 public partial class AlbumsView : ContentView
@@ -44,16 +45,19 @@ public partial class AlbumsView : ContentView
         albumModels.Clear();
         if (albums is null)
             return;
+
         foreach (DriveItem album in albums)
             albumModels.Add(new AlbumItemModel(album));
 
-        loadAllThumbnails();
+        // Thumbnails are loaded lazily (only for realized/visible items) via ThumbnailImage_BindingContextChanged.
     }
 
-    private void loadAllThumbnails()
+    private async void ThumbnailImage_BindingContextChanged(object sender, EventArgs e)
     {
-        foreach (AlbumItemModel model in albumModels)
-            _ = model.LoadThumbnailAsync();
+        if (sender is not Image img || img.BindingContext is not AlbumItemModel model)
+            return;
+
+        await model.LoadThumbnailAsync();
     }
 
     public void Album_Tap(object sender, EventArgs e)
@@ -71,14 +75,13 @@ public partial class AlbumsView : ContentView
     {
         // important: materialize before Clear()
         List<AlbumItemModel> sorted = (ascending ? albumModels.OrderBy(selector) : albumModels.OrderByDescending(selector)).ToList();
-        
+
         albumModels.Clear();
 
         foreach (AlbumItemModel model in sorted)
             albumModels.Add(model);
 
-        // Old thumbnails can expire. Need to reload them
-        loadAllThumbnails();
+        // No eager thumbnail reload here. Visible items will re-request thumbnails as cells get realized.
     }
 
     void updateSortButtons()
@@ -121,10 +124,11 @@ public partial class AlbumsView : ContentView
         IEnumerable<AlbumItemModel> filtered = albums!
                 .Where(album => (album.Name?.Contains(searchText, StringComparison.OrdinalIgnoreCase)).GetValueOrDefault(false))
                 .Select(album => new AlbumItemModel(album));
-        
+
         foreach (AlbumItemModel model in filtered)
             albumModels.Add(model);
-        loadAllThumbnails();
+
+        // No eager thumbnail loading here either.
     }
 
     void ClearSearch_Click(object sender, EventArgs e)
