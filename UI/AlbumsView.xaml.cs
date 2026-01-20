@@ -14,8 +14,6 @@ public partial class AlbumsView : ContentView
     bool? ascByName;
     bool? ascByDate;
 
-    //const char UpArrow = '\x2191';
-    //const char DownArrow = '\x2193';
     const char UpArrow = '\x25B2';
     const char DownArrow = '\x25BC';
 
@@ -38,6 +36,7 @@ public partial class AlbumsView : ContentView
     {
         albums = await GraphClient.Instance.GetBundlesAsync(isItemSuitable);
         reloadModels();
+        SortByDate_Click(this, EventArgs.Empty);
     }
 
     private void reloadModels()
