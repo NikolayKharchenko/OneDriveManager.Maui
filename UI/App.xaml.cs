@@ -29,8 +29,6 @@ public sealed class AppConfig
         ReadCommentHandling = JsonCommentHandling.Skip,
         AllowTrailingCommas = true,
     };
-
-
 }
 
 public record struct AppConfigJson(
@@ -51,8 +49,6 @@ public partial class App : Application
     {
         LoadConfig();
         InitializeComponent();
-
-        
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
@@ -64,20 +60,21 @@ public partial class App : Application
     {
         try
         {
-            string userHome = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string configDir = Path.Combine(userHome, ".OneDriveManager");
-            string path = Path.Combine(configDir, ConfigFileName);
+            string baseDir =
+#if ANDROID
+                FileSystem.AppDataDirectory;
+#else
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+#endif
 
-            if (!File.Exists(path))
-            {
-                Config = new();
-                return;
-            }
+            string configDir = Path.Combine(baseDir, ".OneDriveManager");
+            Directory.CreateDirectory(configDir);
+            string path = Path.Combine(configDir, ConfigFileName);
 
             string json = File.ReadAllText(path);
             Config = new(json);
         }
-        catch (Exception)
+        catch
         {
             Config = new();
         }
