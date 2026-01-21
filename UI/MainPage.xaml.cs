@@ -9,18 +9,11 @@ public partial class MainPage : ContentPage
 {
     private const string ClientId = "14667aef-1076-4332-a2aa-de72d31a570f";
 
-    static private MainPage? instance;
-    static public MainPage Instance
-    {
-        get
-        {
-            Trace.Assert(instance != null, "MainPage instance is null. Make sure to access MainPage.Instance after the MainPage has been constructed.");
-            return instance;
-        }
-    }
+    static public MainPage? Instance;
     public MainPage()
     {
-        instance = this;
+        Trace.Assert(Instance ==  null);
+        Instance = this;
         InitializeComponent();
         SetStatusText(Strings.Ready_Txt);
         GraphClient.Instance.Items_Loading += (s, e) => { SetStatusText(Strings.LoadingItems_Msg, e.Count, e.Elapsed); };

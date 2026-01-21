@@ -31,12 +31,14 @@ public static class MauiProgram
         {
             var ex = e.ExceptionObject as Exception;
             Trace.WriteLine($"[UnhandledException][IsTerminating={e.IsTerminating}] {ex}");
+            MainPage.Instance?.SetStatusText(ex?.Message!);
         };
 
         TaskScheduler.UnobservedTaskException += (_, e) =>
         {
             Trace.WriteLine($"[UnobservedTaskException] {e.Exception}");
             e.SetObserved(); // prevents the process from being torn down later due to this exception
+            MainPage.Instance?.SetStatusText(e.Exception.Message);
         };
     }
 }

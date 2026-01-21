@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace OneDriveAlbums.UI;
@@ -7,21 +8,23 @@ public sealed class AppConfig
 {
     public AppConfig() { }
 
-    public AppConfig(string json)
+    public static AppConfig LoadFromJson(string json)
     {
-        AppConfigJson conf = JsonSerializer.Deserialize<AppConfigJson>(json, options);
-        IgnoredPaths = conf.IgnoredPaths.Select(path => new Regex(path)).ToArray();
-        MaxElements = int.Max(conf.MaxElements, 1);
-        DuplicatesStartSearchFrom = int.Max(conf.DuplicatesStartSearchFrom, 1);
-        AlwaysEqual = conf.AlwaysEqual;
-        DryRun = conf.DryRun;
+        AppConfig? result = JsonSerializer.Deserialize<AppConfig>(json, options);
+        if (result == null)
+        {
+            return new();
+        }
+        result.IgnoredPathRegexs = result.ignoredPaths.Select(path => new Regex(path)).ToArray();
+        return result;
     }
 
-    public Regex[] IgnoredPaths { get; set; } = [];
+    public Regex[] IgnoredPathRegexs { get; set; } = [];
     public int MaxElements { get; set; } = int.MaxValue;
     public int DuplicatesStartSearchFrom { get; set; } = 1;
     public bool AlwaysEqual { get; set; } = false;
     public bool DryRun { get; set; } = false;
+    public string[] ignoredPaths { get; set; } = [];
 
     private static JsonSerializerOptions options = new()
     {
@@ -30,14 +33,6 @@ public sealed class AppConfig
         AllowTrailingCommas = true,
     };
 }
-
-public record struct AppConfigJson(
-    string[] IgnoredPaths,
-    int MaxElements,
-    int DuplicatesStartSearchFrom,
-    bool AlwaysEqual,
-    bool DryRun
-);
 
 public partial class App : Application
 {
@@ -72,7 +67,7 @@ public partial class App : Application
             string path = Path.Combine(configDir, ConfigFileName);
 
             string json = File.ReadAllText(path);
-            Config = new(json);
+            Config = AppConfig.LoadFromJson(json);
         }
         catch
         {
