@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -42,7 +43,9 @@ public partial class App : Application
 
     public App()
     {
-        LoadConfig();
+        loadConfig();
+        loadUILanguage();
+
         InitializeComponent();
     }
 
@@ -51,7 +54,15 @@ public partial class App : Application
         return new Window(new AppShell());
     }
 
-    private static void LoadConfig()
+    private static void loadUILanguage()
+    {
+        string persistedLang = Preferences.Get("AppCulture", "en-US");
+        CultureInfo culture = new(persistedLang);
+        Thread.CurrentThread.CurrentCulture = culture;
+        Thread.CurrentThread.CurrentUICulture = culture;
+    }
+
+    private static void loadConfig()
     {
         try
         {

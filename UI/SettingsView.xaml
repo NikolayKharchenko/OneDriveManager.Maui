@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-        x:Class="OneDriveAlbums.UI.SettingsView">
-    <Grid BackgroundColor="White">
-        <Label Text="Settings" FontSize="24" VerticalOptions="Center" HorizontalOptions="Center" />
-    </Grid>
+        xmlns:str="clr-namespace:OneDriveAlbums.UI.Resources.Strings" x:Class="OneDriveAlbums.UI.SettingsView" Background="White">
+
+    <VerticalStackLayout Padding="10,10">
+        <Picker x:Name="InterfaceLanguage_Picker" Title="{Static str:Strings.InterfaceLanguage_Lbl}" HorizontalOptions="Start"
+                SelectedIndexChanged="InterfaceLanguage_Changed" />
+        <Label Text="{Static str:Strings.InterfaceLanguageChanged_Warn}" TextColor="Red" Margin="0,10,0,0" IsVisible="False"
+                x:Name="InterfaceLanguageChanged_Warn" />
+        <Button Text="{Static str:Strings.FixDates_Btn}" Margin="0,50" HorizontalOptions="Start" Clicked="FixDates_Click" />
+    </VerticalStackLayout>
 </ContentView>

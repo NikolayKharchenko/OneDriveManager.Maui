@@ -79,6 +79,33 @@ namespace OneDriveAlbums.UI.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix albums dates.
+        /// </summary>
+        internal static string FixDates_Btn {
+            get {
+                return ResourceManager.GetString("FixDates_Btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select interface language:.
+        /// </summary>
+        internal static string InterfaceLanguage_Lbl {
+            get {
+                return ResourceManager.GetString("InterfaceLanguage_Lbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interface language will be changed after application restart..
+        /// </summary>
+        internal static string InterfaceLanguageChanged_Warn {
+            get {
+                return ResourceManager.GetString("InterfaceLanguageChanged_Warn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Found {0} items. {1:mm\:ss} elapsed.
         /// </summary>
         internal static string LoadedItems_Msg {

@@ -159,4 +159,13 @@
   <data name="SearchFor_PlaceHolder" xml:space="preserve">
     <value>Enter 3 or more characters to search for</value>
   </data>
+  <data name="InterfaceLanguage_Lbl" xml:space="preserve">
+    <value>Select interface language:</value>
+  </data>
+  <data name="InterfaceLanguageChanged_Warn" xml:space="preserve">
+    <value>Interface language will be changed after application restart.</value>
+  </data>
+  <data name="FixDates_Btn" xml:space="preserve">
+    <value>Fix albums dates</value>
+  </data>
 </root>
