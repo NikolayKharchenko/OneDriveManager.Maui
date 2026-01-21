@@ -2,11 +2,13 @@ using Microsoft.Graph;
 using Microsoft.Graph.Drives.Item.Bundles;
 using Microsoft.Graph.Drives.Item.Items;
 using Microsoft.Graph.Drives.Item.Items.Item;
+using Microsoft.Graph.Drives.Item.Root;
 using Microsoft.Graph.Models;
 using Microsoft.Identity.Client;
 using Microsoft.Kiota.Abstractions;
 using Microsoft.Kiota.Http.HttpClientLibrary;
 using System.Diagnostics;
+using System.Net;
 using System.Text.Json;
 
 namespace OneDriveAlbums.Graph;
@@ -30,7 +32,6 @@ public class GraphClient
     ];
 
     public record struct Config(
-        string OneDriveRootFolder,
         int MaxElements = int.MaxValue
     );
 
@@ -40,8 +41,7 @@ public class GraphClient
 
     private IPublicClientApplication? _pca;
 
-    private string configDir => Path.Combine(config.OneDriveRootFolder, ".OneDriveManager");
-    string persistentDataPath => Path.Combine(configDir, "persistdb.json");
+    const string persistentDataOneDrivePath = "/.OneDriveManager/persistdb.json";
     private PersistentData persistentStore { get; set; } = new(new());
     public static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -89,7 +89,7 @@ public class GraphClient
             client = new GraphServiceClient(adapter);
             await client.Me.GetAsync();
 
-            loadPersistentData();
+            await loadPersistentDataAsync();
         }
         catch (Exception)
         {
@@ -97,6 +97,30 @@ public class GraphClient
             _pca = null;
             throw;
         }
+    }
+
+    private async Task loadPersistentDataAsync()
+    {
+        Trace.Assert(client != null, "GraphClient is not connected");
+
+        DriveItem? persistentItem = await TryGetItemByPathAsync(persistentDataOneDrivePath);
+        if (persistentItem?.Id is null)
+        {
+            persistentStore = new PersistentData(new());
+            return;
+        }
+
+        string driveId = await getDriveIdAsync();
+
+        Stream? content = await client.Drives[driveId].Items[persistentItem.Id].Content.GetAsync();
+        if (content == null)
+        {
+            persistentStore = new PersistentData(new());
+            return;
+        }
+        PersistentData? loaded = await JsonSerializer.DeserializeAsync<PersistentData>(content, JsonOptions);
+
+        persistentStore = loaded ?? new PersistentData(new());
     }
 
     public async Task Disconnect()
@@ -115,19 +139,11 @@ public class GraphClient
         }
     }
 
-    private void loadPersistentData()
-    {
-        if (!File.Exists(persistentDataPath))
-            return;
-        string json = File.ReadAllText(persistentDataPath);
-        persistentStore = JsonSerializer.Deserialize<PersistentData>(json, JsonOptions)!;
-    }
-
     private void storePersistentData()
     {
-        Directory.CreateDirectory(configDir);
-        string json = JsonSerializer.Serialize(persistentStore, JsonOptions);
-        File.WriteAllText(persistentDataPath, json);
+        //Directory.CreateDirectory(configDir);
+        //string json = JsonSerializer.Serialize(persistentStore, JsonOptions);
+        //File.WriteAllText(persistentDataPath, json);
     }
 
     public async Task<string> ConnectedAccountName()
@@ -268,5 +284,46 @@ public class GraphClient
             item.CreatedDateTime = persistentStore.BundleDates[item.Id!] = child.Photo!.TakenDateTime!.Value.DateTime;
         storePersistentData();
         return hasTakenDate;
+    }
+
+    public async Task<DriveItem?> TryGetItemByPathAsync(string oneDrivePathFromRoot)
+    {
+        Trace.Assert(client != null, "GraphClient is not connected");
+
+        string path = NormalizeOneDrivePath(oneDrivePathFromRoot);
+
+        string driveId = await getDriveIdAsync();
+        RootRequestBuilder root = client.Drives[driveId].Root;
+
+        if (string.IsNullOrEmpty(path))
+            return await root.GetAsync();
+
+        try
+        {
+            // GET /drives/{driveId}/root:/path:
+            return await root.ItemWithPath(path).GetAsync();
+        }
+        catch (ApiException ex) when (ex.ResponseStatusCode == (int)HttpStatusCode.NotFound)
+        {
+            return null;
+        }
+    }
+
+    public async Task<DriveItem> GetItemByPathAsync(string oneDrivePathFromRoot)
+    {
+        DriveItem? item = await TryGetItemByPathAsync(oneDrivePathFromRoot);
+        return item ?? throw new FileNotFoundException($"OneDrive item not found: '{oneDrivePathFromRoot}'");
+    }
+
+    private static string NormalizeOneDrivePath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return string.Empty;
+
+        path = path.Replace('\\', '/');
+        if (path.StartsWith('/'))
+            path = path[1..];
+
+        return path;
     }
 }

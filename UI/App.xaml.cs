@@ -55,14 +55,7 @@ public partial class App : Application
     {
         try
         {
-            string baseDir =
-#if ANDROID
-                FileSystem.AppDataDirectory;
-#else
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-#endif
-
-            string configDir = Path.Combine(baseDir, ".OneDriveManager");
+            string configDir = Path.Combine(FileSystem.AppDataDirectory, ".OneDriveManager");
             Directory.CreateDirectory(configDir);
             string path = Path.Combine(configDir, ConfigFileName);
 

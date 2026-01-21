@@ -14,6 +14,7 @@ public partial class AlbumsView : ContentView
     bool? ascByName;
     bool? ascByDate;
 
+    //const char Gear = '\x2699';
     const char UpArrow = '\x25B2';
     const char DownArrow = '\x25BC';
 

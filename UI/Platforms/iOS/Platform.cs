@@ -8,8 +8,4 @@ internal static class Platform
     {
         throw new NotImplementedException("iOS AuthProviderFactory is not implemented yet.");
     }
-    public static string GetOneDriveLocalDirectory()
-    {
-        throw new NotImplementedException("iOS GetOneDriveLocalDirectory is not implemented yet.");
-    }
 }

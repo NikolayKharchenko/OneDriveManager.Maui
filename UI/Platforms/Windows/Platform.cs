@@ -11,7 +11,6 @@ internal static class Platform
 
     public static string GetOneDriveLocalDirectory()
     {
-        string? oneDriveRoot = OneDriveFolderLocator.TryGetConsumerOneDriveRoot();
-        return oneDriveRoot ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "OneDrive");
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "OneDrive");
     }
 }

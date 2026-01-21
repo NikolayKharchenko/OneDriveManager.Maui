@@ -36,16 +36,17 @@ public partial class MainPage : ContentPage
     {
         SetStatusText(Strings.Connecting_Msg);
 
-        string baseDir = Platform.GetOneDriveLocalDirectory();
         AuthProviderImplBase auth = Platform.CreateAuthProvider(ClientId);
 
-        await GraphClient.Instance.Connect(
-            new GraphClient.Config(
-                OneDriveRootFolder: baseDir,
-                MaxElements: App.Config.MaxElements),
-            auth);
+        GraphClient.Config config = new(MaxElements: App.Config.MaxElements);
+        await GraphClient.Instance.Connect(config, auth);
 
         string displayName = await GraphClient.Instance.ConnectedAccountName();
         SetStatusText(Strings.Connected_Msg, displayName);
+    }
+
+    private void Settings_Click(object sender, EventArgs e)
+    {
+        Settings_Vw.IsVisible = !Settings_Vw.IsVisible;
     }
 }

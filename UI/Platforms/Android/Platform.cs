@@ -8,9 +8,4 @@ internal static class Platform
     {
         return new AndroidAuthProvider(clientId);
     }
-
-    public static string GetOneDriveLocalDirectory()
-    {
-        return FileSystem.AppDataDirectory;
-    }
 }
