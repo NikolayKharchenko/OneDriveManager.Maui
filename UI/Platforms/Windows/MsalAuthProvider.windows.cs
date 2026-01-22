@@ -8,6 +8,4 @@ public sealed partial class MsalAuthProvider
     static private partial string GetRedirectUri(string clientId) => "http://localhost";
 
     static private partial PublicClientApplicationBuilder ConfigurePlatform(PublicClientApplicationBuilder builder) => builder.WithWindowsEmbeddedBrowserSupport();
-
-    static private partial AcquireTokenInteractiveParameterBuilder ConfigureInteractive(AcquireTokenInteractiveParameterBuilder builder) => builder;
 }

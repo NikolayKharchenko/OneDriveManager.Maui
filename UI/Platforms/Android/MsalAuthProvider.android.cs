@@ -10,7 +10,4 @@ public sealed partial class MsalAuthProvider
     static private partial PublicClientApplicationBuilder ConfigurePlatform(PublicClientApplicationBuilder builder) 
         => builder.WithParentActivityOrWindow(() => Platform.CurrentActivity!);
 
-    static private partial AcquireTokenInteractiveParameterBuilder ConfigureInteractive(AcquireTokenInteractiveParameterBuilder builder)
-        //=> builder.WithParentActivityOrWindow(() => Platform.CurrentActivity!);
-        => builder;
 }

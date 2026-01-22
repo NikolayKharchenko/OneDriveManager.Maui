@@ -59,8 +59,6 @@ public sealed partial class MsalAuthProvider : IAuthenticationProvider
             .AcquireTokenInteractive(GraphClient.Scopes)
             .WithUseEmbeddedWebView(true);
 
-        interactive = ConfigureInteractive(interactive);
-
         AuthenticationResult result = await interactive.ExecuteAsync(cancellationToken);
         return result.AccessToken;
     }
@@ -80,5 +78,4 @@ public sealed partial class MsalAuthProvider : IAuthenticationProvider
 
     static private partial string GetRedirectUri(string clientId);
     static private partial PublicClientApplicationBuilder ConfigurePlatform(PublicClientApplicationBuilder builder);
-    static private partial AcquireTokenInteractiveParameterBuilder ConfigureInteractive(AcquireTokenInteractiveParameterBuilder builder);
 }
