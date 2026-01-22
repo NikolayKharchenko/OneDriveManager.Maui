@@ -11,8 +11,8 @@ public partial class AlbumsView : ContentView
     private IReadOnlyList<DriveItem>? albums;
     private readonly ObservableCollection<AlbumItemModel> albumModels = new();
 
-    bool? ascByName;
-    bool? ascByDate;
+    bool? nameAscending;
+    bool? dateAscending;
 
     const string UpIcon = "arrow_drop_up";
     const string DownIcon = "arrow_drop_down";
@@ -74,32 +74,30 @@ public partial class AlbumsView : ContentView
         List<AlbumItemModel> sorted = (ascending ? albumModels.OrderBy(selector) : albumModels.OrderByDescending(selector)).ToList();
 
         albumModels.Clear();
-
-        foreach (AlbumItemModel model in sorted)
-            albumModels.Add(model);
+        sorted.ForEach(album => albumModels.Add(album));
     }
 
     public void SortByName_Click(object sender, EventArgs e)
     {
-        sortBy(nameAsc: ascByName is null ? true : !ascByName, dateAsc: null);
+        sortBy(nameAsc: nameAscending is null ? true : !nameAscending, dateAsc: null);
     }
 
     public void SortByDate_Click(object sender, EventArgs e)
     {
-        sortBy(nameAsc: null, dateAsc: ascByDate is null ? false : !ascByDate);
+        sortBy(nameAsc: null, dateAsc: dateAscending is null ? false : !dateAscending);
     }
 
     void sortBy(bool? nameAsc, bool? dateAsc)
     {
-        ascByName = nameAsc;
-        ascByDate = dateAsc;
+        nameAscending = nameAsc;
+        dateAscending = dateAsc;
         if (nameAsc is not null)
             sortAlbums(model => model.Name, nameAsc.Value);
         else if (dateAsc is not null)
             sortAlbums(model => model.Item!.CreatedDateTime!.Value, dateAsc.Value);
 
-        SortByName_Icon.Text = sortIcon(ascByName);
-        SortByDate_Icon.Text = sortIcon(ascByDate);
+        SortByName_Icon.Text = sortIcon(nameAscending);
+        SortByDate_Icon.Text = sortIcon(dateAscending);
     }
 
     void SearchFor_TextChanged(object sender, TextChangedEventArgs e)
@@ -108,7 +106,7 @@ public partial class AlbumsView : ContentView
         if (searchText.Length == 0)
         {
             reloadModels();
-            sortBy(ascByName, ascByDate);
+            sortBy(nameAscending, dateAscending);
             return;
         }
         if (searchText.Length < 3)
