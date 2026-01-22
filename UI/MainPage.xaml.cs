@@ -50,11 +50,16 @@ public partial class MainPage : ContentPage
         Settings_Vw.IsVisible = !Settings_Vw.IsVisible;
     }
 
-    private void Reconnect_Click(object sender, EventArgs e)
+    private async void Reconnect_Click(object sender, EventArgs e)
     {
         Dispatcher.Dispatch(async () =>
         {
             await GraphClient.Instance.Disconnect();
+
+            // Clear MSAL token cache before reconnecting
+            MsalAuthProvider auth = new(ClientId);
+            await auth.ClearTokenCacheAsync();
+
             await connectToGraph();
             await Albums_Vw.LoadAlbums();
         });

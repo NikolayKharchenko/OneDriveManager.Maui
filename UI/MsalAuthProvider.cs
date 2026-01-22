@@ -17,8 +17,12 @@ public sealed partial class MsalAuthProvider : IAuthenticationProvider
             .WithRedirectUri(GetRedirectUri(clientId));
 
         builder = ConfigurePlatform(builder);
-
         _pca = builder.Build();
+
+#if WINDOWS
+        // Must be done once, before any MSAL calls (GetAccountsAsync/AcquireTokenSilent/AcquireTokenInteractive)
+        MsalTokenCache.EnableAsync(_pca).GetAwaiter().GetResult();
+#endif
     }
 
     public async Task AuthenticateRequestAsync(
@@ -61,8 +65,20 @@ public sealed partial class MsalAuthProvider : IAuthenticationProvider
         return result.AccessToken;
     }
 
+
+    public async Task ClearTokenCacheAsync()
+    {
+        var accounts = await _pca.GetAccountsAsync();
+        foreach (var account in accounts)
+        {
+            await _pca.RemoveAsync(account);
+        }
+#if WINDOWS
+        MsalTokenCache.Disable(_pca);
+#endif
+    }
+
     static private partial string GetRedirectUri(string clientId);
     static private partial PublicClientApplicationBuilder ConfigurePlatform(PublicClientApplicationBuilder builder);
     static private partial AcquireTokenInteractiveParameterBuilder ConfigureInteractive(AcquireTokenInteractiveParameterBuilder builder);
-
 }
