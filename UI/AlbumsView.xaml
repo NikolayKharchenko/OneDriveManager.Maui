@@ -5,25 +5,41 @@
 
         <HorizontalStackLayout Grid.Row="0">
             <Label Text="{Static str:Strings.SortBy_Lbl}" WidthRequest="100" Margin="0,0,10,0" VerticalOptions="Center" />
-            <Button Text="{x:Static str:Strings.SortByName_Btn}" x:Name="SortByName_Btn" Clicked="SortByName_Click" VerticalOptions="Center"
-                    Margin="0,0,10,0" WidthRequest="100"/>
-            <Button Text="{x:Static str:Strings.SortByDate_Btn}" x:Name="SortByDate_Btn" Clicked="SortByDate_Click" VerticalOptions="Center"
-                    Margin="0,0,10,0" WidthRequest="100"/>
+
+            <HorizontalStackLayout Spacing="4" VerticalOptions="Center" Margin="0,0,30,0" WidthRequest="80">
+                <HorizontalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="SortByName_Click" />
+                </HorizontalStackLayout.GestureRecognizers>
+                <Label Text="{x:Static str:Strings.SortByName_Btn}" x:Name="SortByName_Btn" VerticalOptions="Center" />
+                <Label x:Name="SortByName_Icon" Text="" FontFamily="MaterialSymbolsRounded" FontSize="28" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Spacing="4" VerticalOptions="Center" Margin="0,0,30,0" WidthRequest="80">
+                <HorizontalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="SortByDate_Click" />
+                </HorizontalStackLayout.GestureRecognizers>
+                <Label Text="{x:Static str:Strings.SortByDate_Btn}" x:Name="SortByDate_Btn" VerticalOptions="Center" />
+                <Label x:Name="SortByDate_Icon" Text="" FontFamily="MaterialSymbolsRounded" FontSize="28" VerticalOptions="Center" />
+            </HorizontalStackLayout>
         </HorizontalStackLayout>
-        
+
         <HorizontalStackLayout Grid.Row="1">
             <Label Text="{Static str:Strings.SearchFor_Lbl}" WidthRequest="100" Margin="0,0,10,0" VerticalOptions="Center" />
             <Grid>
                 <Entry x:Name="SearchFor_Entry" WidthRequest="310" VerticalOptions="Center" TextChanged="SearchFor_TextChanged"
                         Placeholder="{x:Static str:Strings.SearchFor_PlaceHolder}" />
-                <Button Text="&#x2715;" x:Name="ClearSearch_Btn" Clicked="ClearSearch_Click"
-                        VerticalOptions="Center" HorizontalOptions="End" Background="Transparent" TextColor="Gray" />
+                <Label Text="close" x:Name="ClearSearch_Btn" VerticalOptions="Center" HorizontalOptions="End" FontFamily="MaterialSymbolsRounded"
+                        FontSize="28" TextColor="Gray">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ClearSearch_Click" />
+                    </Label.GestureRecognizers>
+                </Label>
             </Grid>
         </HorizontalStackLayout>
 
         <CollectionView Grid.Row="2" SelectionMode="Single" x:Name="Albums_CVw" SizeChanged="Albums_SizeChanged">
             <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" Span="5" HorizontalItemSpacing="2" VerticalItemSpacing="2"/>
+                <GridItemsLayout Orientation="Vertical" Span="5" HorizontalItemSpacing="2" VerticalItemSpacing="2" />
             </CollectionView.ItemsLayout>
 
             <CollectionView.ItemTemplate>
@@ -34,14 +50,11 @@
                         </Border.GestureRecognizers>
 
                         <Grid>
-                            <Image WidthRequest="300"
-                                   HeightRequest="300"
-                                   Source="{Binding Thumbnail}"
-                                   Aspect="AspectFit"
-                                   BindingContextChanged="ThumbnailImage_BindingContextChanged" />
+                            <Image WidthRequest="300" HeightRequest="300" Source="{Binding Thumbnail}" Aspect="AspectFit"
+                                    BindingContextChanged="ThumbnailImage_BindingContextChanged" />
 
                             <Label Text="{Binding Name}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="Start"
-                                   Background="White" Padding="3" Margin="3"/>
+                                    Background="White" Padding="3" Margin="3" />
                         </Grid>
                     </Border>
                 </DataTemplate>

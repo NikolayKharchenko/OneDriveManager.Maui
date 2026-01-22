@@ -87,6 +87,7 @@
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\OpenSans-Regular.ttf" />
 		<MauiFont Include="Resources\Fonts\OpenSans-Semibold.ttf" />
+		<MauiFont Include="Resources\Fonts\MaterialSymbolsRounded.ttf" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />

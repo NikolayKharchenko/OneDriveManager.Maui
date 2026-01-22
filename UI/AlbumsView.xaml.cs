@@ -14,15 +14,15 @@ public partial class AlbumsView : ContentView
     bool? ascByName;
     bool? ascByDate;
 
-    //const char Gear = '\x2699';
-    const char UpArrow = '\x25B2';
-    const char DownArrow = '\x25BC';
+    const string UpIcon = "arrow_drop_up";
+    const string DownIcon = "arrow_drop_down";
 
-    char sortSymbol(bool? ascending)
+    string sortIcon(bool? ascending)
     {
         if (ascending is null)
-            return ' ';
-        return ascending.Value ? UpArrow : DownArrow;
+            return string.Empty;
+
+        return ascending.Value ? UpIcon : DownIcon;
     }
 
     public AlbumsView()
@@ -48,8 +48,6 @@ public partial class AlbumsView : ContentView
 
         foreach (DriveItem album in albums)
             albumModels.Add(new AlbumItemModel(album));
-
-        // Thumbnails are loaded lazily (only for realized/visible items) via ThumbnailImage_BindingContextChanged.
     }
 
     private async void ThumbnailImage_BindingContextChanged(object sender, EventArgs e)
@@ -73,21 +71,18 @@ public partial class AlbumsView : ContentView
 
     void sortAlbums<T>(Func<AlbumItemModel, T> selector, bool ascending)
     {
-        // important: materialize before Clear()
         List<AlbumItemModel> sorted = (ascending ? albumModels.OrderBy(selector) : albumModels.OrderByDescending(selector)).ToList();
 
         albumModels.Clear();
 
         foreach (AlbumItemModel model in sorted)
             albumModels.Add(model);
-
-        // No eager thumbnail reload here. Visible items will re-request thumbnails as cells get realized.
     }
 
     void updateSortButtons()
     {
-        SortByName_Btn.Text = Strings.SortByName_Btn + " " + sortSymbol(ascByName);
-        SortByDate_Btn.Text = Strings.SortByDate_Btn + " " + sortSymbol(ascByDate);
+        SortByName_Icon.Text = sortIcon(ascByName);
+        SortByDate_Icon.Text = sortIcon(ascByDate);
     }
 
     public void SortByName_Click(object sender, EventArgs e)
@@ -110,6 +105,7 @@ public partial class AlbumsView : ContentView
             sortAlbums(model => model.Name, ascByName.Value);
         else if (ascByDate is not null)
             sortAlbums(model => model.Item!.CreatedDateTime!.Value, ascByDate.Value);
+
         updateSortButtons();
     }
 
@@ -133,8 +129,6 @@ public partial class AlbumsView : ContentView
 
         foreach (AlbumItemModel model in filtered)
             albumModels.Add(model);
-
-        // No eager thumbnail loading here either.
     }
 
     void ClearSearch_Click(object sender, EventArgs e)
