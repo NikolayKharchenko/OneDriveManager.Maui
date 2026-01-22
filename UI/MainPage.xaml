@@ -6,12 +6,18 @@
     <Grid RowDefinitions="*,Auto" Padding="10">
         <local:AlbumsView Grid.Row="0" x:Name="Albums_Vw" />
         <local:SettingsView Grid.Row="0" x:Name="Settings_Vw" IsVisible="False" />
-        <Label Grid.Row="0" x:Name="Settings_Btn" Text="settings" FontFamily="MaterialSymbolsRounded" FontSize="28" BackgroundColor="Transparent"
-                HorizontalOptions="End" VerticalOptions="Start">
-            <Label.GestureRecognizers>
-                <TapGestureRecognizer Tapped="Settings_Click" />
-            </Label.GestureRecognizers>
-        </Label>
+        <HorizontalStackLayout Grid.Row="0" HorizontalOptions="End" VerticalOptions="Start" Spacing="10">
+            <Label Text="cloud_off" FontFamily="MaterialSymbolsRounded" FontSize="28">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Reconnect_Click" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Text="settings" FontFamily="MaterialSymbolsRounded" FontSize="28">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Settings_Click" />
+                </Label.GestureRecognizers>
+            </Label>
+        </HorizontalStackLayout>
         <Label Grid.Row="1" x:Name="Status_Lbl" FontSize="14" HorizontalOptions="Start" Margin="0,20,0,0" />
     </Grid>
 </ContentPage>

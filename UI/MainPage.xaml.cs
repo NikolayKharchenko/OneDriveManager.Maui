@@ -49,4 +49,14 @@ public partial class MainPage : ContentPage
     {
         Settings_Vw.IsVisible = !Settings_Vw.IsVisible;
     }
+
+    private void Reconnect_Click(object sender, EventArgs e)
+    {
+        Dispatcher.Dispatch(async () =>
+        {
+            await GraphClient.Instance.Disconnect();
+            await connectToGraph();
+            await Albums_Vw.LoadAlbums();
+        });
+    }
 }

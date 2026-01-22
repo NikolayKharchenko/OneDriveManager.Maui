@@ -37,7 +37,7 @@ public partial class AlbumsView : ContentView
     {
         albums = await GraphClient.Instance.GetBundlesAsync(isItemSuitable);
         reloadModels();
-        SortByDate_Click(this, EventArgs.Empty);
+        sortBy(nameAsc: null, dateAsc: false);
     }
 
     private void reloadModels()
@@ -79,34 +79,27 @@ public partial class AlbumsView : ContentView
             albumModels.Add(model);
     }
 
-    void updateSortButtons()
-    {
-        SortByName_Icon.Text = sortIcon(ascByName);
-        SortByDate_Icon.Text = sortIcon(ascByDate);
-    }
-
     public void SortByName_Click(object sender, EventArgs e)
     {
-        ascByDate = null;
-        ascByName = ascByName is null ? true : !ascByName;
-        sortByCurrentState();
+        sortBy(nameAsc: ascByName is null ? true : !ascByName, dateAsc: null);
     }
 
     public void SortByDate_Click(object sender, EventArgs e)
     {
-        ascByName = null;
-        ascByDate = ascByDate is null ? false : !ascByDate;
-        sortByCurrentState();
+        sortBy(nameAsc: null, dateAsc: ascByDate is null ? false : !ascByDate);
     }
 
-    void sortByCurrentState()
+    void sortBy(bool? nameAsc, bool? dateAsc)
     {
-        if (ascByName is not null)
-            sortAlbums(model => model.Name, ascByName.Value);
-        else if (ascByDate is not null)
-            sortAlbums(model => model.Item!.CreatedDateTime!.Value, ascByDate.Value);
+        ascByName = nameAsc;
+        ascByDate = dateAsc;
+        if (nameAsc is not null)
+            sortAlbums(model => model.Name, nameAsc.Value);
+        else if (dateAsc is not null)
+            sortAlbums(model => model.Item!.CreatedDateTime!.Value, dateAsc.Value);
 
-        updateSortButtons();
+        SortByName_Icon.Text = sortIcon(ascByName);
+        SortByDate_Icon.Text = sortIcon(ascByDate);
     }
 
     void SearchFor_TextChanged(object sender, TextChangedEventArgs e)
@@ -115,8 +108,7 @@ public partial class AlbumsView : ContentView
         if (searchText.Length == 0)
         {
             reloadModels();
-            ascByDate = ascByName = null;
-            updateSortButtons();
+            sortBy(ascByName, ascByDate);
             return;
         }
         if (searchText.Length < 3)
