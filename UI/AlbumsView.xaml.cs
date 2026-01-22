@@ -154,7 +154,7 @@ public partial class AlbumsView : ContentView
         if (changed)
         {
             await GraphClient.Instance.StorePersistentData();
-            reloadModels();
+            await LoadAlbums();
         }
     }
 }

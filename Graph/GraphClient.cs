@@ -189,12 +189,20 @@ public class GraphClient
         string startUrl = "https://graph.microsoft.com/v1.0/drive/bundles";
         BundlesRequestBuilder bundlesRequestBuilder = client.Drives["root"].Bundles;
         IReadOnlyList<DriveItem> result = await getItemsAsync(url => bundlesRequestBuilder.WithUrl(url).GetAsync(), startUrl, filter);
-        foreach (DriveItem item in result)
+        updateCreationDate(result);
+        return result;
+    }
+
+    private void updateCreationDate(IReadOnlyList<DriveItem> items)
+    {
+        foreach (DriveItem item in items)
         {
             if (persistentStore.BundleDates.TryGetValue(item.Id!, out DateTime storedDate))
+            {
+                Trace.WriteLine($"Restored stored creation date for bundle '{item.Name}': {storedDate}");
                 item.CreatedDateTime = storedDate;
+            }
         }
-        return result;
     }
 
     private string? _driveId;
