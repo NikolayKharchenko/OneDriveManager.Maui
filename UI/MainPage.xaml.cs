@@ -36,7 +36,7 @@ public partial class MainPage : ContentPage
     {
         SetStatusText(Strings.Connecting_Msg);
 
-        AuthProviderImplBase auth = Platform.CreateAuthProvider(ClientId);
+        var auth = new MsalAuthProvider(ClientId);
 
         GraphClient.Config config = new(MaxElements: App.Config.MaxElements);
         await GraphClient.Instance.Connect(config, auth);

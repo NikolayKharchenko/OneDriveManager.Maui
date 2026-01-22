@@ -98,14 +98,16 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 	</ItemGroup>
 
+	<ItemGroup Condition="'$([MSBuild]::GetTargetPlatformIdentifier($(TargetFramework)))' == 'windows'">
+		<PackageReference Include="Microsoft.Identity.Client" Version="4.81.0" />
+		<PackageReference Include="Microsoft.Identity.Client.Desktop" Version="4.81.0" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\Graph\Graph.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="Platforms\Android\Platform.cs">
-			<ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
-		</Compile>
 		<Compile Update="Resources\Strings\Strings.Designer.cs">
 			<DependentUpon>Strings.resx</DependentUpon>
 			<DesignTime>True</DesignTime>

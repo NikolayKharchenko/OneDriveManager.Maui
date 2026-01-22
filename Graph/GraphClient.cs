@@ -4,8 +4,8 @@ using Microsoft.Graph.Drives.Item.Items;
 using Microsoft.Graph.Drives.Item.Items.Item;
 using Microsoft.Graph.Drives.Item.Root;
 using Microsoft.Graph.Models;
-using Microsoft.Identity.Client;
 using Microsoft.Kiota.Abstractions;
+using Microsoft.Kiota.Abstractions.Authentication;
 using Microsoft.Kiota.Http.HttpClientLibrary;
 using System.Diagnostics;
 using System.Net;
@@ -38,8 +38,6 @@ public class GraphClient
     GraphServiceClient? client;
     Config config;
     static GraphClient? instance;
-
-    private IPublicClientApplication? _pca;
 
     const string persistentDataOneDrivePath = "/.OneDriveManager/persistdb.json";
     private PersistentData persistentStore { get; set; } = new(new());
@@ -75,26 +73,22 @@ public class GraphClient
     public event EventHandler<ItemsEventArgs>? Items_Loading;
     public event EventHandler<ItemsEventArgs>? Items_Loaded;
 
-    public async Task Connect(Config config, AuthProviderImplBase authProvider)
+    public async Task Connect(Config config, IAuthenticationProvider authProvider)
     {
         try
         {
             this.config = config;
 
-            _pca = authProvider.PCA;
-
-            await MsalTokenCache.InitializeAsync(_pca);
             var adapter = new HttpClientRequestAdapter(authProvider, httpClient: new HttpClient());
-
             client = new GraphServiceClient(adapter);
+
             await client.Me.GetAsync();
 
             await loadPersistentDataAsync();
         }
-        catch (Exception)
+        catch
         {
             client = null;
-            _pca = null;
             throw;
         }
     }
@@ -125,18 +119,6 @@ public class GraphClient
 
     public async Task Disconnect()
     {
-        if (client == null || _pca == null)
-            return;
-
-        try
-        {
-            await MsalTokenCache.ClearAsync(_pca);
-        }
-        finally
-        {
-            client = null;
-            _pca = null;
-        }
     }
 
     private void storePersistentData()
