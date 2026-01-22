@@ -37,7 +37,7 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<AssemblyName>OneDriveAlbums.UI</AssemblyName>
 		<Authors>Nikolay Kharchenko</Authors>
-		<NeutralLanguage>en-US</NeutralLanguage>
+		<NeutralLanguage>en</NeutralLanguage>
 		<SignAssembly>False</SignAssembly>
 		<AssemblyTitle>OneDrive Albums</AssemblyTitle>
 		<Product>$(AssemblyTitle)</Product>

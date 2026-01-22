@@ -1,28 +1,40 @@
 using System.Globalization;
-
+using System.Reflection;
+using System.Resources;
+using OneDriveAlbums.UI.Resources.Strings;
 namespace OneDriveAlbums.UI;
-
-
 
 public partial class SettingsView : ContentView
 {
-    public List<CultureInfo> SupportedCultures { get; } = new()
+    public static List<CultureInfo> GetAvailableResourceCultures()
     {
-        new CultureInfo("en-US"),
-        new CultureInfo("ru"),
-    };
+        ResourceManager resourceManager = Strings.ResourceManager;
+        List<CultureInfo> cultures = new();
 
-    private int initialLanguageIndex;
+        foreach (var culture in CultureInfo.GetCultures(CultureTypes.NeutralCultures))
+        {
+            if (culture == CultureInfo.InvariantCulture)
+                continue;
+            try
+            {
+                // Only add if a resource set exists and is not just the neutral fallback
+                ResourceSet? set = resourceManager.GetResourceSet(culture, true, false);
+                if (set != null)
+                    cultures.Add(culture);
+            }
+            catch { /* Ignore cultures that throw */ }
+        }
+
+        return cultures;
+    }
 
     public SettingsView()
 	{
 		InitializeComponent();
 
-        InterfaceLanguage_Picker.ItemsSource = SupportedCultures.Select(c => c.NativeName).ToList();
-        CultureInfo currentCulture = Thread.CurrentThread.CurrentUICulture;
-        initialLanguageIndex = SupportedCultures.FindIndex(c => c.Name == currentCulture.Name);
-        InterfaceLanguage_Picker.SelectedIndex = initialLanguageIndex;
-
+        InterfaceLanguage_Picker.ItemsSource = GetAvailableResourceCultures();
+        InterfaceLanguage_Picker.SelectedItem = Thread.CurrentThread.CurrentUICulture;
+        InterfaceLanguageChanged_Warn.IsVisible = false;
     }
 
     private void FixDates_Click(object sender, EventArgs e)
@@ -32,12 +44,12 @@ public partial class SettingsView : ContentView
 
     private void InterfaceLanguage_Changed(object sender, EventArgs e)
     {
-        if (InterfaceLanguage_Picker.SelectedIndex < 0 || InterfaceLanguage_Picker.SelectedIndex >= SupportedCultures.Count)
+        if (InterfaceLanguage_Picker.SelectedItem is null)
             return;
 
-        CultureInfo selectedCulture = SupportedCultures[InterfaceLanguage_Picker.SelectedIndex];
+        CultureInfo selectedCulture = (CultureInfo)InterfaceLanguage_Picker.SelectedItem;
         Preferences.Set("AppCulture", selectedCulture.Name);
 
-        InterfaceLanguageChanged_Warn.IsVisible = InterfaceLanguage_Picker.SelectedIndex != initialLanguageIndex;
+        InterfaceLanguageChanged_Warn.IsVisible = true;
     }
 }
