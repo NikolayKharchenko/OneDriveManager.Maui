@@ -117,15 +117,23 @@ public class GraphClient
         persistentStore = loaded ?? new PersistentData(new());
     }
 
-    public async Task Disconnect()
+    public async Task StorePersistentData()
     {
-    }
+        Trace.Assert(client != null, "GraphClient is not connected");
 
-    private void storePersistentData()
-    {
-        //Directory.CreateDirectory(configDir);
-        //string json = JsonSerializer.Serialize(persistentStore, JsonOptions);
-        //File.WriteAllText(persistentDataPath, json);
+        string driveId = await getDriveIdAsync();
+        string json = JsonSerializer.Serialize(persistentStore, JsonOptions);
+        MemoryStream body = new(System.Text.Encoding.UTF8.GetBytes(json));
+
+        DriveItem? persistentItem = await TryGetItemByPathAsync(persistentDataOneDrivePath);
+        if (persistentItem?.Id is null)
+        {
+            await client.Drives[driveId].Root.ItemWithPath(persistentDataOneDrivePath).Content.PutAsync(body);
+        }
+        else
+        {
+            await client.Drives[driveId].Items[persistentItem.Id].Content.PutAsync(body);
+        }
     }
 
     public async Task<string> ConnectedAccountName()
@@ -264,7 +272,6 @@ public class GraphClient
         bool hasTakenDate = child.Photo?.TakenDateTime != null;
         if (hasTakenDate)
             item.CreatedDateTime = persistentStore.BundleDates[item.Id!] = child.Photo!.TakenDateTime!.Value.DateTime;
-        storePersistentData();
         return hasTakenDate;
     }
 

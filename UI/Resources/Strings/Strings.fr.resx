@@ -117,15 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SignIn_Btn" xml:space="preserve">
-    <value>Подключиться</value>
-  </data>
-  <data name="MainWindow_Caption" xml:space="preserve">
-    <value>Альбомы OneDrive</value>
-  </data>
-  <data name="ViewAlbums_Btn" xml:space="preserve">
-    <value>Альбомы</value>
-  </data>
   <data name="Ready_Txt" xml:space="preserve">
     <value>Prêt</value>
   </data>
@@ -135,37 +126,14 @@
   <data name="Connected_Msg" xml:space="preserve">
     <value>Connecté en tant que {0}</value>
   </data>
-  <data name="SignOut_Btn" xml:space="preserve">
-    <value>Отсоединиться</value>
-  </data>
   <data name="LoadingItems_Msg" xml:space="preserve">
     <value>Chargement en cours...{0} éléments trouvés en {1:mm\:ss}</value>
   </data>
   <data name="LoadedItems_Msg" xml:space="preserve">
     <value>{0} éléments trouvés en {1:mm\:ss}</value>
   </data>
-  <data name="SortByName_Btn" xml:space="preserve">
-    <value>Имя</value>
-  </data>
-  <data name="SortByDate_Btn" xml:space="preserve">
-    <value>Дата</value>
-  </data>
-  <data name="SortBy_Lbl" xml:space="preserve">
-    <value>Сортировать по</value>
-  </data>
-  <data name="SearchFor_Lbl" xml:space="preserve">
-    <value>Поиск:</value>
-  </data>
-  <data name="SearchFor_PlaceHolder" xml:space="preserve">
-    <value>Введите 3 и более символов для поиска</value>
-  </data>
-  <data name="InterfaceLanguage_Lbl" xml:space="preserve">
-    <value>Выберите язык интерфейса:</value>
-  </data>
-  <data name="InterfaceLanguageChanged_Warn" xml:space="preserve">
-    <value>Язык интерфейса изменится после перезапуска приложения.</value>
-  </data>
-  <data name="FixDates_Btn" xml:space="preserve">
-    <value>Поправить даты альбомов</value>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ProcessingItem_Msg" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
 </root>

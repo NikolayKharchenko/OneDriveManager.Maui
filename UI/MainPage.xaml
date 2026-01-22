@@ -4,7 +4,7 @@
         x:Class="OneDriveAlbums.UI.MainPage">
 
     <Grid RowDefinitions="*,Auto" Padding="10">
-        <local:AlbumsView Grid.Row="0" x:Name="Albums_Vw" />
+        <local:AlbumsView x:FieldModifier="public" Grid.Row="0" x:Name="Albums_Vw" />
         <local:SettingsView Grid.Row="0" x:Name="Settings_Vw" IsVisible="False" />
         <HorizontalStackLayout Grid.Row="0" HorizontalOptions="End" VerticalOptions="Start" Spacing="10">
             <Label Text="cloud_off" FontFamily="MaterialSymbolsRounded" FontSize="28">

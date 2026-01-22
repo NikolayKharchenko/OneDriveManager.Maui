@@ -54,8 +54,6 @@ public partial class MainPage : ContentPage
     {
         Dispatcher.Dispatch(async () =>
         {
-            await GraphClient.Instance.Disconnect();
-
             // Clear MSAL token cache before reconnecting
             MsalAuthProvider auth = new(ClientId);
             await auth.ClearTokenCacheAsync();

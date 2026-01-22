@@ -133,6 +133,15 @@ namespace OneDriveAlbums.UI.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Processing {0}.
+        /// </summary>
+        internal static string ProcessingItem_Msg {
+            get {
+                return ResourceManager.GetString("ProcessingItem_Msg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ready.
         /// </summary>
         internal static string Ready_Txt {

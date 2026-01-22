@@ -131,4 +131,30 @@ public partial class AlbumsView : ContentView
         GridItemsLayout grid = (GridItemsLayout)Albums_CVw.ItemsLayout;
         grid.Span = int.Max(1, (int)(Albums_CVw.Width / 300));
     }
+
+    public async Task FixAllAlbumDatesAsync()
+    {
+        if (albums is null)
+            return;
+
+        bool changed = false;
+        foreach (DriveItem album in albums)
+        {
+            MainPage.Instance!.SetStatusText(Strings.ProcessingItem_Msg, album.Name!);
+            // Safely check for nulls before dereferencing
+            string? coverImageItemId = album.Bundle?.Album?.CoverImageItemId;
+            if (!string.IsNullOrEmpty(coverImageItemId))
+            {
+                if (await GraphClient.Instance.TryFixCreationDateAsync(album, coverImageItemId))
+                    changed = true;
+            }
+        }
+        MainPage.Instance!.SetStatusText(Strings.Ready_Txt);
+
+        if (changed)
+        {
+            await GraphClient.Instance.StorePersistentData();
+            reloadModels();
+        }
+    }
 }

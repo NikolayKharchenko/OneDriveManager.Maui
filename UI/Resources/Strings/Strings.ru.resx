@@ -168,4 +168,7 @@
   <data name="FixDates_Btn" xml:space="preserve">
     <value>Поправить даты альбомов</value>
   </data>
+  <data name="ProcessingItem_Msg" xml:space="preserve">
+    <value>Обрабатывается {0}</value>
+  </data>
 </root>
