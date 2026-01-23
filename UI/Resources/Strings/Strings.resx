@@ -166,9 +166,9 @@
     <value>Interface language will be changed after application restart.</value>
   </data>
   <data name="FixDates_Btn" xml:space="preserve">
-    <value>Fix albums dates</value>
+    <value>Fix albums metadata</value>
   </data>
   <data name="ProcessingItem_Msg" xml:space="preserve">
-    <value>Processing {0}</value>
+    <value>Processing {0} ({1} of {2})</value>
   </data>
 </root>

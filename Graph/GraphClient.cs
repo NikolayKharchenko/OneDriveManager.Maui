@@ -20,9 +20,20 @@ public enum ThumbnailSize
     Large
 }
 
+public class BundleMetadata
+{
+    public string Name { get; set; } = string.Empty;
+    public DateTime? CoverImageTakenDate { get; set; }
+    public DateTime MinDate { get; set; } = DateTime.MaxValue;
+    public DateTime MaxDate { get; set; } = DateTime.MinValue;
+}
+
 public class GraphClient
 {
-    internal record PersistentData(Dictionary<string, DateTime> BundleDates);
+    internal sealed class PersistentData
+    {
+        public Dictionary<string, BundleMetadata> Bundle { get; set; } = new();
+    }
 
     public static readonly string[] Scopes =
     [
@@ -40,7 +51,7 @@ public class GraphClient
     static GraphClient? instance;
 
     const string persistentDataOneDrivePath = "/.OneDriveManager/persistdb.json";
-    private PersistentData persistentStore { get; set; } = new(new());
+    private PersistentData persistentStore { get; set; } = new();
     public static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
@@ -100,7 +111,7 @@ public class GraphClient
         DriveItem? persistentItem = await TryGetItemByPathAsync(persistentDataOneDrivePath);
         if (persistentItem?.Id is null)
         {
-            persistentStore = new PersistentData(new());
+            persistentStore = new PersistentData();
             return;
         }
 
@@ -109,12 +120,12 @@ public class GraphClient
         Stream? content = await client.Drives[driveId].Items[persistentItem.Id].Content.GetAsync();
         if (content == null)
         {
-            persistentStore = new PersistentData(new());
+            persistentStore = new PersistentData();
             return;
         }
         PersistentData? loaded = await JsonSerializer.DeserializeAsync<PersistentData>(content, JsonOptions);
 
-        persistentStore = loaded ?? new PersistentData(new());
+        persistentStore = loaded ?? new PersistentData();
     }
 
     public async Task StorePersistentData()
@@ -189,20 +200,7 @@ public class GraphClient
         string startUrl = "https://graph.microsoft.com/v1.0/drive/bundles";
         BundlesRequestBuilder bundlesRequestBuilder = client.Drives["root"].Bundles;
         IReadOnlyList<DriveItem> result = await getItemsAsync(url => bundlesRequestBuilder.WithUrl(url).GetAsync(), startUrl, filter);
-        updateCreationDate(result);
         return result;
-    }
-
-    private void updateCreationDate(IReadOnlyList<DriveItem> items)
-    {
-        foreach (DriveItem item in items)
-        {
-            if (persistentStore.BundleDates.TryGetValue(item.Id!, out DateTime storedDate))
-            {
-                Trace.WriteLine($"Restored stored creation date for bundle '{item.Name}': {storedDate}");
-                item.CreatedDateTime = storedDate;
-            }
-        }
     }
 
     private string? _driveId;
@@ -273,14 +271,40 @@ public class GraphClient
         await builder.DeleteAsync();
     }
 
-    public async Task<bool> TryFixCreationDateAsync(DriveItem item, string childItemId)
+    static DateTime photoDate(DriveItem item) => item.Photo?.TakenDateTime?.DateTime ?? item.CreatedDateTime!.Value.DateTime;
+
+    static DateTime dateMax(DateTime a, DateTime b) => a > b ? a : b;
+    static DateTime dateMin(DateTime a, DateTime b) => a < b ? a : b;
+
+    async Task<DriveItem?> getCoverImageItem(DriveItem bundle)
     {
-        DriveItemItemRequestBuilder childBuilder = await getItemRequestBuilderAsync(childItemId);
-        DriveItem child = (await childBuilder.GetAsync())!;
-        bool hasTakenDate = child.Photo?.TakenDateTime != null;
-        if (hasTakenDate)
-            item.CreatedDateTime = persistentStore.BundleDates[item.Id!] = child.Photo!.TakenDateTime!.Value.DateTime;
-        return hasTakenDate;
+        string? coverImageId = bundle?.Bundle?.Album?.CoverImageItemId;
+        if (coverImageId == null)
+            return null;
+        DriveItemItemRequestBuilder builder = await getItemRequestBuilderAsync(coverImageId);
+        return await builder.GetAsync();
+    }
+
+    public async Task CollectBundleMetadata(DriveItem bundle)
+    {
+        IReadOnlyList<DriveItem> children = await GetBundleChildrenAsync(bundle);
+        BundleMetadata metadata = new() { Name = bundle.Name! };
+        foreach (DriveItem child in children)
+        {
+            DateTime childDate = photoDate(child);
+            metadata.MinDate = dateMin(metadata.MinDate, childDate);
+            metadata.MaxDate = dateMax(metadata.MaxDate, childDate);
+        }
+        DriveItem? coverImageItem = await getCoverImageItem(bundle);
+        metadata.CoverImageTakenDate = coverImageItem?.Photo?.TakenDateTime?.DateTime ?? metadata.MinDate;
+        persistentStore.Bundle[bundle.Id!] = metadata;
+    }
+
+    public BundleMetadata? GetBundleMetadata(string bundleId)
+    {
+        if (persistentStore.Bundle.TryGetValue(bundleId, out BundleMetadata? metadata))
+            return metadata;
+        return null;
     }
 
     public async Task<DriveItem?> TryGetItemByPathAsync(string oneDrivePathFromRoot)

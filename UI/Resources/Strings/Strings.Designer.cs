@@ -79,7 +79,7 @@ namespace OneDriveAlbums.UI.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fix albums dates.
+        ///   Looks up a localized string similar to Fix albums metadata.
         /// </summary>
         internal static string FixDates_Btn {
             get {
@@ -133,7 +133,7 @@ namespace OneDriveAlbums.UI.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Processing {0}.
+        ///   Looks up a localized string similar to Processing {0} ({1} of {2}).
         /// </summary>
         internal static string ProcessingItem_Msg {
             get {

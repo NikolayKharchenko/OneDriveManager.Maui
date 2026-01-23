@@ -166,9 +166,9 @@
     <value>Язык интерфейса изменится после перезапуска приложения.</value>
   </data>
   <data name="FixDates_Btn" xml:space="preserve">
-    <value>Поправить даты альбомов</value>
+    <value>Поправить данные альбомов</value>
   </data>
   <data name="ProcessingItem_Msg" xml:space="preserve">
-    <value>Обрабатывается {0}</value>
+    <value>Обрабатывается {0} ({1} из {2})</value>
   </data>
 </root>

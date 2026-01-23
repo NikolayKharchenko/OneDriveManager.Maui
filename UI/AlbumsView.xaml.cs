@@ -32,6 +32,7 @@ public partial class AlbumsView : ContentView
     }
 
     static bool isItemSuitable(DriveItem item) => item?.Bundle?.Album != null;
+    private static AlbumItemModel createModel(DriveItem item) => new(item, GraphClient.Instance.GetBundleMetadata(item.Id!));
 
     public async Task LoadAlbums()
     {
@@ -47,7 +48,7 @@ public partial class AlbumsView : ContentView
             return;
 
         foreach (DriveItem album in albums)
-            albumModels.Add(new AlbumItemModel(album));
+            albumModels.Add(createModel(album));
     }
 
     private async void ThumbnailImage_BindingContextChanged(object sender, EventArgs e)
@@ -94,7 +95,7 @@ public partial class AlbumsView : ContentView
         if (nameAsc is not null)
             sortAlbums(model => model.Name, nameAsc.Value);
         else if (dateAsc is not null)
-            sortAlbums(model => model.Item!.CreatedDateTime!.Value, dateAsc.Value);
+            sortAlbums(model => model.DateForSort, dateAsc.Value);
 
         SortByName_Icon.Text = sortIcon(nameAscending);
         SortByDate_Icon.Text = sortIcon(dateAscending);
@@ -115,13 +116,13 @@ public partial class AlbumsView : ContentView
         albumModels.Clear();
         IEnumerable<AlbumItemModel> filtered = albums!
                 .Where(album => (album.Name?.Contains(searchText, StringComparison.OrdinalIgnoreCase)).GetValueOrDefault(false))
-                .Select(album => new AlbumItemModel(album));
+                .Select(album => createModel(album));
 
         foreach (AlbumItemModel model in filtered)
             albumModels.Add(model);
     }
 
-    void ClearSearch_Click(object sender, EventArgs e)
+        void ClearSearch_Click(object sender, EventArgs e)
     {
         SearchFor_Entry.Text = string.Empty;
     }
@@ -132,29 +133,21 @@ public partial class AlbumsView : ContentView
         grid.Span = int.Max(1, (int)(Albums_CVw.Width / 300));
     }
 
-    public async Task FixAllAlbumDatesAsync()
+    public async Task FixAllAlbumsMetadataAsync()
     {
         if (albums is null)
             return;
 
-        bool changed = false;
+        int counter = 1;
         foreach (DriveItem album in albums)
         {
-            MainPage.Instance!.SetStatusText(Strings.ProcessingItem_Msg, album.Name!);
-            // Safely check for nulls before dereferencing
-            string? coverImageItemId = album.Bundle?.Album?.CoverImageItemId;
-            if (!string.IsNullOrEmpty(coverImageItemId))
-            {
-                if (await GraphClient.Instance.TryFixCreationDateAsync(album, coverImageItemId))
-                    changed = true;
-            }
+            MainPage.Instance!.SetStatusText(Strings.ProcessingItem_Msg, album.Name!, counter, albums.Count);
+            await GraphClient.Instance.CollectBundleMetadata(album);
+            counter++;
         }
         MainPage.Instance!.SetStatusText(Strings.Ready_Txt);
 
-        if (changed)
-        {
-            await GraphClient.Instance.StorePersistentData();
-            await LoadAlbums();
-        }
+        await GraphClient.Instance.StorePersistentData();
+        await LoadAlbums();
     }
 }

@@ -39,7 +39,7 @@ public partial class SettingsView : ContentView
 
     private void FixDates_Click(object sender, EventArgs e)
     {
-        Dispatcher.Dispatch(async () => await MainPage.Instance!.Albums_Vw.FixAllAlbumDatesAsync());
+        Dispatcher.Dispatch(async () => await MainPage.Instance!.Albums_Vw.FixAllAlbumsMetadataAsync());
     }
 
     private void InterfaceLanguage_Changed(object sender, EventArgs e)

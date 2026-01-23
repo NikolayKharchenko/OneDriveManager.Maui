@@ -55,6 +55,8 @@
 
                             <Label Text="{Binding Name}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="Start"
                                     Background="White" Padding="3" Margin="3" />
+                            <Label Text="{Binding DatesRange}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="End"
+                                    Background="White" Padding="3" Margin="3" />
                         </Grid>
                     </Border>
                 </DataTemplate>
