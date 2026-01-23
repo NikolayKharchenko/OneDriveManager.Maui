@@ -59,15 +59,32 @@ public partial class AlbumsView : ContentView
         await model.LoadThumbnailAsync();
     }
 
-    public void Album_Tap(object? sender, EventArgs e)
+    private async Task openAlbum(object? sender)
     {
         if (sender is not Border border || border.BindingContext is not AlbumItemModel albumModel)
             return;
-
         if (albumModel.Item.WebUrl is null)
             return;
 
-        _ = Launcher.OpenAsync(albumModel.Item.WebUrl);
+#if ANDROID
+        _ = Browser.OpenAsync(albumModel.Item.WebUrl, BrowserLaunchMode.SystemPreferred);
+#else
+        _ = Browser.OpenAsync(albumModel.Item.WebUrl, BrowserLaunchMode.External);
+#endif
+    }
+
+    public void Album_Tap(object? sender, EventArgs e)
+    {
+#if !WINDOWS
+        _ = openAlbum(sender);
+#endif
+    }
+
+    public void Album_DblTap(object? sender, EventArgs e)
+    {
+#if WINDOWS
+        _ = openAlbum(sender);
+#endif
     }
 
     void sortAlbums<T>(Func<AlbumItemModel, T> selector, bool ascending)
