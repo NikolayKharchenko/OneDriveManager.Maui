@@ -45,12 +45,12 @@ public partial class MainPage : ContentPage
         SetStatusText(Strings.Connected_Msg, displayName);
     }
 
-    private void Settings_Click(object sender, EventArgs e)
+    private void Settings_Click(object? sender, EventArgs e)
     {
         Settings_Vw.IsVisible = !Settings_Vw.IsVisible;
     }
 
-    private async void Reconnect_Click(object sender, EventArgs e)
+    private async void Reconnect_Click(object? sender, EventArgs e)
     {
         Dispatcher.Dispatch(async () =>
         {

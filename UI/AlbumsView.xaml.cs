@@ -51,7 +51,7 @@ public partial class AlbumsView : ContentView
             albumModels.Add(createModel(album));
     }
 
-    private async void ThumbnailImage_BindingContextChanged(object sender, EventArgs e)
+    private async void ThumbnailImage_BindingContextChanged(object? sender, EventArgs e)
     {
         if (sender is not Image img || img.BindingContext is not AlbumItemModel model)
             return;
@@ -59,7 +59,7 @@ public partial class AlbumsView : ContentView
         await model.LoadThumbnailAsync();
     }
 
-    public void Album_Tap(object sender, EventArgs e)
+    public void Album_Tap(object? sender, EventArgs e)
     {
         if (sender is not Border border || border.BindingContext is not AlbumItemModel albumModel)
             return;
@@ -78,12 +78,12 @@ public partial class AlbumsView : ContentView
         sorted.ForEach(album => albumModels.Add(album));
     }
 
-    public void SortByName_Click(object sender, EventArgs e)
+    public void SortByName_Click(object? sender, EventArgs e)
     {
         sortBy(nameAsc: nameAscending is null ? true : !nameAscending, dateAsc: null);
     }
 
-    public void SortByDate_Click(object sender, EventArgs e)
+    public void SortByDate_Click(object? sender, EventArgs e)
     {
         sortBy(nameAsc: null, dateAsc: dateAscending is null ? false : !dateAscending);
     }
@@ -101,7 +101,7 @@ public partial class AlbumsView : ContentView
         SortByDate_Icon.Text = sortIcon(dateAscending);
     }
 
-    void SearchFor_TextChanged(object sender, TextChangedEventArgs e)
+    void SearchFor_TextChanged(object? sender, TextChangedEventArgs e)
     {
         string searchText = e.NewTextValue?.Trim() ?? string.Empty;
         if (searchText.Length == 0)
@@ -122,12 +122,12 @@ public partial class AlbumsView : ContentView
             albumModels.Add(model);
     }
 
-        void ClearSearch_Click(object sender, EventArgs e)
+    void ClearSearch_Click(object? sender, EventArgs e)
     {
         SearchFor_Entry.Text = string.Empty;
     }
 
-    private void Albums_SizeChanged(object sender, EventArgs e)
+    private void Albums_SizeChanged(object? sender, EventArgs e)
     {
         GridItemsLayout grid = (GridItemsLayout)Albums_CVw.ItemsLayout;
         grid.Span = int.Max(1, (int)(Albums_CVw.Width / 300));

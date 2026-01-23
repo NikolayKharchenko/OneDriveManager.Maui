@@ -160,7 +160,7 @@ namespace OneDriveAlbums.UI.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter 3 or more characters to search for.
+        ///   Looks up a localized string similar to Enter text to search.
         /// </summary>
         internal static string SearchFor_PlaceHolder {
             get {

@@ -157,7 +157,7 @@
     <value>Search for:</value>
   </data>
   <data name="SearchFor_PlaceHolder" xml:space="preserve">
-    <value>Enter 3 or more characters to search for</value>
+    <value>Enter text to search</value>
   </data>
   <data name="InterfaceLanguage_Lbl" xml:space="preserve">
     <value>Select interface language:</value>

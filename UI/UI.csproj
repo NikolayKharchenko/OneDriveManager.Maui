@@ -44,33 +44,39 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-android|AnyCPU'">
-	  <ApplicationId>com.nk.onedrivealbums</ApplicationId>
-	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<ApplicationId>com.nk.onedrivealbums</ApplicationId>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-ios|AnyCPU'">
-	  <ApplicationId>com.nk.onedrivealbums</ApplicationId>
-	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<ApplicationId>com.nk.onedrivealbums</ApplicationId>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows10.0.19041.0|AnyCPU'">
-	  <ApplicationId>com.nk.onedrivealbums</ApplicationId>
-	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<ApplicationId>com.nk.onedrivealbums</ApplicationId>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android|AnyCPU'">
-	  <ApplicationId>com.nk.onedrivealbums</ApplicationId>
-	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<ApplicationId>com.nk.onedrivealbums</ApplicationId>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-ios|AnyCPU'">
-	  <ApplicationId>com.nk.onedrivealbums</ApplicationId>
-	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<ApplicationId>com.nk.onedrivealbums</ApplicationId>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows10.0.19041.0|AnyCPU'">
-	  <ApplicationId>com.nk.onedrivealbums</ApplicationId>
-	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<ApplicationId>com.nk.onedrivealbums</ApplicationId>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<XamlCompilation>Compile</XamlCompilation>
+		<MauiXamlStrictMode>true</MauiXamlStrictMode>
+		<MauiXamlInflator>SourceGen</MauiXamlInflator>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -118,7 +124,7 @@
 
 	<ItemGroup>
 		<EmbeddedResource Update="Resources\Strings\Strings.fr.resx">
-		  <SubType>Designer</SubType>
+			<SubType>Designer</SubType>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Resources\Strings\Strings.resx">
 			<LastGenOutput>Strings.Designer.cs</LastGenOutput>
@@ -127,12 +133,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="AlbumsView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="SettingsView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="AlbumsView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="SettingsView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 </Project>

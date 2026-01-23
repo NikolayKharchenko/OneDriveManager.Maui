@@ -157,7 +157,7 @@
     <value>Поиск:</value>
   </data>
   <data name="SearchFor_PlaceHolder" xml:space="preserve">
-    <value>Введите 3 и более символов для поиска</value>
+    <value>Введите текст для поиска</value>
   </data>
   <data name="InterfaceLanguage_Lbl" xml:space="preserve">
     <value>Выберите язык интерфейса:</value>
