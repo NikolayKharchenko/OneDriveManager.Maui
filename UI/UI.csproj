@@ -41,6 +41,7 @@
 		<SignAssembly>False</SignAssembly>
 		<AssemblyTitle>OneDrive Albums</AssemblyTitle>
 		<Product>$(AssemblyTitle)</Product>
+		<Platforms>AnyCPU</Platforms>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-android|AnyCPU'">
