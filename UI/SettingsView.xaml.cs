@@ -1,6 +1,8 @@
 using OneDriveAlbums.UI.Resources.Strings;
 using System.Globalization;
 using System.Resources;
+using System.Diagnostics;
+
 namespace OneDriveAlbums.UI;
 
 public partial class SettingsView : ContentView
@@ -28,14 +30,19 @@ public partial class SettingsView : ContentView
     }
 
     public SettingsView()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
+        
+        Dispatcher.Dispatch(initialize);
+    }
 
+    public void initialize()
+    {
         InterfaceLanguage_Picker.ItemsSource = GetAvailableResourceCultures();
         InterfaceLanguage_Picker.SelectedItem = Thread.CurrentThread.CurrentUICulture;
         InterfaceLanguageChanged_Warn.IsVisible = false;
     }
-
+    
     private void FixDates_Click(object? sender, EventArgs e)
     {
         Dispatcher.Dispatch(async () => await MainPage.Instance!.Albums_Vw.FixAllAlbumsMetadataAsync());
@@ -51,4 +58,5 @@ public partial class SettingsView : ContentView
 
         InterfaceLanguageChanged_Warn.IsVisible = true;
     }
+
 }
