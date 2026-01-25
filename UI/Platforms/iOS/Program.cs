@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using UIKit;
+﻿using UIKit;
 
 namespace OneDriveAlbums.UI;
 
@@ -10,13 +9,6 @@ public class Program
     {
         // if you want to use a different Application Delegate class from "AppDelegate"
         // you can specify it here.
-        try
-        {
-            UIApplication.Main(args, null, typeof(AppDelegate));
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine($"Unhandled exception in UIApplication.Main: {ex.Message}");
-        }
+        UIApplication.Main(args, null, typeof(AppDelegate));
     }
 }

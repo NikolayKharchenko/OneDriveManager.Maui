@@ -33,10 +33,10 @@ public partial class SettingsView : ContentView
     {
         InitializeComponent();
         
-        Dispatcher.Dispatch(initialize);
+        Dispatcher.Dispatch(async () => await initialize());
     }
 
-    public void initialize()
+    public async Task initialize()
     {
         InterfaceLanguage_Picker.ItemsSource = GetAvailableResourceCultures();
         InterfaceLanguage_Picker.SelectedItem = Thread.CurrentThread.CurrentUICulture;
