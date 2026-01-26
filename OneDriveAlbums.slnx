@@ -3,4 +3,7 @@
     <File Path="DeviceLog.txt" />
   </Folder>
   <Project Path="Graph/Graph.csproj" />
+  <Project Path="UI/UI.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
 </Solution>
