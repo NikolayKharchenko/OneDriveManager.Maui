@@ -5,16 +5,8 @@
 
     <Grid RowDefinitions="Auto,*,Auto" Padding="10">
         <HorizontalStackLayout Grid.Row="0" HorizontalOptions="End" VerticalOptions="Center" Spacing="30" Margin="0,0,0,30">
-            <Label Text="cloud_off" FontFamily="MaterialSymbolsRounded" FontSize="28">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Reconnect_Click" />
-                </Label.GestureRecognizers>
-            </Label>
-            <Label Text="settings" FontFamily="MaterialSymbolsRounded" FontSize="28">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Settings_Click" />
-                </Label.GestureRecognizers>
-            </Label>
+            <local:SymbolFontButton Ligature="cloud_off" Clicked="Reconnect_Click" FontSize="28"/>
+            <local:SymbolFontButton Ligature="settings" Clicked="Settings_Click" FontSize="28"/>
         </HorizontalStackLayout>
         <local:AlbumsView x:FieldModifier="public" Grid.Row="1" x:Name="Albums_Vw" />
         <local:SettingsView Grid.Row="1" x:Name="Settings_Vw" IsVisible="False" />

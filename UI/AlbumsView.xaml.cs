@@ -114,8 +114,8 @@ public partial class AlbumsView : ContentView
         else if (dateAsc is not null)
             sortAlbums(model => model.DateForSort, dateAsc.Value);
 
-        SortByName_Icon.Text = sortIcon(nameAscending);
-        SortByDate_Icon.Text = sortIcon(dateAscending);
+        SortByName_Icon.Ligature = sortIcon(nameAscending);
+        SortByDate_Icon.Ligature = sortIcon(dateAscending);
     }
 
     void SearchFor_TextChanged(object? sender, TextChangedEventArgs e)
