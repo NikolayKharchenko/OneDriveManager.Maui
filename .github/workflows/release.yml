@@ -47,7 +47,7 @@ jobs:
           -f net10.0-ios
           /p:BuildIpa=true
           /p:RunAOTCompilation=false
-          /p:PublishTrimmed=false
+          /p:PublishTrimmed=true
 
       - name: Collect artifacts
         shell: bash
@@ -101,33 +101,25 @@ jobs:
           $pfxPasswordPlain = "temporary-password"
           $pfxPassword = ConvertTo-SecureString -String $pfxPasswordPlain -Force -AsPlainText
 
-          # Code Signing EKU: 1.3.6.1.5.5.7.3.3
-          $eku = New-Object System.Security.Cryptography.Oid("1.3.6.1.5.5.7.3.3","Code Signing")
-          $ekuExt = New-Object System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension(
-            (New-Object System.Security.Cryptography.OidCollection), $false
-          )
-          $null = $ekuExt.EnhancedKeyUsages.Add($eku)
-
           $cert = New-SelfSignedCertificate `
             -Subject $subject `
+            -CertStoreLocation "Cert:\CurrentUser\My" `
             -KeyAlgorithm RSA `
             -KeyLength 2048 `
             -HashAlgorithm SHA256 `
             -KeyExportPolicy Exportable `
             -KeySpec Signature `
-            -CertStoreLocation "Cert:\CurrentUser\My" `
             -NotAfter (Get-Date).AddYears(5) `
-            -Extension @($ekuExt)
+            -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3")
 
           Export-PfxCertificate -Cert $cert -FilePath "artifacts\onedrivealbums.pfx" -Password $pfxPassword | Out-Null
           Export-Certificate -Cert $cert -FilePath "artifacts\onedrivealbums.cer" | Out-Null
 
-          # Import back to ensure MSBuild can access it
           $imported = Import-PfxCertificate -FilePath "artifacts\onedrivealbums.pfx" -CertStoreLocation "Cert:\CurrentUser\My" -Password $pfxPassword
           if (-not $imported) { throw "PFX import failed" }
 
-          "PFX_PASSWORD=$pfxPasswordPlain" | Out-File -FilePath $env:GITHUB_ENV -Append
           "CERT_THUMBPRINT=$($cert.Thumbprint)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "PFX_PASSWORD=$pfxPasswordPlain" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Restore
         run: dotnet restore ${{ env.UI_PROJECT }}
