@@ -47,7 +47,14 @@ public partial class MainPage : ContentPage
 
     private void Settings_Click(object? sender, EventArgs e)
     {
-        Settings_Vw.IsVisible = !Settings_Vw.IsVisible;
+        Settings_Vw.IsVisible = true;
+        Albums_Vw.IsVisible = false;
+    }
+
+    private void Albums_Click(object? sender, EventArgs e)
+    {
+        Settings_Vw.IsVisible = false;
+        Albums_Vw.IsVisible = true;
     }
 
     private async void Reconnect_Click(object? sender, EventArgs e)
