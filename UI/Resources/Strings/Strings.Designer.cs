@@ -124,6 +124,15 @@ namespace OneDriveAlbums.UI.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading photos....
+        /// </summary>
+        internal static string LoadingPhotos_Msg {
+            get {
+                return ResourceManager.GetString("LoadingPhotos_Msg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OneDrive Albums.
         /// </summary>
         internal static string MainWindow_Caption {

@@ -29,7 +29,7 @@
             <Grid>
                 <Entry x:Name="SearchFor_Entry" WidthRequest="250" VerticalOptions="Center" TextChanged="SearchFor_TextChanged"
                         Placeholder="{x:Static str:Strings.SearchFor_PlaceHolder}" />
-                <local:SymbolFontButton Ligature="close" x:Name="ClearSearch_Btn" VerticalOptions="Center" HorizontalOptions="End" FontSize="28"
+                <local:SymbolFontButton Text="close" x:Name="ClearSearch_Btn" VerticalOptions="Center" HorizontalOptions="End" FontSize="28"
                         TextColor="Gray" Clicked="ClearSearch_Click"/>
             </Grid>
         </HorizontalStackLayout>

@@ -66,11 +66,7 @@ public partial class AlbumsView : ContentView
         if (albumModel.Item.WebUrl is null)
             return;
 
-#if ANDROID
-        _ = Browser.OpenAsync(albumModel.Item.WebUrl, BrowserLaunchMode.SystemPreferred);
-#else
-        _ = Browser.OpenAsync(albumModel.Item.WebUrl, BrowserLaunchMode.External);
-#endif
+        MainPage.Instance!.ShowGalleryView(albumModel.Item.WebUrl);
     }
 
     public void Album_Tap(object? sender, EventArgs e)
@@ -114,8 +110,8 @@ public partial class AlbumsView : ContentView
         else if (dateAsc is not null)
             sortAlbums(model => model.DateForSort, dateAsc.Value);
 
-        SortByName_Icon.Ligature = sortIcon(nameAscending);
-        SortByDate_Icon.Ligature = sortIcon(dateAscending);
+        SortByName_Icon.Text = sortIcon(nameAscending);
+        SortByDate_Icon.Text = sortIcon(dateAscending);
     }
 
     void SearchFor_TextChanged(object? sender, TextChangedEventArgs e)

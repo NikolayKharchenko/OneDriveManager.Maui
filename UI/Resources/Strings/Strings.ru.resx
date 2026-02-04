@@ -171,4 +171,7 @@
   <data name="ProcessingItem_Msg" xml:space="preserve">
     <value>Обрабатывается {0} ({1} из {2})</value>
   </data>
+  <data name="LoadingPhotos_Msg" xml:space="preserve">
+    <value>Загрузка фотографий...</value>
+  </data>
 </root>

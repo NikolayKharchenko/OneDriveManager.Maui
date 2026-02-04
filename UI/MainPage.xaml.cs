@@ -12,7 +12,7 @@ public partial class MainPage : ContentPage
     static public MainPage? Instance;
     public MainPage()
     {
-        Trace.Assert(Instance ==  null);
+        Trace.Assert(Instance == null);
         Instance = this;
         InitializeComponent();
         SetStatusText(Strings.Ready_Txt);
@@ -45,16 +45,28 @@ public partial class MainPage : ContentPage
         SetStatusText(Strings.Connected_Msg, displayName);
     }
 
+    public void ShowGalleryView(string url)
+    {
+        Gallery_Vw.ShowGallery(url);
+        activateView(Gallery_Vw);
+    }
+
+    private void activateView(View view)
+    {
+        Settings_Vw.IsVisible = false;
+        Albums_Vw.IsVisible = false;
+        Gallery_Vw.IsVisible = false;
+        view.IsVisible = true;
+    }
+
     private void Settings_Click(object? sender, EventArgs e)
     {
-        Settings_Vw.IsVisible = true;
-        Albums_Vw.IsVisible = false;
+        activateView(Settings_Vw);
     }
 
     private void Albums_Click(object? sender, EventArgs e)
     {
-        Settings_Vw.IsVisible = false;
-        Albums_Vw.IsVisible = true;
+        activateView(Albums_Vw);
     }
 
     private async void Reconnect_Click(object? sender, EventArgs e)
