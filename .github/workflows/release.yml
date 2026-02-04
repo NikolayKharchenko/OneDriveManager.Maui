@@ -1,9 +1,7 @@
 name: Build & Release (MAUI)
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch: # To enable manual run of action
 
 permissions:
   contents: write
