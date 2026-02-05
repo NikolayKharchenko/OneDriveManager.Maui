@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
     <File Path="DeviceLog.txt" />
   </Folder>
   <Project Path="Graph/Graph.csproj" />
