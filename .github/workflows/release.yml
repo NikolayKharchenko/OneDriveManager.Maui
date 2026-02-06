@@ -120,11 +120,11 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Install fastlane
           sudo gem install fastlane -N
 
           mkdir -p "$RUNNER_TEMP/appstoreconnect"
-          echo "$ASC_P8_BASE64" | base64 --decode > "$RUNNER_TEMP/appstoreconnect/AuthKey_${ASC_KEY_ID}.p8"
+          KEY_PATH="$RUNNER_TEMP/appstoreconnect/AuthKey_${ASC_KEY_ID}.p8"
+          echo "$ASC_P8_BASE64" | base64 --decode > "$KEY_PATH"
 
           IPA="$(find UI/bin/${{ env.CONFIGURATION }}/net10.0-ios -type f -name '*.ipa' -print -quit)"
           if [ -z "$IPA" ]; then
@@ -132,11 +132,18 @@ jobs:
             exit 1
           fi
 
+          API_KEY_JSON=$(cat <<EOF
+          {
+            "key_id": "${ASC_KEY_ID}",
+            "issuer_id": "${ASC_ISSUER_ID}",
+            "key_filepath": "${KEY_PATH}"
+          }
+          EOF
+          )
+
           fastlane pilot upload \
             --ipa "$IPA" \
-            --api_key_path "$RUNNER_TEMP/appstoreconnect/AuthKey_${ASC_KEY_ID}.p8" \
-            --api_key_id "$ASC_KEY_ID" \
-            --api_issuer "$ASC_ISSUER_ID" \
+            --api_key "$API_KEY_JSON" \
             --app_identifier "$IOS_BUNDLE_ID" \
             --skip_waiting_for_build_processing true
 
