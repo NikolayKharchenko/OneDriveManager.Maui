@@ -122,16 +122,14 @@ jobs:
 
           sudo gem install fastlane -N
 
-          mkdir -p "$RUNNER_TEMP/appstoreconnect"
-          KEY_PATH="$RUNNER_TEMP/appstoreconnect/AuthKey_${ASC_KEY_ID}.p8"
-          echo "$ASC_P8_BASE64" | base64 --decode > "$KEY_PATH"
+          DECODED_KEY="$(echo "$ASC_P8_BASE64" | base64 --decode)"
 
           API_KEY_JSON_PATH="$RUNNER_TEMP/appstoreconnect/api_key.json"
           cat > "$API_KEY_JSON_PATH" <<EOF
           {
             "key_id": "${ASC_KEY_ID}",
             "issuer_id": "${ASC_ISSUER_ID}",
-            "key_filepath": "${KEY_PATH}"
+            "key": "${DECODED_KEY}"
           }
           EOF
 
@@ -141,7 +139,6 @@ jobs:
             exit 1
           fi
 
-          ls -la "$KEY_PATH" "$API_KEY_JSON_PATH"
           cat "$API_KEY_JSON_PATH"
 
           fastlane pilot upload \
