@@ -83,7 +83,7 @@ jobs:
 
       - name: Build iOS (IPA)
         run: >
-          dotnet publish ${{ env.UI_PROJECT }}
+          dotenv publish ${{ env.UI_PROJECT }}
           -c ${{ env.CONFIGURATION }}
           -f net10.0-ios
           /p:BuildIpa=true
@@ -122,25 +122,30 @@ jobs:
 
           sudo gem install fastlane -N
 
-          DECODED_KEY="$(echo "$ASC_P8_BASE64" | base64 --decode)"
-
           mkdir -p "$RUNNER_TEMP/appstoreconnect"
+          KEY_PATH="$RUNNER_TEMP/appstoreconnect/AuthKey_${ASC_KEY_ID}.p8"
+          echo "$ASC_P8_BASE64" | base64 --decode > "$KEY_PATH"
+
           API_KEY_JSON_PATH="$RUNNER_TEMP/appstoreconnect/api_key.json"
-          cat > "$API_KEY_JSON_PATH" <<EOF
-          {
-            "key_id": "${ASC_KEY_ID}",
-            "issuer_id": "${ASC_ISSUER_ID}",
-            "key": "${DECODED_KEY}"
-          }
-          EOF
+          python3 - <<PY
+          import json
+          key_id = "${ASC_KEY_ID}"
+          issuer_id = "${ASC_ISSUER_ID}"
+          key_path = "${KEY_PATH}"
+
+          with open(key_path, "r", encoding="utf-8") as f:
+              key = f.read()
+
+          # Write JSON with proper escaping of newlines
+          with open("${API_KEY_JSON_PATH}", "w", encoding="utf-8") as f:
+              json.dump({"key_id": key_id, "issuer_id": issuer_id, "key": key}, f)
+          PY
 
           IPA="$(find UI/bin/${{ env.CONFIGURATION }}/net10.0-ios -type f -name '*.ipa' -print -quit)"
           if [ -z "$IPA" ]; then
             echo "IPA not found" >&2
             exit 1
           fi
-
-          cat "$API_KEY_JSON_PATH"
 
           fastlane pilot upload \
             --ipa "$IPA" \
