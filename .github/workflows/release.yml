@@ -124,6 +124,7 @@ jobs:
 
           DECODED_KEY="$(echo "$ASC_P8_BASE64" | base64 --decode)"
 
+          mkdir -p "$RUNNER_TEMP/appstoreconnect"
           API_KEY_JSON_PATH="$RUNNER_TEMP/appstoreconnect/api_key.json"
           cat > "$API_KEY_JSON_PATH" <<EOF
           {
