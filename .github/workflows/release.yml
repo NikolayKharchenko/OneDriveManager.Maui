@@ -83,7 +83,7 @@ jobs:
 
       - name: Build iOS (IPA)
         run: >
-          dotenv publish ${{ env.UI_PROJECT }}
+          dotnet publish ${{ env.UI_PROJECT }}
           -c ${{ env.CONFIGURATION }}
           -f net10.0-ios
           /p:BuildIpa=true
