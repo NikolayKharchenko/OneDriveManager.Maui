@@ -110,6 +110,36 @@ jobs:
           fi
           cp "${IPA}" "artifacts/OneDriveAlbums-ios-${GITHUB_REF_NAME}.ipa"
 
+      - name: Upload iOS .ipa to TestFlight (Fastlane)
+        shell: bash
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_P8_BASE64: ${{ secrets.ASC_P8_BASE64 }}
+          IOS_BUNDLE_ID: ${{ vars.IOS_BUNDLE_ID }}
+        run: |
+          set -euo pipefail
+
+          # Install fastlane
+          sudo gem install fastlane -N
+
+          mkdir -p "$RUNNER_TEMP/appstoreconnect"
+          echo "$ASC_P8_BASE64" | base64 --decode > "$RUNNER_TEMP/appstoreconnect/AuthKey_${ASC_KEY_ID}.p8"
+
+          IPA="$(find UI/bin/${{ env.CONFIGURATION }}/net10.0-ios -type f -name '*.ipa' -print -quit)"
+          if [ -z "$IPA" ]; then
+            echo "IPA not found" >&2
+            exit 1
+          fi
+
+          fastlane pilot upload \
+            --ipa "$IPA" \
+            --api_key_path "$RUNNER_TEMP/appstoreconnect/AuthKey_${ASC_KEY_ID}.p8" \
+            --api_key_id "$ASC_KEY_ID" \
+            --api_issuer "$ASC_ISSUER_ID" \
+            --app_identifier "$IOS_BUNDLE_ID" \
+            --skip_waiting_for_build_processing true
+
       - name: Upload workflow artifacts (mobile)
         uses: actions/upload-artifact@v4
         with:
