@@ -3,6 +3,7 @@
     <File Path=".github/workflows/release.yml" />
     <File Path=".gitignore" />
     <File Path="DeviceLog.txt" />
+    <File Path="Gemfile" />
   </Folder>
   <Project Path="Graph/Graph.csproj" />
   <Project Path="UI/UI.csproj">

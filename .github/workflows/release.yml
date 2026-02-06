@@ -25,6 +25,12 @@ jobs:
         with:
           global-json-file: global.json
 
+      - name: Setup Ruby (Fastlane)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
       - name: Install MAUI workload
         run: dotnet workload install maui
 
@@ -80,7 +86,7 @@ jobs:
 
           echo "Available signing identities:"
           security find-identity -v -p codesigning "$KEYCHAIN"
-
+      
       - name: Build iOS (IPA)
         run: >
           dotnet publish ${{ env.UI_PROJECT }}
@@ -120,8 +126,6 @@ jobs:
         run: |
           set -euo pipefail
 
-          sudo gem install fastlane -N
-
           mkdir -p "$RUNNER_TEMP/appstoreconnect"
           KEY_PATH="$RUNNER_TEMP/appstoreconnect/AuthKey_${ASC_KEY_ID}.p8"
           echo "$ASC_P8_BASE64" | base64 --decode > "$KEY_PATH"
@@ -147,7 +151,7 @@ jobs:
             exit 1
           fi
 
-          fastlane pilot upload \
+          bundle exec fastlane pilot upload \
             --ipa "$IPA" \
             --api_key_path "$API_KEY_JSON_PATH" \
             --app_identifier "$IOS_BUNDLE_ID" \
