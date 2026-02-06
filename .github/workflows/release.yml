@@ -126,24 +126,27 @@ jobs:
           KEY_PATH="$RUNNER_TEMP/appstoreconnect/AuthKey_${ASC_KEY_ID}.p8"
           echo "$ASC_P8_BASE64" | base64 --decode > "$KEY_PATH"
 
-          IPA="$(find UI/bin/${{ env.CONFIGURATION }}/net10.0-ios -type f -name '*.ipa' -print -quit)"
-          if [ -z "$IPA" ]; then
-            echo "IPA not found" >&2
-            exit 1
-          fi
-
-          API_KEY_JSON=$(cat <<EOF
+          API_KEY_JSON_PATH="$RUNNER_TEMP/appstoreconnect/api_key.json"
+          cat > "$API_KEY_JSON_PATH" <<EOF
           {
             "key_id": "${ASC_KEY_ID}",
             "issuer_id": "${ASC_ISSUER_ID}",
             "key_filepath": "${KEY_PATH}"
           }
           EOF
-          )
+
+          IPA="$(find UI/bin/${{ env.CONFIGURATION }}/net10.0-ios -type f -name '*.ipa' -print -quit)"
+          if [ -z "$IPA" ]; then
+            echo "IPA not found" >&2
+            exit 1
+          fi
+
+          ls -la "$KEY_PATH" "$API_KEY_JSON_PATH"
+          cat "$API_KEY_JSON_PATH"
 
           fastlane pilot upload \
             --ipa "$IPA" \
-            --api_key "$API_KEY_JSON" \
+            --api_key_path "$API_KEY_JSON_PATH" \
             --app_identifier "$IOS_BUNDLE_ID" \
             --skip_waiting_for_build_processing true
 
