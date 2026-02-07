@@ -110,12 +110,11 @@ jobs:
           fi
           cp "${IPA}" "artifacts/OneDriveAlbums-ios-${GITHUB_REF_NAME}.ipa"
 
-      - name: Upload iOS .ipa to TestFlight (fastlane pilot)
+      - name: Upload iOS .ipa to TestFlight (iTMSTransporter)
         shell: bash
         env:
-          ASC_API_KEY_ID: ${{ secrets.ASC_API_KEY_ID }}
-          ASC_API_ISSUER_ID: ${{ secrets.ASC_API_ISSUER_ID }}
-          ASC_API_KEY_P8_BASE64: ${{ secrets.ASC_API_KEY_P8_BASE64 }}
+          ASC_APPLE_ID: ${{ secrets.ASC_APPLE_ID }}
+          ASC_APP_PASSWORD: ${{ secrets.ASC_APP_PASSWORD }}
         run: |
           set -euo pipefail
 
@@ -125,17 +124,11 @@ jobs:
             exit 1
           fi
 
-          mkdir -p "$RUNNER_TEMP/asc"
-          echo "$ASC_API_KEY_P8_BASE64" | base64 --decode > "$RUNNER_TEMP/asc/AuthKey_${ASC_API_KEY_ID}.p8"
-
-          sudo gem install fastlane -N
-
-          fastlane pilot upload \
-            --ipa "$IPA" \
-            --api_key_path "$RUNNER_TEMP/asc/AuthKey_${ASC_API_KEY_ID}.p8" \
-            --api_key_id "$ASC_API_KEY_ID" \
-            --api_issuer_id "$ASC_API_ISSUER_ID" \
-            --skip_waiting_for_build_processing true
+          xcrun iTMSTransporter -m upload \
+            -assetFile "$IPA" \
+            -u "$ASC_APPLE_ID" \
+            -p "$ASC_APP_PASSWORD" \
+            -v informational
 
       - name: Upload workflow artifacts (mobile)
         uses: actions/upload-artifact@v4
