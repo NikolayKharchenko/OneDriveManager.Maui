@@ -95,6 +95,7 @@ jobs:
           /p:BuildIpa=true
           /p:RunAOTCompilation=false
           /p:PublishTrimmed=true
+          /p:ApplicationVersion=${{ github.run_number }}
 
       - name: Collect artifacts
         shell: bash
