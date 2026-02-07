@@ -83,8 +83,8 @@
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios'">
 	  <ProvisioningType>manual</ProvisioningType>
-	  <CodesignKey>Apple Development: NIKOLAY KHARCHENKO (JQBV3GNQSF)</CodesignKey>
-	  <CodesignProvision>b6412441-4d0d-4a09-a65a-0758cd24c06e</CodesignProvision>
+	  <CodesignKey>Apple Distribution: NIKOLAY KHARCHENKO (S9E3A78VMZ)</CodesignKey>
+	  <CodesignProvision>74118b24-b7ed-4c9f-a33c-425a26352ee3</CodesignProvision>
 	</PropertyGroup>
 
 	<ItemGroup>
