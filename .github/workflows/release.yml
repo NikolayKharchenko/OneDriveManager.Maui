@@ -25,6 +25,12 @@ jobs:
         with:
           global-json-file: global.json
 
+      - name: Setup Ruby (Fastlane)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
       - name: Install MAUI workload
         run: dotnet workload install maui
 
@@ -80,7 +86,7 @@ jobs:
 
           echo "Available signing identities:"
           security find-identity -v -p codesigning "$KEYCHAIN"
-
+      
       - name: Build iOS (IPA)
         run: >
           dotnet publish ${{ env.UI_PROJECT }}
@@ -110,13 +116,34 @@ jobs:
           fi
           cp "${IPA}" "artifacts/OneDriveAlbums-ios-${GITHUB_REF_NAME}.ipa"
 
-      - name: Upload iOS .ipa to TestFlight (iTMSTransporter)
+      - name: Upload iOS .ipa to TestFlight (Fastlane)
         shell: bash
         env:
-          ASC_APPLE_ID: ${{ secrets.ASC_APPLE_ID }}
-          ASC_APP_PASSWORD: ${{ secrets.ASC_APP_PASSWORD }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_P8_BASE64: ${{ secrets.ASC_P8_BASE64 }}
+          IOS_BUNDLE_ID: ${{ vars.IOS_BUNDLE_ID }}
         run: |
           set -euo pipefail
+
+          mkdir -p "$RUNNER_TEMP/appstoreconnect"
+          KEY_PATH="$RUNNER_TEMP/appstoreconnect/AuthKey_${ASC_KEY_ID}.p8"
+          echo "$ASC_P8_BASE64" | base64 --decode > "$KEY_PATH"
+
+          API_KEY_JSON_PATH="$RUNNER_TEMP/appstoreconnect/api_key.json"
+          python3 - <<PY
+          import json
+          key_id = "${ASC_KEY_ID}"
+          issuer_id = "${ASC_ISSUER_ID}"
+          key_path = "${KEY_PATH}"
+
+          with open(key_path, "r", encoding="utf-8") as f:
+              key = f.read()
+
+          # Write JSON with proper escaping of newlines
+          with open("${API_KEY_JSON_PATH}", "w", encoding="utf-8") as f:
+              json.dump({"key_id": key_id, "issuer_id": issuer_id, "key": key}, f)
+          PY
 
           IPA="$(find UI/bin/${{ env.CONFIGURATION }}/net10.0-ios -type f -name '*.ipa' -print -quit)"
           if [ -z "$IPA" ]; then
@@ -124,11 +151,11 @@ jobs:
             exit 1
           fi
 
-          xcrun iTMSTransporter -m upload \
-            -assetFile "$IPA" \
-            -u "$ASC_APPLE_ID" \
-            -p "$ASC_APP_PASSWORD" \
-            -v informational
+          bundle exec fastlane pilot upload \
+            --ipa "$IPA" \
+            --api_key_path "$API_KEY_JSON_PATH" \
+            --app_identifier "$IOS_BUNDLE_ID" \
+            --skip_waiting_for_build_processing true
 
       - name: Upload workflow artifacts (mobile)
         uses: actions/upload-artifact@v4
