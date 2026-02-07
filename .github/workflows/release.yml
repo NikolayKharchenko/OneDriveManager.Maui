@@ -129,6 +129,7 @@ jobs:
 
           mkdir -p "$RUNNER_TEMP/appstoreconnect"
           KEY_PATH="$RUNNER_TEMP/appstoreconnect/AuthKey_${ASC_KEY_ID}.p8"
+          echo "P8: $ASC_P8_BASE64"
           echo "$ASC_P8_BASE64" | base64 --decode > "$KEY_PATH"
           chmod 600 "$KEY_PATH"
 
