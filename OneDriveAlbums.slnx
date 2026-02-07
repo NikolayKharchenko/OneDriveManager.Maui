@@ -2,7 +2,11 @@
   <Folder Name="/Solution Items/">
     <File Path=".github/workflows/release.yml" />
     <File Path=".gitignore" />
+    <File Path="build.sh" />
     <File Path="DeviceLog.txt" />
+    <File Path="fastlane/Fastfile" />
+    <File Path="Gemfile" />
+    <File Path="Gemfile.lock" />
   </Folder>
   <Project Path="Graph/Graph.csproj" />
   <Project Path="UI/UI.csproj">

@@ -1,0 +1,18 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Upload to TestFlight using App Store Connect API key (.p8)"
+  lane :upload_testflight do |options|
+    app_store_connect_api_key(
+      key_id: options[:key_id],
+      issuer_id: options[:issuer_id],
+      key_filepath: options[:key_filepath]
+    )
+
+    pilot(
+      ipa: options[:ipa],
+      app_identifier: options[:app_identifier],
+      skip_waiting_for_build_processing: true
+    )
+  end
+end
