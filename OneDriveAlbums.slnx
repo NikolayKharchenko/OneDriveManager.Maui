@@ -4,6 +4,7 @@
     <File Path=".gitignore" />
     <File Path="DeviceLog.txt" />
     <File Path="Gemfile" />
+    <File Path="Gemfile.lock" />
   </Folder>
   <Project Path="Graph/Graph.csproj" />
   <Project Path="UI/UI.csproj">
