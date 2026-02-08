@@ -52,14 +52,6 @@ public class GraphClient
 
     const string persistentDataOneDrivePath = "/.OneDriveManager/persistdb.json";
     private PersistentData persistentStore { get; set; } = new();
-    public static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        ReadCommentHandling = JsonCommentHandling.Skip,
-        AllowTrailingCommas = true,
-        WriteIndented = true,
-    };
-
 
     public GraphClient()
     {
@@ -123,7 +115,10 @@ public class GraphClient
             persistentStore = new PersistentData();
             return;
         }
-        PersistentData? loaded = await JsonSerializer.DeserializeAsync<PersistentData>(content, JsonOptions);
+
+        PersistentData? loaded = await JsonSerializer.DeserializeAsync(
+            content,
+            GraphJsonContext.Default.PersistentData);
 
         persistentStore = loaded ?? new PersistentData();
     }
@@ -133,7 +128,11 @@ public class GraphClient
         Trace.Assert(client != null, "GraphClient is not connected");
 
         string driveId = await getDriveIdAsync();
-        string json = JsonSerializer.Serialize(persistentStore, JsonOptions);
+
+        string json = JsonSerializer.Serialize(
+            persistentStore,
+            GraphJsonContext.Default.PersistentData);
+
         MemoryStream body = new(System.Text.Encoding.UTF8.GetBytes(json));
 
         DriveItem? persistentItem = await TryGetItemByPathAsync(persistentDataOneDrivePath);
