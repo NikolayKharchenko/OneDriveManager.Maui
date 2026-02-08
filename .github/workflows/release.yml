@@ -147,9 +147,8 @@ jobs:
           /p:BuildIpa=true
           /p:RunAOTCompilation=false
           /p:PublishTrimmed=true
+          /p:TrimMode=partial
           /p:MtouchLink=None
-          /p:TrimMode=copyused
-          /p:TrimmerDefaultAction=copy
           /p:ApplicationVersion=${{ github.run_number }}
 
       - name: Collect artifacts
