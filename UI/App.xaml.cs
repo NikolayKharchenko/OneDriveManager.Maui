@@ -42,8 +42,8 @@ public partial class App : Application
 
     public App()
     {
-        loadConfig();
-        loadUILanguage();
+        //loadConfig();
+        //loadUILanguage();
 
         InitializeComponent();
     }

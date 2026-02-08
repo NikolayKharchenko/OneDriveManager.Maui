@@ -81,7 +81,13 @@
 		<MauiXamlInflator>SourceGen</MauiXamlInflator>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios'">
+	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios' and '$(Configuration)' == 'Debug'">
+	  <ProvisioningType>manual</ProvisioningType>
+	  <CodesignKey>Apple Development: NIKOLAY KHARCHENKO (JQBV3GNQSF)</CodesignKey>
+	  <CodesignProvision>2daa65ca-3c47-4edb-b97d-8555b1fcafce</CodesignProvision>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios' and '$(Configuration)' == 'Release'">
 	  <ProvisioningType>manual</ProvisioningType>
 	  <CodesignKey>Apple Distribution: NIKOLAY KHARCHENKO (S9E3A78VMZ)</CodesignKey>
 	  <CodesignProvision>74118b24-b7ed-4c9f-a33c-425a26352ee3</CodesignProvision>
