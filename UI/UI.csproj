@@ -42,43 +42,14 @@
 		<AssemblyTitle>OneDrive Albums</AssemblyTitle>
 		<Product>$(AssemblyTitle)</Product>
 		<Platforms>AnyCPU</Platforms>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-android|AnyCPU'">
-		<ApplicationId>com.nk.onedrivealbums</ApplicationId>
 		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-ios|AnyCPU'">
-		<ApplicationId>com.nk.onedrivealbums</ApplicationId>
-		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-		<MtouchLink>None</MtouchLink>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows10.0.19041.0|AnyCPU'">
-		<ApplicationId>com.nk.onedrivealbums</ApplicationId>
-		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android|AnyCPU'">
-		<ApplicationId>com.nk.onedrivealbums</ApplicationId>
-		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-ios|AnyCPU'">
-		<ApplicationId>com.nk.onedrivealbums</ApplicationId>
-		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows10.0.19041.0|AnyCPU'">
-		<ApplicationId>com.nk.onedrivealbums</ApplicationId>
-		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-	</PropertyGroup>
-
-	<PropertyGroup>
 		<XamlCompilation>Compile</XamlCompilation>
 		<MauiXamlStrictMode>true</MauiXamlStrictMode>
 		<MauiXamlInflator>SourceGen</MauiXamlInflator>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-ios|AnyCPU'">
+		<MtouchLink>None</MtouchLink>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios' and '$(Configuration)' == 'Debug'">
@@ -96,7 +67,6 @@
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-		<MauiFont Include="Resources\Fonts\MaterialSymbolsRounded.ttf" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -106,6 +76,7 @@
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
 		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\MaterialSymbolsRounded.ttf" />
 		<MauiFont Include="Resources\Fonts\OpenSans-Regular.ttf" />
 		<MauiFont Include="Resources\Fonts\OpenSans-Semibold.ttf" />
 

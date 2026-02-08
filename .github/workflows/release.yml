@@ -155,13 +155,6 @@ jobs:
           set -euo pipefail
           mkdir -p artifacts
 
-          APK="$(find UI/bin/${{ env.CONFIGURATION }}/net10.0-android -type f -name '*.apk' -print -quit || true)"
-          if [ -z "${APK}" ]; then
-            echo "APK not found" >&2
-            exit 1
-          fi
-          cp "${APK}" "artifacts/OneDriveAlbums-android-${GITHUB_REF_NAME}.apk"
-
           IPA="$(find UI/bin/${{ env.CONFIGURATION }}/net10.0-ios -type f -name '*.ipa' -print -quit || true)"
           if [ -z "${IPA}" ]; then
             echo "IPA not found" >&2
