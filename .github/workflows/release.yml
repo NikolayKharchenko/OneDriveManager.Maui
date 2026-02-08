@@ -148,6 +148,8 @@ jobs:
           /p:RunAOTCompilation=false
           /p:PublishTrimmed=true
           /p:MtouchLink=None
+          /p:TrimMode=copyused
+          /p:TrimmerDefaultAction=copy
           /p:ApplicationVersion=${{ github.run_number }}
 
       - name: Collect artifacts
