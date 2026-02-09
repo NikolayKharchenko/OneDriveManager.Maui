@@ -1,8 +1,5 @@
 using System.Diagnostics;
-
-#if IOS
-using Foundation;
-#endif
+using System.Runtime.InteropServices;
 
 namespace OneDriveAlbums.UI;
 
@@ -13,17 +10,13 @@ internal static class StartupLog
 
     private static string GetBaseDir()
     {
-        // FileSystem.* can fail very early in startup; this is safer.
         try
         {
             var dir = FileSystem.AppDataDirectory;
             if (!string.IsNullOrWhiteSpace(dir))
                 return dir;
         }
-        catch
-        {
-            // ignore
-        }
+        catch { }
 
         return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
     }
@@ -58,15 +51,12 @@ internal static class StartupLog
     {
         var line = $"{DateTimeOffset.UtcNow:O} {message}";
 
-        // Always emit to debug output
-        try { Trace.WriteLine(line); } catch { /* ignore */ }
+        try { Trace.WriteLine(line); } catch { }
 
 #if IOS
-        // Also emit to unified logging so Console.app can see it
-        try { NSLog($"{line}"); } catch { /* ignore */ }
+        try { IOSLog(line); } catch { }
 #endif
 
-        // Best-effort file append (may fail early startup)
         try
         {
             lock (Gate)
@@ -76,9 +66,14 @@ internal static class StartupLog
                 File.AppendAllText(Path.Combine(baseDir, LogFileName), line + Environment.NewLine);
             }
         }
-        catch
-        {
-            // ignore
-        }
+        catch { }
     }
+
+#if IOS
+    private static void IOSLog(string message)
+        => os_log("%{public}s", message);
+
+    [DllImport("/usr/lib/libSystem.dylib", EntryPoint = "os_log")]
+    private static extern void os_log([MarshalAs(UnmanagedType.LPStr)] string format, [MarshalAs(UnmanagedType.LPStr)] string message);
+#endif
 }
