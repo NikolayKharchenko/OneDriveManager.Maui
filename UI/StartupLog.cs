@@ -1,5 +1,9 @@
 using System.Diagnostics;
 
+#if IOS
+using Foundation;
+#endif
+
 namespace OneDriveAlbums.UI;
 
 internal static class StartupLog
@@ -7,45 +11,74 @@ internal static class StartupLog
     private const string LogFileName = "startup.log";
     private static readonly object Gate = new();
 
-    public static string LogPath =>
-        Path.Combine(FileSystem.AppDataDirectory, LogFileName);
+    private static string GetBaseDir()
+    {
+        // FileSystem.* can fail very early in startup; this is safer.
+        try
+        {
+            var dir = FileSystem.AppDataDirectory;
+            if (!string.IsNullOrWhiteSpace(dir))
+                return dir;
+        }
+        catch
+        {
+            // ignore
+        }
+
+        return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+    }
+
+    public static string LogPath => Path.Combine(GetBaseDir(), LogFileName);
 
     public static void Clear()
     {
+        WriteCore("StartupLog:Clear begin");
         try
         {
             lock (Gate)
             {
-                Directory.CreateDirectory(FileSystem.AppDataDirectory);
-                File.WriteAllText(LogPath, string.Empty);
+                var baseDir = GetBaseDir();
+                Directory.CreateDirectory(baseDir);
+                File.WriteAllText(Path.Combine(baseDir, LogFileName), string.Empty);
             }
+            WriteCore("StartupLog:Clear end");
         }
-        catch
+        catch (Exception ex)
         {
-            // ignore
+            WriteCore($"StartupLog:Clear failed: {ex.GetType().Name}: {ex.Message}");
         }
     }
 
-    public static void Write(string message)
-    {
-        try
-        {
-            var line = $"{DateTimeOffset.UtcNow:O} {message}{Environment.NewLine}";
-            lock (Gate)
-            {
-                Directory.CreateDirectory(FileSystem.AppDataDirectory);
-                File.AppendAllText(LogPath, line);
-            }
-
-            // Also emit to device logs when available
-            Trace.WriteLine(line);
-        }
-        catch
-        {
-            // ignore
-        }
-    }
+    public static void Write(string message) => WriteCore(message);
 
     public static void Write(Exception ex, string message = "Exception")
-        => Write($"{message}: {ex}");
+        => WriteCore($"{message}: {ex}");
+
+    private static void WriteCore(string message)
+    {
+        var line = $"{DateTimeOffset.UtcNow:O} {message}";
+
+        // Always emit to debug output
+        try { Trace.WriteLine(line); } catch { /* ignore */ }
+
+#if IOS
+        // Also emit to unified logging so Console.app can see it
+        try { NSLog($"{line}"); } catch { /* ignore */ }
+#endif
+
+        // Best-effort file append (may fail early startup)
+        try
+        {
+            lock (Gate)
+            {
+                var baseDir = GetBaseDir();
+                Directory.CreateDirectory(baseDir);
+                File.AppendAllText(Path.Combine(baseDir, LogFileName), line + Environment.NewLine);
+            }
+        }
+        catch
+        {
+            // ignore
+        }
+    }
 }
