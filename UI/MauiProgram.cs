@@ -25,9 +25,29 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        var app = builder.Build();
-        StartupLog.Write("MauiProgram:CreateMauiApp end");
-        return app;
+        try
+        {
+            StartupLog.Write("MauiProgram:builder.Build begin");
+            var app = builder.Build();
+            StartupLog.Write("MauiProgram:builder.Build end");
+            StartupLog.Write("MauiProgram:CreateMauiApp end");
+            return app;
+        }
+        catch (Exception ex)
+        {
+            StartupLog.Write(ex, "MauiProgram:builder.Build failed");
+            LogInnerExceptions(ex);
+            throw;
+        }
+    }
+
+    private static void LogInnerExceptions(Exception ex)
+    {
+        int i = 0;
+        for (Exception? cur = ex.InnerException; cur != null; cur = cur.InnerException)
+        {
+            StartupLog.Write(cur, $"MauiProgram:inner[{++i}]");
+        }
     }
 
     private static void HookUnhandledExceptions()
