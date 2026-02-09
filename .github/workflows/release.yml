@@ -140,6 +140,7 @@ jobs:
 
       
       - name: Build iOS (IPA)
+        timeout-minutes: 45
         run: >
           dotnet publish ${{ env.UI_PROJECT }}
           -c ${{ env.CONFIGURATION }}

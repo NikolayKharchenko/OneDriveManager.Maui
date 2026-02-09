@@ -42,15 +42,60 @@ public partial class App : Application
 
     public App()
     {
-        loadConfig();
-        loadUILanguage();
+        StartupLog.Clear();
+        StartupLog.Write("App:.ctor begin");
 
-        InitializeComponent();
+        try
+        {
+            loadConfig();
+            StartupLog.Write("App:loadConfig ok");
+        }
+        catch (Exception ex)
+        {
+            StartupLog.Write(ex, "App:loadConfig failed");
+            throw;
+        }
+
+        try
+        {
+            loadUILanguage();
+            StartupLog.Write("App:loadUILanguage ok");
+        }
+        catch (Exception ex)
+        {
+            StartupLog.Write(ex, "App:loadUILanguage failed");
+            throw;
+        }
+
+        try
+        {
+            InitializeComponent();
+            StartupLog.Write("App:InitializeComponent ok");
+        }
+        catch (Exception ex)
+        {
+            StartupLog.Write(ex, "App:InitializeComponent failed");
+            throw;
+        }
+
+        StartupLog.Write($"App:.ctor end. LogPath={StartupLog.LogPath}");
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(new AppShell());
+        StartupLog.Write("App:CreateWindow begin");
+
+        try
+        {
+            var window = new Window(new AppShell());
+            StartupLog.Write("App:CreateWindow end (AppShell created)");
+            return window;
+        }
+        catch (Exception ex)
+        {
+            StartupLog.Write(ex, "App:CreateWindow failed");
+            throw;
+        }
     }
 
     private static void loadUILanguage()

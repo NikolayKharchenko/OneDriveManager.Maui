@@ -9,6 +9,8 @@ public static class MauiProgram
     {
         HookUnhandledExceptions();
 
+        StartupLog.Write("MauiProgram:CreateMauiApp begin");
+
         MauiAppBuilder builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
@@ -23,7 +25,9 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        return builder.Build();
+        var app = builder.Build();
+        StartupLog.Write("MauiProgram:CreateMauiApp end");
+        return app;
     }
 
     private static void HookUnhandledExceptions()
@@ -31,14 +35,16 @@ public static class MauiProgram
         AppDomain.CurrentDomain.UnhandledException += (_, e) =>
         {
             var ex = e.ExceptionObject as Exception;
+            StartupLog.Write(ex ?? new Exception("Unknown exception"), $"[UnhandledException][IsTerminating={e.IsTerminating}]");
             Trace.WriteLine($"[UnhandledException][IsTerminating={e.IsTerminating}] {ex}");
             MainPage.Instance?.SetStatusText(ex?.Message!);
         };
 
         TaskScheduler.UnobservedTaskException += (_, e) =>
         {
+            StartupLog.Write(e.Exception, "[UnobservedTaskException]");
             Trace.WriteLine($"[UnobservedTaskException] {e.Exception}");
-            e.SetObserved(); // prevents the process from being torn down later due to this exception
+            e.SetObserved();
             MainPage.Instance?.SetStatusText(e.Exception.Message);
         };
     }
