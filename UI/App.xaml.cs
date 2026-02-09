@@ -42,7 +42,6 @@ public partial class App : Application
 
     public App()
     {
-        StartupLog.Clear();
         StartupLog.Write("App:.ctor begin");
 
         try

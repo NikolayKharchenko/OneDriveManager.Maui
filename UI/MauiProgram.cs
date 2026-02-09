@@ -20,6 +20,7 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("MaterialSymbolsRounded.ttf", "MaterialSymbolsRounded");
             });
+        StartupLog.Write("MauiProgram:builder created");
 
 #if DEBUG
         builder.Logging.AddDebug();
