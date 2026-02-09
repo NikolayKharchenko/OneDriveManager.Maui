@@ -2,7 +2,12 @@
 <ContentView x:Class="OneDriveAlbums.UI.AlbumsView" xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
         xmlns:local="clr-namespace:OneDriveAlbums.UI" xmlns:str="clr-namespace:OneDriveAlbums.UI.Resources.Strings"
         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="5">
+    <Grid RowSpacing="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
         <HorizontalStackLayout Grid.Row="0">
             <Label Text="{Static str:Strings.SortBy_Lbl}" WidthRequest="100" Margin="0,0,10,0" VerticalOptions="Center" />
