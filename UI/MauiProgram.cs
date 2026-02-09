@@ -10,6 +10,7 @@ public static class MauiProgram
         HookUnhandledExceptions();
 
         StartupLog.Write("MauiProgram:CreateMauiApp begin");
+        StartupLog.Write("MauiProgram:CreateMauiApp first log");
 
         MauiAppBuilder builder = MauiApp.CreateBuilder();
         StartupLog.Write("MauiProgram:builder created");
