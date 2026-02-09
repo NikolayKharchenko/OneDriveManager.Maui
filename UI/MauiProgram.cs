@@ -12,15 +12,16 @@ public static class MauiProgram
         StartupLog.Write("MauiProgram:CreateMauiApp begin");
 
         MauiAppBuilder builder = MauiApp.CreateBuilder();
+        StartupLog.Write("MauiProgram:builder created");
         builder
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                fonts.AddFont("MaterialSymbolsRounded.ttf", "MaterialSymbolsRounded");
+                //fonts.AddFont("MaterialSymbolsRounded.ttf", "MaterialSymbolsRounded");
             });
-        StartupLog.Write("MauiProgram:builder created");
+        StartupLog.Write("MauiProgram:builder configured");
 
 #if DEBUG
         builder.Logging.AddDebug();
