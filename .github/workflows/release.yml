@@ -305,8 +305,8 @@ jobs:
       - name: Create / Update Release and upload assets
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
+          tag_name: build_${{ github.run_number }}
+          name: build_${{ github.run_number }}
           generate_release_notes: true
           files: |
             artifacts/*
