@@ -27,7 +27,9 @@ public partial class AlbumsView : ContentView
 
     public AlbumsView()
     {
+        StartupLog.Write("AlbumsView.ctor");
         InitializeComponent();
+        StartupLog.Write("AlbumsView.InitializeComponent called");
         Albums_CVw.ItemsSource = albumModels;
     }
 

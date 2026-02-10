@@ -31,18 +31,22 @@ public partial class SettingsView : ContentView
 
     public SettingsView()
     {
+        StartupLog.Write("SettingsView.ctor");
         InitializeComponent();
-        
+        StartupLog.Write("SettingsView.InitializeComponent called");
+
         Dispatcher.Dispatch(async () => await initialize());
     }
 
     public async Task initialize()
     {
+        StartupLog.Write("SettingsView.initialize called");
         InterfaceLanguage_Picker.ItemsSource = GetAvailableResourceCultures();
         InterfaceLanguage_Picker.SelectedItem = Thread.CurrentThread.CurrentUICulture;
         InterfaceLanguageChanged_Warn.IsVisible = false;
+        StartupLog.Write("SettingsView.initialize finished");
     }
-    
+
     private void FixDates_Click(object? sender, EventArgs e)
     {
         Dispatcher.Dispatch(async () => await MainPage.Instance!.Albums_Vw.FixAllAlbumsMetadataAsync());

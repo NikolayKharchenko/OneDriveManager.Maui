@@ -4,10 +4,12 @@ public partial class GalleryView : ContentView
 {
 	public GalleryView()
 	{
+		StartupLog.Write("GalleryView.ctor");
 		InitializeComponent();
-	}
+        StartupLog.Write("GalleryView.InitializeComponent finished");
+    }
 
-	public void ShowGallery(string url)
+    public void ShowGallery(string url)
 	{
 		WebVw.IsVisible = false;
         WebVw.Source = url;

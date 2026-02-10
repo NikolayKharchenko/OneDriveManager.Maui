@@ -14,11 +14,14 @@ public partial class MainPage : ContentPage
     {
         Trace.Assert(Instance == null);
         Instance = this;
+		StartupLog.Write("MainPage.ctor");
         InitializeComponent();
+        StartupLog.Write("MainPage.InitializeComponent called");
         SetStatusText(Strings.Ready_Txt);
         GraphClient.Instance.Items_Loading += (s, e) => { SetStatusText(Strings.LoadingItems_Msg, e.Count, e.Elapsed); };
         GraphClient.Instance.Items_Loaded += (s, e) => { SetStatusText(Strings.LoadedItems_Msg, e.Count, e.Elapsed); };
         Dispatcher.Dispatch(initialize);
+        StartupLog.Write("MainPage.ctor finishe");
     }
 
     public void SetStatusText(string text = "", params object[] args)
@@ -28,8 +31,11 @@ public partial class MainPage : ContentPage
 
     private async void initialize()
     {
+        StartupLog.Write("MainPage.initialize called");
         await connectToGraph();
+        StartupLog.Write("MainPage.connectToGraph finished");
         await Albums_Vw.LoadAlbums();
+        StartupLog.Write("MainPage: albums loaded");
     }
 
     private async Task connectToGraph()
