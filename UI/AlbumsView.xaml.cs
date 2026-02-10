@@ -29,7 +29,7 @@ public partial class AlbumsView : ContentView
     {
         StartupLog.Write("AlbumsView.ctor");
         InitializeComponent();
-        StartupLog.Write("AlbumsView.InitializeComponent called");
+        StartupLog.Write("AlbumsView.InitializeComponent passed");
 
         //Albums_CVw.ItemsSource = albumModels;
     }
