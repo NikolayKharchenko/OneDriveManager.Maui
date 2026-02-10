@@ -41,7 +41,7 @@
 
         <CollectionView Grid.Row="2" SelectionMode="Single" x:Name="Albums_CVw">
             <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="2" VerticalItemSpacing="2" />
+                <GridItemsLayout Orientation="Vertical" HorizontalItemSpacing="2" VerticalItemSpacing="2" />
             </CollectionView.ItemsLayout>
 
             <CollectionView.ItemTemplate>
