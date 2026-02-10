@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell x:Class="OneDriveAlbums.UI.AppShell" xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-        xmlns:str="clr-namespace:OneDriveAlbums.UI.Resources.Strings" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-        xmlns:local="clr-namespace:OneDriveAlbums.UI" Title="{Static str:Strings.MainWindow_Caption}">
+<Shell x:Class="OneDriveAlbums.UI.AppShell"
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:str="clr-namespace:OneDriveAlbums.UI.Resources.Strings"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:OneDriveAlbums.UI"
+       Title="{Static str:Strings.MainWindow_Caption}"
+       FlyoutBehavior="Disabled">
 
     <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage" />
 
