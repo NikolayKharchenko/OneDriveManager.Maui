@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
         xmlns:globalization="clr-namespace:System.Globalization;assembly=netstandard" xmlns:str="clr-namespace:OneDriveAlbums.UI.Resources.Strings"
-        x:Class="OneDriveAlbums.UI.SettingsView" Background="White">
+        x:Class="OneDriveAlbums.UI.SettingsView" BackgroundColor="White">
 
     <VerticalStackLayout Padding="10,10">
         <Picker x:DataType="globalization:CultureInfo" x:Name="InterfaceLanguage_Picker" Title="{Static str:Strings.InterfaceLanguage_Lbl}"

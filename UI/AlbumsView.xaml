@@ -57,9 +57,11 @@
                                     BindingContextChanged="ThumbnailImage_BindingContextChanged" />
 
                             <Label Text="{x:Binding Name}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="Start"
-                                    Background="White" Padding="3" Margin="3" />
+                                    Padding="3" Margin="3" BackgroundColor="White" />
+
                             <Label Text="{x:Binding DatesRange}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="End"
-                                    Background="White" Padding="3" Margin="3" />
+                                    Padding="3" Margin="3" BackgroundColor="White" />
+
                         </Grid>
                     </Border>
                 </DataTemplate>
