@@ -86,9 +86,17 @@ public partial class App : Application
 
         try
         {
+#if IOS
+            // Workaround for iOS AOT crash in Shell flyout cell creation:
+            // Microsoft.Maui.Controls.Platform.Compatibility.ShellTableViewSource.GetCell -> Grid.DefinitionsChanged (DynamicMethod).
+            var window = new Window(new MainPage());
+            StartupLog.Write("App:CreateWindow end (MainPage created, no Shell)");
+            return window;
+#else
             var window = new Window(new AppShell());
             StartupLog.Write("App:CreateWindow end (AppShell created)");
             return window;
+#endif
         }
         catch (Exception ex)
         {
