@@ -16,12 +16,12 @@ public partial class MainPage : ContentPage
         Instance = this;
 		StartupLog.Write("MainPage.ctor");
         InitializeComponent();
-        StartupLog.Write("MainPage.InitializeComponent called");
+        StartupLog.Write("MainPage.InitializeComponent passed");
         SetStatusText(Strings.Ready_Txt);
         GraphClient.Instance.Items_Loading += (s, e) => { SetStatusText(Strings.LoadingItems_Msg, e.Count, e.Elapsed); };
         GraphClient.Instance.Items_Loaded += (s, e) => { SetStatusText(Strings.LoadedItems_Msg, e.Count, e.Elapsed); };
         Dispatcher.Dispatch(initialize);
-        StartupLog.Write("MainPage.ctor finishe");
+        StartupLog.Write("MainPage.ctor passed");
     }
 
     public void SetStatusText(string text = "", params object[] args)
