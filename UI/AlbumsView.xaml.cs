@@ -11,13 +11,16 @@ public partial class AlbumsView : ContentView
     private IReadOnlyList<DriveItem>? albums;
     private readonly ObservableCollection<AlbumItemModel> albumModels = new();
 
-    bool? nameAscending;
-    bool? dateAscending;
+    private bool? nameAscending;
+    private bool? dateAscending;
 
-    const string UpIcon = "arrow_drop_up";
-    const string DownIcon = "arrow_drop_down";
+    private const string UpIcon = "arrow_drop_up";
+    private const string DownIcon = "arrow_drop_down";
 
-    string sortIcon(bool? ascending)
+    private int _lastSpan = -1;
+    private CancellationTokenSource? _spanCts;
+
+    private string sortIcon(bool? ascending)
     {
         if (ascending is null)
             return string.Empty;
@@ -30,7 +33,79 @@ public partial class AlbumsView : ContentView
         StartupLog.Write("AlbumsView.ctor");
         InitializeComponent();
         StartupLog.Write("AlbumsView.InitializeComponent called");
+
         Albums_CVw.ItemsSource = albumModels;
+
+        Loaded += OnLoaded;
+        Unloaded += OnUnloaded;
+    }
+
+    private void OnLoaded(object? sender, EventArgs e)
+    {
+        Albums_CVw.SizeChanged += Albums_CVw_SizeChanged;
+
+        // Apply once after first layout pass.
+        Dispatcher.Dispatch(() => RequestSpanUpdate(reason: "Loaded"));
+    }
+
+    private void OnUnloaded(object? sender, EventArgs e)
+    {
+        Albums_CVw.SizeChanged -= Albums_CVw_SizeChanged;
+        CancelPendingSpanUpdate();
+    }
+
+    private void Albums_CVw_SizeChanged(object? sender, EventArgs e)
+        => RequestSpanUpdate(reason: "SizeChanged");
+
+    private void RequestSpanUpdate(string reason)
+    {
+        CancelPendingSpanUpdate();
+
+        _spanCts = new CancellationTokenSource();
+        var token = _spanCts.Token;
+
+        // Throttle: orientation changes can cause many SizeChanged events.
+        _ = Dispatcher.DispatchAsync(async () =>
+        {
+            try
+            {
+                await Task.Delay(150, token);
+
+                double width = Albums_CVw.Width;
+                if (width <= 0)
+                    return;
+
+                int span = int.Max(1, (int)(width / 300));
+                if (span == _lastSpan)
+                    return;
+
+                _lastSpan = span;
+
+                if (Albums_CVw.ItemsLayout is GridItemsLayout grid)
+                {
+                    StartupLog.Write($"AlbumsView:Span={span} ({reason})");
+                    grid.Span = span;
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // expected
+            }
+        });
+    }
+
+    private void CancelPendingSpanUpdate()
+    {
+        try
+        {
+            _spanCts?.Cancel();
+            _spanCts?.Dispose();
+        }
+        catch { }
+        finally
+        {
+            _spanCts = null;
+        }
     }
 
     static bool isItemSuitable(DriveItem item) => item?.Bundle?.Album != null;
