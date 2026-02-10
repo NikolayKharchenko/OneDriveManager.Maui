@@ -33,7 +33,7 @@ public partial class SettingsView : ContentView
     {
         StartupLog.Write("SettingsView.ctor");
         InitializeComponent();
-        StartupLog.Write("SettingsView.InitializeComponent called");
+        StartupLog.Write("SettingsView.InitializeComponent finished");
 
         Dispatcher.Dispatch(async () => await initialize());
     }
