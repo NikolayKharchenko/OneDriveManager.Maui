@@ -9,7 +9,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <HorizontalStackLayout Grid.Row="0">
+<!--        <HorizontalStackLayout Grid.Row="0">
             <Label Text="{Static str:Strings.SortBy_Lbl}" WidthRequest="100" Margin="0,0,10,0" VerticalOptions="Center" />
 
             <HorizontalStackLayout Spacing="4" VerticalOptions="Center" Margin="0,0,30,0" WidthRequest="80">
@@ -66,6 +66,6 @@
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-        </CollectionView>
+        </CollectionView>-->
     </Grid>
 </ContentView>
