@@ -141,7 +141,7 @@ public partial class AlbumsView : ContentView
 
     void ClearSearch_Click(object? sender, EventArgs e)
     {
-        //SearchFor_Entry.Text = string.Empty;
+        SearchFor_Entry.Text = string.Empty;
     }
 
     public async Task FixAllAlbumsMetadataAsync()

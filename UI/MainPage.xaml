@@ -15,9 +15,9 @@
             <local:SymbolFontButton Text="photo_library" Clicked="Albums_Click" FontSize="28"/>
             <local:SymbolFontButton Text="settings" Clicked="Settings_Click" FontSize="28"/>
         </HorizontalStackLayout>
-        <local:AlbumsView x:FieldModifier="public" Grid.Row="1" x:Name="Albums_Vw" />
-        <local:SettingsView Grid.Row="1" x:Name="Settings_Vw" IsVisible="False" />
         <local:GalleryView Grid.Row="1" x:Name="Gallery_Vw" IsVisible="False" />
+        <local:SettingsView Grid.Row="1" x:Name="Settings_Vw" IsVisible="False" />
+        <local:AlbumsView x:FieldModifier="public" Grid.Row="1" x:Name="Albums_Vw" />
         <Label Grid.Row="2" x:Name="Status_Lbl" FontSize="14" HorizontalOptions="Start" Margin="0,20,0,0" />
     </Grid>
 </ContentPage>

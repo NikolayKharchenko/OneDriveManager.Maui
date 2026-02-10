@@ -29,7 +29,7 @@
             </HorizontalStackLayout>
         </HorizontalStackLayout>
 
-<!--        <HorizontalStackLayout Grid.Row="1">
+        <HorizontalStackLayout Grid.Row="1">
             <Label Text="{Static str:Strings.SearchFor_Lbl}" WidthRequest="100" Margin="0,0,10,0" VerticalOptions="Center" />
             <Grid>
                 <Entry x:Name="SearchFor_Entry" WidthRequest="250" VerticalOptions="Center" TextChanged="SearchFor_TextChanged"
@@ -38,7 +38,7 @@
                         TextColor="Gray" Clicked="ClearSearch_Click"/>
             </Grid>
         </HorizontalStackLayout>
--->
+
         <CollectionView Grid.Row="2" SelectionMode="Single" x:Name="Albums_CVw">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" HorizontalItemSpacing="2" VerticalItemSpacing="2" />
