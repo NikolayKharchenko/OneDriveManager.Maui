@@ -40,7 +40,7 @@
         </HorizontalStackLayout>
 
         <CollectionView Grid.Row="2" SelectionMode="Single" x:Name="Albums_CVw">
-            <CollectionView.ItemsLayout>
+<!--            <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" HorizontalItemSpacing="2" VerticalItemSpacing="2" />
             </CollectionView.ItemsLayout>
 
@@ -66,6 +66,7 @@
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+            -->
         </CollectionView>
     </Grid>
 </ContentView>
