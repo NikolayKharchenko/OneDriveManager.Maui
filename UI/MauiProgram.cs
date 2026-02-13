@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Handlers;
 using System.Diagnostics;
 
 namespace OneDriveAlbums.UI;
@@ -7,13 +8,11 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
-        HookUnhandledExceptions();
+        hookUnhandledExceptions();
 
         StartupLog.Write("MauiProgram:CreateMauiApp begin");
-        StartupLog.Write("MauiProgram:CreateMauiApp first log");
 
-        MauiAppBuilder builder = MauiApp.CreateBuilder();
-        StartupLog.Write("MauiProgram:builder created");
+        var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
@@ -21,39 +20,23 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("MaterialSymbolsRounded.ttf", "MaterialSymbolsRounded");
+            })
+            .ConfigureMauiHandlers(handlers =>
+            {
+                handlers.AddHandler(typeof(ContentView), typeof(ContentViewHandler));
+                handlers.AddHandler(typeof(Layout), typeof(LayoutHandler));
             });
-        StartupLog.Write("MauiProgram:builder configured");
 
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
 
-        try
-        {
-            StartupLog.Write("MauiProgram:builder.Build begin");
-            var app = builder.Build();
-            StartupLog.Write("MauiProgram:builder.Build end");
-            StartupLog.Write("MauiProgram:CreateMauiApp end");
-            return app;
-        }
-        catch (Exception ex)
-        {
-            StartupLog.Write(ex, "MauiProgram:builder.Build failed");
-            LogInnerExceptions(ex);
-            throw;
-        }
+        var app = builder.Build();
+        StartupLog.Write("MauiProgram:CreateMauiApp end");
+        return app;
     }
 
-    private static void LogInnerExceptions(Exception ex)
-    {
-        int i = 0;
-        for (Exception? cur = ex.InnerException; cur != null; cur = cur.InnerException)
-        {
-            StartupLog.Write(cur, $"MauiProgram:inner[{++i}]");
-        }
-    }
-
-    private static void HookUnhandledExceptions()
+    private static void hookUnhandledExceptions()
     {
         AppDomain.CurrentDomain.UnhandledException += (_, e) =>
         {
