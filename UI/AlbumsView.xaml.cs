@@ -31,7 +31,7 @@ public partial class AlbumsView : ContentView
         InitializeComponent();
         StartupLog.Write("AlbumsView.InitializeComponent passed");
 
-        Albums_CVw.ItemsSource = albumModels;
+        //Albums_CVw.ItemsSource = albumModels;
     }
 
 
@@ -114,8 +114,8 @@ public partial class AlbumsView : ContentView
         else if (dateAsc is not null)
             sortAlbums(model => model.DateForSort, dateAsc.Value);
 
-        SortByName_Icon.Text = sortIcon(nameAscending);
-        SortByDate_Icon.Text = sortIcon(dateAscending);
+        //SortByName_Icon.Text = sortIcon(nameAscending);
+        //SortByDate_Icon.Text = sortIcon(dateAscending);
     }
 
     void SearchFor_TextChanged(object? sender, TextChangedEventArgs e)
@@ -141,7 +141,7 @@ public partial class AlbumsView : ContentView
 
     void ClearSearch_Click(object? sender, EventArgs e)
     {
-        SearchFor_Entry.Text = string.Empty;
+        //SearchFor_Entry.Text = string.Empty;
     }
 
     public async Task FixAllAlbumsMetadataAsync()
