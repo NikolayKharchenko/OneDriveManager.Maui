@@ -1,4 +1,70 @@
 <ContentView x:Class="OneDriveAlbums.UI.AlbumsView" xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:local="clr-namespace:OneDriveAlbums.UI" xmlns:str="clr-namespace:OneDriveAlbums.UI.Resources.Strings"
         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <Label Text="AlbumsView loaded" />
+    <Grid RowSpacing="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <HorizontalStackLayout Grid.Row="0">
+            <Label Text="{Static str:Strings.SortBy_Lbl}" WidthRequest="100" Margin="0,0,10,0" VerticalOptions="Center" />
+
+            <HorizontalStackLayout Spacing="4" VerticalOptions="Center" Margin="0,0,30,0" WidthRequest="80">
+                <HorizontalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="SortByName_Click" />
+                </HorizontalStackLayout.GestureRecognizers>
+                <Label Text="{x:Static str:Strings.SortByName_Btn}" x:Name="SortByName_Btn" VerticalOptions="Center" />
+                <local:SymbolFontButton x:Name="SortByName_Icon" FontSize="28" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Spacing="4" VerticalOptions="Center" Margin="0,0,30,0" WidthRequest="80">
+                <HorizontalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="SortByDate_Click" />
+                </HorizontalStackLayout.GestureRecognizers>
+                <Label Text="{x:Static str:Strings.SortByDate_Btn}" x:Name="SortByDate_Btn" VerticalOptions="Center" />
+                <local:SymbolFontButton x:Name="SortByDate_Icon" FontSize="28" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Grid.Row="1">
+            <Label Text="{Static str:Strings.SearchFor_Lbl}" WidthRequest="100" Margin="0,0,10,0" VerticalOptions="Center" />
+            <Grid>
+                <Entry x:Name="SearchFor_Entry" WidthRequest="250" VerticalOptions="Center" TextChanged="SearchFor_TextChanged"
+                        Placeholder="{x:Static str:Strings.SearchFor_PlaceHolder}" />
+                <local:SymbolFontButton Text="close" x:Name="ClearSearch_Btn" VerticalOptions="Center" HorizontalOptions="End" FontSize="28"
+                        TextColor="Gray" Clicked="ClearSearch_Click" />
+            </Grid>
+        </HorizontalStackLayout>
+
+        <CollectionView Grid.Row="2" SelectionMode="Single" x:Name="Albums_CVw">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" HorizontalItemSpacing="2" VerticalItemSpacing="2" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="8" Margin="6" x:DataType="local:AlbumItemModel">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Album_DblTap" NumberOfTapsRequired="2" />
+                            <TapGestureRecognizer Tapped="Album_Tap" NumberOfTapsRequired="1" />
+                        </Border.GestureRecognizers>
+
+                        <Grid>
+                            <Image WidthRequest="300" HeightRequest="300" Source="{x:Binding Thumbnail}" Aspect="AspectFit"
+                                    BindingContextChanged="ThumbnailImage_BindingContextChanged" />
+
+                            <Label Text="{x:Binding Name}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="Start"
+                                    Padding="3" Margin="3" BackgroundColor="White" />
+
+                            <Label Text="{x:Binding DatesRange}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="End"
+                                    Padding="3" Margin="3" BackgroundColor="White" />
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 </ContentView>
