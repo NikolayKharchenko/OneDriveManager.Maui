@@ -7,6 +7,7 @@
     <File Path="fastlane/Fastfile" />
     <File Path="Gemfile" />
     <File Path="Gemfile.lock" />
+    <File Path="global.json" />
     <File Path="publish.sh" />
   </Folder>
   <Project Path="Graph/Graph.csproj" />
