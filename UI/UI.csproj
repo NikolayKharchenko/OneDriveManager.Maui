@@ -122,4 +122,8 @@
 		</MauiXaml>
 	</ItemGroup>
 
+	<ItemGroup Condition="'$(TargetFramework)'=='net10.0-ios' and '$(Configuration)'=='Release'">
+    <LinkerDescriptor Include="linker.xml" />
+  </ItemGroup>
+
 </Project>

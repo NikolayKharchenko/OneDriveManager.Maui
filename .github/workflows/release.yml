@@ -148,7 +148,8 @@ jobs:
           /p:BuildIpa=true
           /p:RunAOTCompilation=true
           /p:PublishTrimmed=true
-          /p:MtouchLink=None
+          /p:TrimMode=partial
+          /p:MtouchLink=SdkOnly
           /p:ApplicationVersion=${{ github.run_number }}
 
       - name: Collect artifacts
