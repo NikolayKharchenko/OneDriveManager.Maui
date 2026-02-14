@@ -36,8 +36,8 @@ jobs:
           -c ${{ env.CONFIGURATION }}
           -f net10.0-android
           /p:AndroidPackageFormat=apk
+          /p:PublishTrimmed=true
           /p:RunAOTCompilation=true
-          /p:PublishTrimmed=false
 
       - name: Collect artifacts (android)
         shell: bash
@@ -147,8 +147,8 @@ jobs:
           -f net10.0-ios
           /p:BuildIpa=true
           /p:RunAOTCompilation=true
-          /p:PublishTrimmed=false
-          /p:MtouchLink=SdkOnly
+          /p:PublishTrimmed=true
+          /p:MtouchLink=None
           /p:ApplicationVersion=${{ github.run_number }}
 
       - name: Collect artifacts
