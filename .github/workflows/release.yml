@@ -151,6 +151,13 @@ jobs:
           /p:TrimMode=partial
           /p:MtouchLink=SdkOnly
           /p:ApplicationVersion=${{ github.run_number }}
+          /bl:artifacts/ios.binlog
+
+      - name: Upload iOS binlog
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-binlog
+          path: artifacts/ios.binlog
 
       - name: Collect artifacts
         shell: bash
