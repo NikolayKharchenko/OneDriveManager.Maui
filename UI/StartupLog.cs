@@ -110,7 +110,7 @@ internal static class StartupLog
 
     private static void WriteCore(string message)
     {
-        var line = $"{DateTimeOffset.UtcNow:O} [StartupLog] {message}";
+        var line = $"{DateTimeOffset.Now:O} {message}";
 
         try { Trace.WriteLine(line); } catch { }
 
