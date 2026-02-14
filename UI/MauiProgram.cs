@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Handlers;
 using System.Diagnostics;
 
 namespace OneDriveAlbums.UI;
@@ -20,11 +19,6 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("MaterialSymbolsRounded.ttf", "MaterialSymbolsRounded");
-            })
-            .ConfigureMauiHandlers(handlers =>
-            {
-                handlers.AddHandler(typeof(ContentView), typeof(ContentViewHandler));
-                handlers.AddHandler(typeof(Layout), typeof(LayoutHandler));
             });
 
 #if DEBUG
