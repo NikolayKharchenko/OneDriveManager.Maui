@@ -18,8 +18,7 @@ internal static class StartupLog
 #if IOS
         try
         {
-            var dir = FileSystem.AppDataDirectory;
-            // Prefer Documents on iOS so it’s reachable via Files/iTunes file sharing
+            // iOS documents directory (visible via Finder/Files when UIFileSharingEnabled=true)
             var docs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             if (!string.IsNullOrWhiteSpace(docs))
                 return docs;
@@ -40,34 +39,6 @@ internal static class StartupLog
 
     public static string LogPath => Path.Combine(GetBaseDir(), LogFileName);
 
-    public static void Clear()
-    {
-        try
-        {
-            lock (Gate)
-            {
-                CloseWriterNoThrow();
-
-                var baseDir = GetBaseDir();
-                Directory.CreateDirectory(baseDir);
-                File.WriteAllText(Path.Combine(baseDir, LogFileName), string.Empty, Encoding.UTF8);
-
-                _sessionStarted = false;
-            }
-
-            WriteCore("StartupLog:Clear ok");
-        }
-        catch (Exception ex)
-        {
-            WriteCore($"StartupLog:Clear failed: {ex.GetType().Name}: {ex.Message}");
-        }
-    }
-
-    public static void Write(string message) => WriteCore(message);
-
-    public static void Write(Exception ex, string message = "Exception")
-        => WriteCore($"{message}: {ex}");
-
     private static void EnsureWriter()
     {
         if (_writer != null)
@@ -76,9 +47,17 @@ internal static class StartupLog
         var baseDir = GetBaseDir();
         Directory.CreateDirectory(baseDir);
 
-        var path = Path.Combine(baseDir, LogFileName);
+        // Force-create a visible marker file so Finder shows something even on early crash.
+        // If you don't see this file, you're looking at the wrong container or baseDir isn't Documents.
+        var markerPath = Path.Combine(baseDir, "log_marker.txt");
+        try
+        {
+            File.WriteAllText(markerPath, $"created {DateTimeOffset.UtcNow:O}", Encoding.UTF8);
+        }
+        catch { }
 
-        // Keep the file open, append, allow container tools to read it.
+        var path = LogPath;
+
         _stream = new FileStream(
             path,
             FileMode.Append,
@@ -103,6 +82,7 @@ internal static class StartupLog
         try
         {
             _writer!.WriteLine($"{DateTimeOffset.UtcNow:O} [StartupLog] ===== session start =====");
+            _writer!.WriteLine($"{DateTimeOffset.UtcNow:O} [StartupLog] LogPath={LogPath}");
             _writer!.Flush();
             _stream!.Flush(flushToDisk: true);
         }
@@ -112,13 +92,10 @@ internal static class StartupLog
         }
     }
 
-    private static void CloseWriterNoThrow()
-    {
-        try { _writer?.Dispose(); } catch { }
-        try { _stream?.Dispose(); } catch { }
-        _writer = null;
-        _stream = null;
-    }
+    public static void Write(string message) => WriteCore(message);
+
+    public static void Write(Exception ex, string message = "Exception")
+        => WriteCore($"{message}: {ex}");
 
     private static void WriteCore(string message)
     {
