@@ -99,7 +99,7 @@ internal static class StartupLog
 
     private static void WriteCore(string message)
     {
-        var line = $"{DateTimeOffset.Now:O} {message}";
+        var line = $"{DateTimeOffset.Now:O} [StartupLog] {message}";
 
         try { Trace.WriteLine(line); } catch { }
 
