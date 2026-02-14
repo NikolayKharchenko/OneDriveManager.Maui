@@ -41,5 +41,9 @@
 		<key>DOTNET_System_Reflection_EmitDisableDynamicInvoke</key>
 		<string>1</string>
 	</dict>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 </dict>
 </plist>

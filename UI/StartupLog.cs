@@ -15,6 +15,18 @@ internal static class StartupLog
 
     private static string GetBaseDir()
     {
+#if IOS
+        try
+        {
+            var dir = FileSystem.AppDataDirectory;
+            // Prefer Documents on iOS so it’s reachable via Files/iTunes file sharing
+            var docs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (!string.IsNullOrWhiteSpace(docs))
+                return docs;
+        }
+        catch { }
+#endif
+
         try
         {
             var dir = FileSystem.AppDataDirectory;
