@@ -1,14 +1,11 @@
 <linker>
   <!-- Preserve MAUI handler types that are created via reflection/DI -->
   <assembly fullname="Microsoft.Maui">
-    <type fullname="Microsoft.Maui.Handlers.LayoutHandler" preserve="all" />
-    <type fullname="Microsoft.Maui.Handlers.ContentViewHandler" preserve="all" />
-    <type fullname="Microsoft.Maui.Handlers.WindowHandler" preserve="all" />
-    <type fullname="Microsoft.Maui.Hosting.Internal.MauiHandlersFactory" preserve="all" />
-    <type fullname="Microsoft.Maui.Hosting.Internal.MauiFactory" preserve="all" />
+    <namespace fullname="Microsoft.Maui.Handlers" preserve="all" />
+    <namespace fullname="Microsoft.Maui.Hosting.Internal" preserve="all" />
   </assembly>
 
   <assembly fullname="Microsoft.Maui.Controls">
-    <type fullname="Microsoft.Maui.Controls.Handlers.Compatibility.LayoutHandler" preserve="all" />
+    <namespace fullname="Microsoft.Maui.Controls.Handlers" preserve="all" />
   </assembly>
 </linker>

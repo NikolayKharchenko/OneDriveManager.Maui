@@ -55,6 +55,9 @@
 	  <ProvisioningType>manual</ProvisioningType>
 	  <CodesignKey>Apple Distribution: NIKOLAY KHARCHENKO (S9E3A78VMZ)</CodesignKey>
 	  <CodesignProvision>74118b24-b7ed-4c9f-a33c-425a26352ee3</CodesignProvision>
+
+	  <!-- Ensure custom linker descriptor is used by the iOS native linker -->
+	  <MtouchExtraArgs>--xml=$(MSBuildProjectDirectory)/linker.xml $(MtouchExtraArgs)</MtouchExtraArgs>
 	</PropertyGroup>
 
 	<ItemGroup>
