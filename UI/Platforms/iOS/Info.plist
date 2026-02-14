@@ -32,5 +32,14 @@
 	<!-- Export compliance: declare you don't use non-exempt encryption -->
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+
+	<!-- .NET runtime switches for iOS AOT -->
+	<key>LSEnvironment</key>
+	<dict>
+		<key>DOTNET_EnableDynamicCode</key>
+		<string>0</string>
+		<key>DOTNET_System_Reflection_EmitDisableDynamicInvoke</key>
+		<string>1</string>
+	</dict>
 </dict>
 </plist>
