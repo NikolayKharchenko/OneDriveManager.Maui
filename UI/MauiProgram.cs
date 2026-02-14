@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace OneDriveAlbums.UI;
 
@@ -10,6 +11,15 @@ public static class MauiProgram
         hookUnhandledExceptions();
 
         StartupLog.Write("MauiProgram:CreateMauiApp begin");
+
+        StartupLog.Write($"FrameworkDescription: {RuntimeInformation.FrameworkDescription}");
+        StartupLog.Write($"Environment.Version: {Environment.Version}");
+
+        var enableDynamicCode = AppContext.GetData("System.Reflection.EnableDynamicCode");
+        var disableDynamicInvoke = AppContext.GetData("System.Reflection.EmitDisableDynamicInvoke");
+
+        StartupLog.Write($"System.Reflection.EnableDynamicCode (AppContext): {(enableDynamicCode is null ? "<null>" : enableDynamicCode)}");
+        StartupLog.Write($"System.Reflection.EmitDisableDynamicInvoke (AppContext): {(disableDynamicInvoke is null ? "<null>" : disableDynamicInvoke)}");
 
         var builder = MauiApp.CreateBuilder();
         builder

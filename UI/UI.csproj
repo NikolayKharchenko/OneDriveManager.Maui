@@ -58,6 +58,7 @@
 
 	  <!-- Ensure custom linker descriptor is used by the iOS native linker -->
 	  <MtouchExtraArgs>--xml=$(MSBuildProjectDirectory)/linker.xml $(MtouchExtraArgs)</MtouchExtraArgs>
+		<MtouchRegistrar>static</MtouchRegistrar>
 	</PropertyGroup>
 
 	<ItemGroup>
