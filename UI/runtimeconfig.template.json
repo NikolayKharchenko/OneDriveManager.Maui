@@ -1,9 +1,0 @@
-{
-  "runtimeOptions": {
-    "configProperties": {
-      "System.Reflection.NullabilityInfoContext.IsSupported": true,
-      "System.Reflection.EnableDynamicCode": false,
-      "System.Reflection.EmitDisableDynamicInvoke": true
-    }
-  }
-}

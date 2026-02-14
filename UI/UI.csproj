@@ -52,14 +52,20 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios' and '$(Configuration)' == 'Release'">
-	  <ProvisioningType>manual</ProvisioningType>
-	  <CodesignKey>Apple Distribution: NIKOLAY KHARCHENKO (S9E3A78VMZ)</CodesignKey>
-	  <CodesignProvision>74118b24-b7ed-4c9f-a33c-425a26352ee3</CodesignProvision>
+  <ProvisioningType>manual</ProvisioningType>
+  <CodesignKey>Apple Distribution: NIKOLAY KHARCHENKO (S9E3A78VMZ)</CodesignKey>
+  <CodesignProvision>74118b24-b7ed-4c9f-a33c-425a26352ee3</CodesignProvision>
 
-	  <!-- Ensure custom linker descriptor is used by the iOS native linker -->
-	  <MtouchExtraArgs>--xml=$(MSBuildProjectDirectory)/linker.xml $(MtouchExtraArgs)</MtouchExtraArgs>
-		<MtouchRegistrar>static</MtouchRegistrar>
-	</PropertyGroup>
+  <!-- Keep linker descriptor -->
+  <MtouchExtraArgs>--xml=$(MSBuildProjectDirectory)/linker.xml $(MtouchExtraArgs)</MtouchExtraArgs>
+
+  <!-- Force disable dynamic invoke stubs on iOS AOT -->
+  <MtouchExtraArgs>
+    --setenv:DOTNET_EnableDynamicCode=0
+    --setenv:DOTNET_System_Reflection_EmitDisableDynamicInvoke=1
+    $(MtouchExtraArgs)
+  </MtouchExtraArgs>
+</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
@@ -130,8 +136,5 @@
     <LinkerDescriptor Include="linker.xml" />
   </ItemGroup>
 
-	<ItemGroup>
-	  <None Include="runtimeconfig.template.json" CopyToOutputDirectory="Never" />
-	</ItemGroup>
 
 </Project>
