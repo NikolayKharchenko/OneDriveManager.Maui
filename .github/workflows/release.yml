@@ -236,55 +236,6 @@ jobs:
       - name: Install MAUI workload
         run: dotnet workload install maui --skip-manifest-update
 
-      - name: Import signing certificate (PFX from repo)
-        shell: pwsh
-        env:
-          PFX_PASSWORD: ${{ secrets.WIN_MSIX_PFX_PASSWORD }}
-        run: |
-          $ErrorActionPreference = "Stop"
-
-          $pfxPath = Join-Path $PWD "build\signing\onedrivealbums.pfx"
-          if (-not (Test-Path $pfxPath)) { throw "Missing PFX at $pfxPath" }
-
-          $secure = ConvertTo-SecureString -String $env:PFX_PASSWORD -AsPlainText -Force
-
-          # Import into LocalMachine so the signing task can access the key reliably in CI.
-          $imported = Import-PfxCertificate `
-            -FilePath $pfxPath `
-            -CertStoreLocation "Cert:\LocalMachine\My" `
-            -Password $secure `
-            -Exportable
-
-          if (-not $imported) { throw "PFX import failed" }
-
-          "CERT_THUMBPRINT=$($imported.Thumbprint)" | Out-File -FilePath $env:GITHUB_ENV -Append
-
-      - name: Verify signing certificate (EKU + validity)
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = "Stop"
-
-          $thumb = "${{ env.CERT_THUMBPRINT }}"
-          $cert = Get-Item "Cert:\LocalMachine\My\$thumb"
-
-          Write-Host "Subject: $($cert.Subject)"
-          Write-Host "Issuer : $($cert.Issuer)"
-          Write-Host "NotBefore: $($cert.NotBefore)"
-          Write-Host "NotAfter : $($cert.NotAfter)"
-          Write-Host "HasPrivateKey: $($cert.HasPrivateKey)"
-
-          $eku = $cert.Extensions | Where-Object { $_ -is [System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension] }
-          if (-not $eku) { throw "Certificate has no EKU extension; not valid for MSIX signing." }
-
-          $ekuOids = $eku.EnhancedKeyUsages | ForEach-Object { $_.Value }
-          Write-Host "EKU OIDs: $($ekuOids -join ', ')"
-
-          if ($ekuOids -notcontains "1.3.6.1.5.5.7.3.3") {
-            throw "Certificate is missing Code Signing EKU (1.3.6.1.5.5.7.3.3). Not valid for MSIX signing."
-          }
-
-          if (-not $cert.HasPrivateKey) { throw "Certificate has no private key; cannot sign." }
-
       - name: Restore
         run: dotnet restore ${{ env.UI_PROJECT }}
 
@@ -298,23 +249,37 @@ jobs:
           /p:AppxPackageSigningEnabled=false
           /p:PublishTrimmed=false
 
-      - name: Sign MSIX (signtool)
+      - name: Sign MSIX (signtool, PFX)
         shell: pwsh
         env:
-          CERT_THUMBPRINT: ${{ env.CERT_THUMBPRINT }}
+          PFX_PASSWORD: ${{ secrets.WIN_MSIX_PFX_PASSWORD }}
         run: |
           $ErrorActionPreference = "Stop"
 
           $msix = Get-ChildItem -Path "UI\bin\${{ env.CONFIGURATION }}\net10.0-windows10.0.19041.0" -Recurse -Include *.msix,*.msixbundle | Select-Object -First 1
-          if (-not $msix) { throw "MSIX not found" }
+          if (-not $msix) { throw "MSIX/MSIXBUNDLE not found" }
 
-          $signtool = "${env:ProgramFiles(x86)}\Windows Kits\10\App Certification Kit\signtool.exe"
-          if (-not (Test-Path $signtool)) {
-            $signtool = "${env:ProgramFiles(x86)}\Windows Kits\10\bin\x64\signtool.exe"
-          }
-          if (-not (Test-Path $signtool)) { throw "signtool.exe not found" }
+          $pfxPath = Join-Path $PWD "build\signing\onedrivealbums.pfx"
+          if (-not (Test-Path $pfxPath)) { throw "Missing PFX at $pfxPath" }
 
-          & $signtool sign /sha1 $env:CERT_THUMBPRINT /sm /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 $msix.FullName
+          $kitsRoot = "${env:ProgramFiles(x86)}\Windows Kits\10\bin"
+          if (-not (Test-Path $kitsRoot)) { throw "Windows Kits not found at $kitsRoot" }
+
+          $signtool = Get-ChildItem $kitsRoot -Directory |
+            Sort-Object Name -Descending |
+            ForEach-Object { Join-Path $_.FullName "x64\signtool.exe" } |
+            Where-Object { Test-Path $_ } |
+            Select-Object -First 1
+
+          if (-not $signtool) { throw "signtool.exe (x64) not found under $kitsRoot" }
+
+          & $signtool sign `
+            /f $pfxPath `
+            /p $env:PFX_PASSWORD `
+            /fd SHA256 `
+            /tr http://timestamp.digicert.com `
+            /td SHA256 `
+            $msix.FullName
 
       - name: Collect artifacts
         shell: pwsh
