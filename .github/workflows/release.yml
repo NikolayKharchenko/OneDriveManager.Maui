@@ -270,16 +270,10 @@ jobs:
             ForEach-Object { Join-Path $_.FullName "x64\signtool.exe" } |
             Where-Object { Test-Path $_ } |
             Select-Object -First 1
-
           if (-not $signtool) { throw "signtool.exe (x64) not found under $kitsRoot" }
 
-          & $signtool sign `
-            /f $pfxPath `
-            /p $env:PFX_PASSWORD `
-            /fd SHA256 `
-            /tr http://timestamp.digicert.com `
-            /td SHA256 `
-            $msix.FullName
+          # List certs inside PFX to confirm it's readable
+          & $signtool sign /debug /f $pfxPath /p $env:PFX_PASSWORD /fd SHA256 /a $msix.FullName
 
       - name: Collect artifacts
         shell: pwsh
