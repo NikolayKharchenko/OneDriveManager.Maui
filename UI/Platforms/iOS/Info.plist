@@ -33,8 +33,10 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 
+	<!-- Allow access to the app's Documents folder via Finder (macOS) / iTunes File Sharing -->
 	<key>UIFileSharingEnabled</key>
 	<true/>
+	<!-- Allow opening/editing shared documents in place -->
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 </dict>

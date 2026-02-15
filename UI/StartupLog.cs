@@ -18,10 +18,18 @@ internal static class StartupLog
 #if IOS
         try
         {
-            // iOS documents directory (visible via Finder/Files when UIFileSharingEnabled=true)
+            // iOS Documents directory (visible via Finder/Files when UIFileSharingEnabled=true)
+            // In Xamarin/.NET for iOS, SpecialFolder.MyDocuments can map to ".../Documents".
             var docs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             if (!string.IsNullOrWhiteSpace(docs))
                 return docs;
+
+            // Fallback: ask Foundation directly to avoid any unexpected mapping.
+            var urls = Foundation.NSFileManager.DefaultManager.GetUrls(Foundation.NSSearchPathDirectory.DocumentDirectory, Foundation.NSSearchPathDomain.User);
+            var url = urls?.FirstOrDefault();
+            var docPath = url?.Path;
+            if (!string.IsNullOrWhiteSpace(docPath))
+                return docPath;
         }
         catch { }
 #endif
