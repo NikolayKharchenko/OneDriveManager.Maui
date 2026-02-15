@@ -14,6 +14,7 @@ public static class MauiProgram
         // iOS is AOT-only. Ensure reflection invocation never falls back to DynamicMethod / JIT.
         // This must be set before any code paths t hat may use reflection-based activation.
         AppContext.SetSwitch("System.Reflection.EmitDisableDynamicInvoke", true);
+        AppContext.SetSwitch("System.Reflection.EnableDynamicCode", false);
 #endif
 
         StartupLog.Write("MauiProgram:CreateMauiApp begin");
