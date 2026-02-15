@@ -12,6 +12,6 @@
   </Folder>
   <Project Path="Graph/Graph.csproj" />
   <Project Path="UI/UI.csproj">
-    <Deploy Solution="Debug|*" />
+    <Deploy />
   </Project>
 </Solution>
