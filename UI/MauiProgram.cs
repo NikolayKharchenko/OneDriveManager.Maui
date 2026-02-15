@@ -10,6 +10,12 @@ public static class MauiProgram
     {
         hookUnhandledExceptions();
 
+#if IOS
+        // iOS is AOT-only. Ensure reflection invocation never falls back to DynamicMethod / JIT.
+        // This must be set before any code paths t hat may use reflection-based activation.
+        AppContext.SetSwitch("System.Reflection.EmitDisableDynamicInvoke", true);
+#endif
+
         StartupLog.Write("MauiProgram:CreateMauiApp begin");
 
         StartupLog.Write($"FrameworkDescription: {RuntimeInformation.FrameworkDescription}");
