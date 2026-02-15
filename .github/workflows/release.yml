@@ -288,18 +288,33 @@ jobs:
       - name: Restore
         run: dotnet restore ${{ env.UI_PROJECT }}
 
-      - name: Publish Windows (MSIX)
+      - name: Publish Windows (MSIX) - unsigned
         shell: pwsh
         run: >
           dotnet publish ${{ env.UI_PROJECT }}
           -c ${{ env.CONFIGURATION }}
           -f net10.0-windows10.0.19041.0
           /p:GenerateAppxPackageOnBuild=true
-          /p:AppxPackageSigningEnabled=true
-          /p:PackageCertificateThumbprint="${{ env.CERT_THUMBPRINT }}"
-          /p:PackageCertificateStoreLocation=LocalMachine
-          /p:PackageCertificateStoreName=My
+          /p:AppxPackageSigningEnabled=false
           /p:PublishTrimmed=false
+
+      - name: Sign MSIX (signtool)
+        shell: pwsh
+        env:
+          CERT_THUMBPRINT: ${{ env.CERT_THUMBPRINT }}
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          $msix = Get-ChildItem -Path "UI\bin\${{ env.CONFIGURATION }}\net10.0-windows10.0.19041.0" -Recurse -Include *.msix,*.msixbundle | Select-Object -First 1
+          if (-not $msix) { throw "MSIX not found" }
+
+          $signtool = "${env:ProgramFiles(x86)}\Windows Kits\10\App Certification Kit\signtool.exe"
+          if (-not (Test-Path $signtool)) {
+            $signtool = "${env:ProgramFiles(x86)}\Windows Kits\10\bin\x64\signtool.exe"
+          }
+          if (-not (Test-Path $signtool)) { throw "signtool.exe not found" }
+
+          & $signtool sign /sha1 $env:CERT_THUMBPRINT /sm /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 $msix.FullName
 
       - name: Collect artifacts
         shell: pwsh
