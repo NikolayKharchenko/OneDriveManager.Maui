@@ -247,7 +247,14 @@ jobs:
           if (-not (Test-Path $pfxPath)) { throw "Missing PFX at $pfxPath" }
 
           $secure = ConvertTo-SecureString -String $env:PFX_PASSWORD -AsPlainText -Force
-          $imported = Import-PfxCertificate -FilePath $pfxPath -CertStoreLocation "Cert:\CurrentUser\My" -Password $secure
+
+          # Import into LocalMachine so the signing task can access the key reliably in CI.
+          $imported = Import-PfxCertificate `
+            -FilePath $pfxPath `
+            -CertStoreLocation "Cert:\LocalMachine\My" `
+            -Password $secure `
+            -Exportable
+
           if (-not $imported) { throw "PFX import failed" }
 
           "CERT_THUMBPRINT=$($imported.Thumbprint)" | Out-File -FilePath $env:GITHUB_ENV -Append
@@ -258,7 +265,7 @@ jobs:
           $ErrorActionPreference = "Stop"
 
           $thumb = "${{ env.CERT_THUMBPRINT }}"
-          $cert = Get-Item "Cert:\CurrentUser\My\$thumb"
+          $cert = Get-Item "Cert:\LocalMachine\My\$thumb"
 
           Write-Host "Subject: $($cert.Subject)"
           Write-Host "Issuer : $($cert.Issuer)"
@@ -290,7 +297,7 @@ jobs:
           /p:GenerateAppxPackageOnBuild=true
           /p:AppxPackageSigningEnabled=true
           /p:PackageCertificateThumbprint="${{ env.CERT_THUMBPRINT }}"
-          /p:PackageCertificateStoreLocation=CurrentUser
+          /p:PackageCertificateStoreLocation=LocalMachine
           /p:PackageCertificateStoreName=My
           /p:PublishTrimmed=false
 
