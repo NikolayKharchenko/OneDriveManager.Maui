@@ -239,25 +239,26 @@ jobs:
       - name: Restore
         run: dotnet restore ${{ env.UI_PROJECT }}
 
-      - name: Publish Windows (MSIX) - unsigned
+      - name: Publish Windows (APPX) - unsigned
         shell: pwsh
         run: >
           dotnet publish ${{ env.UI_PROJECT }}
           -c ${{ env.CONFIGURATION }}
           -f net10.0-windows10.0.19041.0
+          /p:WindowsPackageType=appx
           /p:GenerateAppxPackageOnBuild=true
           /p:AppxPackageSigningEnabled=false
           /p:PublishTrimmed=false
 
-      - name: Sign MSIX (signtool, PFX)
+      - name: Sign APPX (signtool, PFX)
         shell: pwsh
         env:
           PFX_PASSWORD: ${{ secrets.WIN_MSIX_PFX_PASSWORD }}
         run: |
           $ErrorActionPreference = "Stop"
 
-          $msix = Get-ChildItem -Path "UI\bin\${{ env.CONFIGURATION }}\net10.0-windows10.0.19041.0" -Recurse -Include *.msix,*.msixbundle | Select-Object -First 1
-          if (-not $msix) { throw "MSIX/MSIXBUNDLE not found" }
+          $pkg = Get-ChildItem -Path "UI\bin\${{ env.CONFIGURATION }}\net10.0-windows10.0.19041.0" -Recurse -Include *.appx | Select-Object -First 1
+          if (-not $pkg) { throw "APPX not found" }
 
           $pfxPath = Join-Path $PWD "build\signing\onedrivealbums.pfx"
           if (-not (Test-Path $pfxPath)) { throw "Missing PFX at $pfxPath" }
@@ -272,8 +273,7 @@ jobs:
             Select-Object -First 1
           if (-not $signtool) { throw "signtool.exe (x64) not found under $kitsRoot" }
 
-          # List certs inside PFX to confirm it's readable
-          & $signtool sign /debug /f $pfxPath /p $env:PFX_PASSWORD /fd SHA256 /a $msix.FullName
+          & $signtool sign /debug /f $pfxPath /p $env:PFX_PASSWORD /fd SHA256 /a $pkg.FullName
 
       - name: Collect artifacts
         shell: pwsh
