@@ -221,7 +221,7 @@ jobs:
           path: artifacts/*
 
   build_windows:
-    name: Build Windows (MSIX, self-signed)
+    name: Build Windows (MSIX, unsigned)
     runs-on: windows-latest
 
     steps:
@@ -239,41 +239,15 @@ jobs:
       - name: Restore
         run: dotnet restore ${{ env.UI_PROJECT }}
 
-      - name: Publish Windows (APPX) - unsigned
+      - name: Publish Windows (MSIX) - unsigned
         shell: pwsh
         run: >
           dotnet publish ${{ env.UI_PROJECT }}
           -c ${{ env.CONFIGURATION }}
           -f net10.0-windows10.0.19041.0
-          /p:WindowsPackageType=appx
           /p:GenerateAppxPackageOnBuild=true
           /p:AppxPackageSigningEnabled=false
           /p:PublishTrimmed=false
-
-      - name: Sign APPX (signtool, PFX)
-        shell: pwsh
-        env:
-          PFX_PASSWORD: ${{ secrets.WIN_MSIX_PFX_PASSWORD }}
-        run: |
-          $ErrorActionPreference = "Stop"
-
-          $pkg = Get-ChildItem -Path "UI\bin\${{ env.CONFIGURATION }}\net10.0-windows10.0.19041.0" -Recurse -Include *.appx | Select-Object -First 1
-          if (-not $pkg) { throw "APPX not found" }
-
-          $pfxPath = Join-Path $PWD "build\signing\onedrivealbums.pfx"
-          if (-not (Test-Path $pfxPath)) { throw "Missing PFX at $pfxPath" }
-
-          $kitsRoot = "${env:ProgramFiles(x86)}\Windows Kits\10\bin"
-          if (-not (Test-Path $kitsRoot)) { throw "Windows Kits not found at $kitsRoot" }
-
-          $signtool = Get-ChildItem $kitsRoot -Directory |
-            Sort-Object Name -Descending |
-            ForEach-Object { Join-Path $_.FullName "x64\signtool.exe" } |
-            Where-Object { Test-Path $_ } |
-            Select-Object -First 1
-          if (-not $signtool) { throw "signtool.exe (x64) not found under $kitsRoot" }
-
-          & $signtool sign /debug /f $pfxPath /p $env:PFX_PASSWORD /fd SHA256 /a $pkg.FullName
 
       - name: Collect artifacts
         shell: pwsh
@@ -281,10 +255,10 @@ jobs:
           $ErrorActionPreference = "Stop"
           New-Item -ItemType Directory -Force -Path artifacts | Out-Null
 
-          $msix = Get-ChildItem -Path "UI\bin\${{ env.CONFIGURATION }}\net10.0-windows10.0.19041.0" -Recurse -Include *.msix,*.msixbundle | Select-Object -First 1
-          if (-not $msix) { throw "MSIX/MSIXBUNDLE not found" }
+          $pkg = Get-ChildItem -Path "UI\bin\${{ env.CONFIGURATION }}\net10.0-windows10.0.19041.0" -Recurse -Include *.msix,*.msixbundle | Select-Object -First 1
+          if (-not $pkg) { throw "MSIX/MSIXBUNDLE not found" }
 
-          Copy-Item $msix.FullName "artifacts\OneDriveAlbums-windows-${env:GITHUB_REF_NAME}$($msix.Extension)" -Force
+          Copy-Item $pkg.FullName "artifacts\OneDriveAlbums-windows-${env:GITHUB_REF_NAME}$($pkg.Extension)" -Force
           Copy-Item "build\signing\onedrivealbums.cer" "artifacts\OneDriveAlbums-windows-${env:GITHUB_REF_NAME}.cer" -Force
 
       - name: Upload workflow artifacts (windows)
