@@ -103,7 +103,39 @@ internal static class StartupLog
     public static void Write(string message) => WriteCore(message);
 
     public static void Write(Exception ex, string message = "Exception")
-        => WriteCore($"{message}: {ex}");
+        => WriteExceptionCore(ex, message);
+
+    private static void WriteExceptionCore(Exception? ex, string message)
+    {
+        if (ex is null)
+        {
+            WriteCore($"{message}: <null>");
+            return;
+        }
+
+        // Console / os_log can truncate very long messages. Emit multi-line exceptions as separate log entries.
+        WriteCore($"{message}: {ex.GetType().FullName}: {ex.Message}");
+
+        foreach (var rawLine in ex.ToString().Split('\n'))
+        {
+            var line = rawLine.TrimEnd('\r');
+            if (line.Length == 0)
+                continue;
+
+            const int chunkSize = 900;
+            if (line.Length <= chunkSize)
+            {
+                WriteCore(line);
+                continue;
+            }
+
+            for (var i = 0; i < line.Length; i += chunkSize)
+            {
+                var len = Math.Min(chunkSize, line.Length - i);
+                WriteCore(line.Substring(i, len));
+            }
+        }
+    }
 
     private static void WriteCore(string message)
     {

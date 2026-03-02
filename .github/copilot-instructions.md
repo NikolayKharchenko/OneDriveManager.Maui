@@ -4,6 +4,7 @@
 - First general instruction
 - Second general instruction
 - Prefer not to change the SDK version as a first step; currently using the latest SDK from Visual Studio 2026 update.
+- When an issue is reported as occurring only in Release builds, avoid changing Debug/compiler options unnecessarily; focus on Release-specific behavior and diagnostics.
 
 ## Git Operations
 - When diagnosing Git push failures, check for ambiguous refs (e.g., both refs/heads/master and refs/tags/master) since Visual Studio push can fail with 'dst refspec master matches more than one'.
