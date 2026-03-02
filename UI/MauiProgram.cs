@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Handlers;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
@@ -45,6 +47,18 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("MaterialSymbolsRounded.ttf", "MaterialSymbolsRounded");
             });
+
+#if IOS
+        // Workaround for iOS AOT-only: avoid Activator.CreateInstance for LayoutHandler.
+        // In Release/AOT it can hit a DynamicMethod invoke stub and crash with ExecutionEngineException.
+        for (var i = builder.Services.Count - 1; i >= 0; i--)
+        {
+            var d = builder.Services[i];
+            if (d.ServiceType == typeof(LayoutHandler) || d.ImplementationType == typeof(LayoutHandler))
+                builder.Services.RemoveAt(i);
+        }
+        builder.Services.AddTransient<LayoutHandler>(_ => new LayoutHandler());
+#endif
 
 #if DEBUG
         builder.Logging.AddDebug();
