@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace OneDriveAlbums.UI;
 
@@ -12,7 +13,7 @@ public static class MauiProgram
 
 #if IOS
         // iOS is AOT-only. Ensure reflection invocation never falls back to DynamicMethod / JIT.
-        // This must be set before any code paths t hat may use reflection-based activation.
+        // This must be set before any code paths that may use reflection-based activation.
         AppContext.SetSwitch("System.Reflection.EmitDisableDynamicInvoke", true);
         AppContext.SetSwitch("System.Reflection.EnableDynamicCode", false);
 #endif
@@ -22,11 +23,18 @@ public static class MauiProgram
         StartupLog.Write($"FrameworkDescription: {RuntimeInformation.FrameworkDescription}");
         StartupLog.Write($"Environment.Version: {Environment.Version}");
 
-        var enableDynamicCode = AppContext.GetData("System.Reflection.EnableDynamicCode");
-        var disableDynamicInvoke = AppContext.GetData("System.Reflection.EmitDisableDynamicInvoke");
+        if (AppContext.TryGetSwitch("System.Reflection.EnableDynamicCode", out var enableDynamicCode))
+            StartupLog.Write($"System.Reflection.EnableDynamicCode (switch): {enableDynamicCode}");
+        else
+            StartupLog.Write("System.Reflection.EnableDynamicCode (switch): <not set>");
 
-        StartupLog.Write($"System.Reflection.EnableDynamicCode (AppContext): {(enableDynamicCode is null ? "<null>" : enableDynamicCode)}");
-        StartupLog.Write($"System.Reflection.EmitDisableDynamicInvoke (AppContext): {(disableDynamicInvoke is null ? "<null>" : disableDynamicInvoke)}");
+        if (AppContext.TryGetSwitch("System.Reflection.EmitDisableDynamicInvoke", out var disableDynamicInvoke))
+            StartupLog.Write($"System.Reflection.EmitDisableDynamicInvoke (switch): {disableDynamicInvoke}");
+        else
+            StartupLog.Write("System.Reflection.EmitDisableDynamicInvoke (switch): <not set>");
+
+        StartupLog.Write($"RuntimeFeature.IsDynamicCodeSupported: {RuntimeFeature.IsDynamicCodeSupported}");
+        StartupLog.Write($"RuntimeFeature.IsDynamicCodeCompiled: {RuntimeFeature.IsDynamicCodeCompiled}");
 
         var builder = MauiApp.CreateBuilder();
         builder
