@@ -105,6 +105,37 @@ internal static class StartupLog
     public static void Write(Exception ex, string message = "Exception")
         => WriteExceptionCore(ex, message);
 
+    public static void Clear()
+    {
+        try
+        {
+            lock (Gate)
+            {
+                try { _writer?.Dispose(); } catch { }
+                try { _stream?.Dispose(); } catch { }
+
+                _writer = null;
+                _stream = null;
+                _sessionStarted = false;
+
+                try
+                {
+                    if (File.Exists(LogPath))
+                        File.Delete(LogPath);
+                }
+                catch
+                {
+                    // If delete fails (e.g., transient sharing issue), fall back to truncation.
+                    try { File.WriteAllText(LogPath, string.Empty, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false)); } catch { }
+                }
+            }
+        }
+        catch
+        {
+            // ignore
+        }
+    }
+
     private static void WriteExceptionCore(Exception? ex, string message)
     {
         if (ex is null)

@@ -10,6 +10,7 @@ public static class MauiProgram
     {
         hookUnhandledExceptions();
 
+        StartupLog.Clear();
         StartupLog.Write("MauiProgram:CreateMauiApp begin");
 
         StartupLog.Write($"FrameworkDescription: {RuntimeInformation.FrameworkDescription}");
