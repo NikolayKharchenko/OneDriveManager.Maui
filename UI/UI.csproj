@@ -66,6 +66,9 @@
 
 	  <!-- Ensure custom linker descriptor is used by the iOS native linker -->
 	  <MtouchExtraArgs>--xml=$(MSBuildProjectDirectory)/linker.xml $(MtouchExtraArgs)</MtouchExtraArgs>
+
+	  <!-- Workaround for iOS Release/AOT crash in MAUI handler activation (DynamicMethod JIT attempt). -->
+	  <MtouchInterpreter>all</MtouchInterpreter>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios' and '$(Configuration)' == 'Release'">
