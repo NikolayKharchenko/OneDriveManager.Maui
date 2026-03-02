@@ -1,14 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentView x:Class="OneDriveAlbums.UI.AlbumsView" xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
         xmlns:local="clr-namespace:OneDriveAlbums.UI" xmlns:str="clr-namespace:OneDriveAlbums.UI.Resources.Strings"
         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <Label Text="AlbumsView" />
-    <!--
-    <Grid RowSpacing="5">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="5">
 
         <HorizontalStackLayout Grid.Row="0">
             <Label Text="{Static str:Strings.SortBy_Lbl}" WidthRequest="100" Margin="0,0,10,0" VerticalOptions="Center" />
@@ -40,9 +34,9 @@
             </Grid>
         </HorizontalStackLayout>
 
-        <CollectionView Grid.Row="2" SelectionMode="Single" x:Name="Albums_CVw">
+        <CollectionView Grid.Row="2" SelectionMode="Single" x:Name="Albums_CVw" SizeChanged="Albums_SizeChanged">
             <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" HorizontalItemSpacing="2" VerticalItemSpacing="2" />
+                <GridItemsLayout Orientation="Vertical" Span="5" HorizontalItemSpacing="2" VerticalItemSpacing="2" />
             </CollectionView.ItemsLayout>
 
             <CollectionView.ItemTemplate>
@@ -58,16 +52,13 @@
                                     BindingContextChanged="ThumbnailImage_BindingContextChanged" />
 
                             <Label Text="{x:Binding Name}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="Start"
-                                    Padding="3" Margin="3" BackgroundColor="White" />
-
+                                    Background="White" Padding="3" Margin="3" />
                             <Label Text="{x:Binding DatesRange}" LineBreakMode="TailTruncation" HorizontalOptions="Center" VerticalOptions="End"
-                                    Padding="3" Margin="3" BackgroundColor="White" />
-
+                                    Background="White" Padding="3" Margin="3" />
                         </Grid>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
     </Grid>
--->
 </ContentView>

@@ -3,23 +3,15 @@
         xmlns:local="clr-namespace:OneDriveAlbums.UI" xmlns:str="clr-namespace:OneDriveAlbums.UI.Resources.Strings"
         x:Class="OneDriveAlbums.UI.MainPage">
 
-    <!--    <Grid Padding="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
+    <Grid RowDefinitions="Auto,*,Auto" Padding="10">
         <HorizontalStackLayout Grid.Row="0" HorizontalOptions="End" VerticalOptions="Center" Spacing="30" Margin="0,0,0,30">
             <local:SymbolFontButton Text="cloud" Clicked="Reconnect_Click" FontSize="28" />
-            <local:SymbolFontButton Text="photo_library" Clicked="Albums_Click" FontSize="28"/>
-            <local:SymbolFontButton Text="settings" Clicked="Settings_Click" FontSize="28"/>
-        </HorizontalStackLayout>-->
-    <VerticalStackLayout Padding="10" Spacing="20">
-        <local:GalleryView x:Name="Gallery_Vw" IsVisible="False" />
-        <local:SettingsView x:Name="Settings_Vw" IsVisible="False" />
-        <local:AlbumsView x:FieldModifier="public" x:Name="Albums_Vw" />
-        <Label x:Name="Status_Lbl" FontSize="14" HorizontalOptions="Start" Margin="0,20,0,0" />
-    </VerticalStackLayout>
-    <!--</Grid>-->
+            <local:SymbolFontButton Text="photo_library" Clicked="Albums_Click" FontSize="28" />
+            <local:SymbolFontButton Text="settings" Clicked="Settings_Click" FontSize="28" />
+        </HorizontalStackLayout>
+        <local:AlbumsView x:FieldModifier="public" Grid.Row="1" x:Name="Albums_Vw" />
+        <local:SettingsView Grid.Row="1" x:Name="Settings_Vw" IsVisible="False" />
+        <local:GalleryView Grid.Row="1" x:Name="Gallery_Vw" IsVisible="False" />
+        <Label Grid.Row="2" x:Name="Status_Lbl" FontSize="14" HorizontalOptions="Start" Margin="0,20,0,0" />
+    </Grid>
 </ContentPage>

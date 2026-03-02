@@ -11,13 +11,13 @@ public partial class AlbumsView : ContentView
     private IReadOnlyList<DriveItem>? albums;
     private readonly ObservableCollection<AlbumItemModel> albumModels = new();
 
-    private bool? nameAscending;
-    private bool? dateAscending;
+    bool? nameAscending;
+    bool? dateAscending;
 
-    private const string UpIcon = "arrow_drop_up";
-    private const string DownIcon = "arrow_drop_down";
+    const string UpIcon = "arrow_drop_up";
+    const string DownIcon = "arrow_drop_down";
 
-    private string sortIcon(bool? ascending)
+    string sortIcon(bool? ascending)
     {
         if (ascending is null)
             return string.Empty;
@@ -27,13 +27,9 @@ public partial class AlbumsView : ContentView
 
     public AlbumsView()
     {
-        StartupLog.Write("AlbumsView.ctor");
         InitializeComponent();
-        StartupLog.Write("AlbumsView.InitializeComponent passed");
-
-        //Albums_CVw.ItemsSource = albumModels;
+        Albums_CVw.ItemsSource = albumModels;
     }
-
 
     static bool isItemSuitable(DriveItem item) => item?.Bundle?.Album != null;
     private static AlbumItemModel createModel(DriveItem item) => new(item, GraphClient.Instance.GetBundleMetadata(item.Id!));
@@ -114,8 +110,8 @@ public partial class AlbumsView : ContentView
         else if (dateAsc is not null)
             sortAlbums(model => model.DateForSort, dateAsc.Value);
 
-        //SortByName_Icon.Text = sortIcon(nameAscending);
-        //SortByDate_Icon.Text = sortIcon(dateAscending);
+        SortByName_Icon.Text = sortIcon(nameAscending);
+        SortByDate_Icon.Text = sortIcon(dateAscending);
     }
 
     void SearchFor_TextChanged(object? sender, TextChangedEventArgs e)
@@ -141,7 +137,13 @@ public partial class AlbumsView : ContentView
 
     void ClearSearch_Click(object? sender, EventArgs e)
     {
-        //SearchFor_Entry.Text = string.Empty;
+        SearchFor_Entry.Text = string.Empty;
+    }
+
+    private void Albums_SizeChanged(object? sender, EventArgs e)
+    {
+        GridItemsLayout grid = (GridItemsLayout)Albums_CVw.ItemsLayout;
+        grid.Span = int.Max(1, (int)(Albums_CVw.Width / 300));
     }
 
     public async Task FixAllAlbumsMetadataAsync()
