@@ -174,4 +174,7 @@
   <data name="LoadingPhotos_Msg" xml:space="preserve">
     <value>Loading photos...</value>
   </data>
+  <data name="LoadingAlbums_Pgs" xml:space="preserve">
+    <value>Loading albums`{0} albums found.`{1:mm\:ss} elapsed</value>
+  </data>
 </root>

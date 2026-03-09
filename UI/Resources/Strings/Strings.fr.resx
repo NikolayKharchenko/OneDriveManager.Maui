@@ -136,4 +136,7 @@
   <data name="ProcessingItem_Msg" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="LoadingAlbums_Pgs" xml:space="preserve">
+    <value>Album chargement en cours`{0} éléments trouvés`{1:mm\:ss}</value>
+  </data>
 </root>

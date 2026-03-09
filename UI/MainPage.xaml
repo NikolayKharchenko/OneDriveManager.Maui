@@ -12,6 +12,7 @@
         <local:AlbumsView x:FieldModifier="public" Grid.Row="1" x:Name="Albums_Vw" />
         <local:SettingsView Grid.Row="1" x:Name="Settings_Vw" IsVisible="False" />
         <local:GalleryView Grid.Row="1" x:Name="Gallery_Vw" IsVisible="False" />
+        <Label Grid.Row="1" x:Name="Progress_Lbl" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
         <Label Grid.Row="2" x:Name="Status_Lbl" FontSize="14" HorizontalOptions="Start" Margin="0,20,0,0" />
     </Grid>
 </ContentPage>

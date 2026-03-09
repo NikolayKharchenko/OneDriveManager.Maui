@@ -18,7 +18,11 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         StartupLog.Write("MainPage.InitializeComponent passed");
         SetStatusText(Strings.Ready_Txt);
-        GraphClient.Instance.Items_Loading += (s, e) => { SetStatusText(Strings.LoadingItems_Msg, e.Count, e.Elapsed); };
+        GraphClient.Instance.Items_Loading += (s, e) =>
+        {
+            SetStatusText(Strings.LoadingItems_Msg, e.Count, e.Elapsed);
+            SetProgressText(Strings.LoadingAlbums_Pgs, e.Count, e.Elapsed); 
+        };
         GraphClient.Instance.Items_Loaded += (s, e) => { SetStatusText(Strings.LoadedItems_Msg, e.Count, e.Elapsed); };
         Dispatcher.Dispatch(initialize);
         StartupLog.Write("MainPage.ctor passed");
@@ -29,6 +33,12 @@ public partial class MainPage : ContentPage
         Status_Lbl.Text = string.Format(text, args);
     }
 
+    public void SetProgressText(string text = "", params object[] args)
+    {
+        Albums_Vw.IsVisible = Gallery_Vw.IsVisible = Settings_Vw.IsVisible = false;
+        Progress_Lbl.Text = string.Format(text, args).Replace('`', '\n');
+    }
+
     private async void initialize()
     {
         StartupLog.Write("MainPage.initialize called");
@@ -36,11 +46,13 @@ public partial class MainPage : ContentPage
         StartupLog.Write("MainPage.connectToGraph finished");
         await Albums_Vw.LoadAlbums();
         StartupLog.Write("MainPage: albums loaded");
+        activateView(Albums_Vw);
     }
 
     private async Task connectToGraph()
     {
         SetStatusText(Strings.Connecting_Msg);
+        SetProgressText(Strings.Connecting_Msg);
 
         var auth = new MsalAuthProvider(ClientId);
 
@@ -59,6 +71,7 @@ public partial class MainPage : ContentPage
 
     private void activateView(View view)
     {
+        Progress_Lbl.IsVisible = false;
         Settings_Vw.IsVisible = false;
         Albums_Vw.IsVisible = false;
         Gallery_Vw.IsVisible = false;

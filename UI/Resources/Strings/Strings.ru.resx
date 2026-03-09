@@ -174,4 +174,7 @@
   <data name="LoadingPhotos_Msg" xml:space="preserve">
     <value>Загрузка фотографий...</value>
   </data>
+  <data name="LoadingAlbums_Pgs" xml:space="preserve">
+    <value>Загрузка альбомов`Найдено {0} альбомов`Прошло {1:mm\:ss}</value>
+  </data>
 </root>
